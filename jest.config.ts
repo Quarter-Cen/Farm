@@ -150,7 +150,10 @@ const config: Config = {
 
   // The test environment that will be used for testing
   testEnvironment: "jsdom",
-
+  reporters: [
+    'default',
+    ['jest-junit', { outputDirectory: 'test-reports', outputName: 'test-*.xml' }]
+]
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
 
