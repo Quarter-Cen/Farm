@@ -58,7 +58,5 @@ export class LoginService implements ILoginService {
 
     return roles;
 }
-    ok(): string {
-        return "OK555"
-    }
+
 }
