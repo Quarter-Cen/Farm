@@ -1,0 +1,213 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    BigInt    @id @default(autoincrement())
+  firstName             String
+  lastName              String
+  gender                Gender
+  employmentDurationHours Int
+  workLocation          String
+  salary                Float
+  startDate             DateTime
+  workHour              Int
+  phoneNumber           String     @unique
+  address               String
+  birthdate             DateTime
+  email                 String     @unique
+  password              String
+
+  admin                 Admin?
+  supervisor            Supervisor?
+  dairyWorker           DairyWorker?
+  veterian              Veterian?
+
+  @@map("users")
+}
+
+model Admin {
+  id                    BigInt @id @default(autoincrement())
+  userId                BigInt @unique
+  user                  User   @relation(fields: [userId], references: [id])
+
+  foodImports           FoodImp[]
+  exports               Export[]
+
+  @@map("admins")
+}
+
+model Supervisor {
+  id                    BigInt @id @default(autoincrement())
+  userId                BigInt @unique
+  user                  User   @relation(fields: [userId], references: [id])
+
+  tasks                 Task[]
+  productReports        ProductReport[]
+
+  @@map("supervisors")
+}
+
+model DairyWorker {
+  id                    BigInt @id @default(autoincrement())
+  userId                BigInt @unique
+  user                  User   @relation(fields: [userId], references: [id])
+
+  tasks                 Task[]
+
+  @@map("dairy_workers")
+}
+
+model Veterian {
+  id                    BigInt @id @default(autoincrement())
+  userId                BigInt @unique
+  user                  User   @relation(fields: [userId], references: [id])
+
+  treatments            Treatment[]
+  vaccinations          Vaccination[]
+  cows                  Cow[]
+
+  @@map("veterians")
+}
+
+model FoodImp {
+  id                    BigInt   @id @default(autoincrement())
+  name                  String
+  date                  DateTime
+  importFrom            String
+  type                  String
+  quantity              Int
+  pricePerUnit          Float
+
+  adminId               BigInt
+  admin                 Admin   @relation(fields: [adminId], references: [id])
+
+  @@map("food_imps")
+}
+
+model Task {
+  id                    BigInt   @id @default(autoincrement())
+  taskName              String
+  description           String
+  dueDateTime           DateTime
+  status                String
+
+  supervisorId          BigInt?
+  supervisor            Supervisor? @relation(fields: [supervisorId], references: [id])
+
+  dairyWorkerId         BigInt?
+  dairyWorker           DairyWorker? @relation(fields: [dairyWorkerId], references: [id])
+
+  @@map("tasks")
+}
+
+model ProductReport {
+  id                    BigInt   @id @default(autoincrement())
+  date                  DateTime
+  quantityOfProduct     Int
+  cowZone               String
+
+  supervisorId          BigInt
+  supervisor            Supervisor @relation(fields: [supervisorId], references: [id])
+
+  @@map("product_reports")
+}
+
+model Export {
+  id                    BigInt   @id @default(autoincrement())
+  cowName               String
+  customer              String
+  quantity              Int
+  status                String
+  type                  String
+  destination           String
+  pricePerQuantity      Float
+
+  adminId               BigInt
+  admin                 Admin   @relation(fields: [adminId], references: [id])
+
+  methodId              BigInt
+  paymentMethod         PaymentMethod @relation(fields: [methodId], references: [id])
+
+  @@map("exports")
+}
+
+model PaymentMethod {
+  id                    BigInt @id @default(autoincrement())
+  name                  String
+
+  exports               Export[]
+
+  @@map("payment_methods")
+}
+
+model Cow {
+  id                    BigInt    @id @default(autoincrement())
+  name                  String
+  gender                String
+  age                   Int
+  weight                Float
+  birthDate             DateTime
+  breed                 String
+  healthStatus          String
+
+  veterianId            BigInt?
+  veterian              Veterian? @relation(fields: [veterianId], references: [id])
+
+  treatments            Treatment[]
+  vaccinations          Vaccination[]
+
+  @@map("cows")
+}
+
+model Treatment {
+  id                    BigInt   @id @default(autoincrement())
+  nameDisease           String
+  events                String
+  details               String
+  date                  DateTime
+  drugName              String
+  status                String
+  responsibleMan        String
+  notation              String
+
+  veterianId            BigInt
+  veterian              Veterian @relation(fields: [veterianId], references: [id])
+
+  cowId                 BigInt
+  cow                   Cow      @relation(fields: [cowId], references: [id])
+
+  @@map("treatments")
+}
+
+model Vaccination {
+  id                    BigInt   @id @default(autoincrement())
+  name                  String
+  cowName               String
+  dose                  Int
+  injectDate            DateTime
+  injectNextDate        DateTime
+  status                String
+  injector              String
+  sideEffects           String
+  notation              String
+
+  veterianId            BigInt
+  veterian              Veterian @relation(fields: [veterianId], references: [id])
+
+  cowId                 BigInt
+  cow                   Cow      @relation(fields: [cowId], references: [id])
+
+  @@map("vaccinations")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
