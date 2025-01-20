@@ -16,15 +16,19 @@ pipeline {
         }
         stage('Run Unit Tests') {
             steps {
-                sh 'npm test -- --coverage --ci'  // รัน Unit Tests ด้วย Jest (ใช้ตัวเลือก --coverage สำหรับรายงานความครอบคลุมของการทดสอบ)
+                script {
+                    try {
+                        sh 'npm test -- --coverage --ci'  // รัน Unit Tests ด้วย Jest
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'  // ถ้ามีข้อผิดพลาดในการทดสอบ
+                        throw e  // ทำให้ pipeline หยุดทำงาน
+                    }
+                }
             }
         }
     }
 
     post {
-        always {
-            junit '**/test-*.xml'  // ใช้สำหรับรายงานผลของ Unit Test ใน Jenkins
-        }
         success {
             echo 'Tests passed successfully!'
         }
