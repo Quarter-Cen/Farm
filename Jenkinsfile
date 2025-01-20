@@ -6,11 +6,13 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo 'Checking out the code...'
                 checkout scm  // เช็คเอาท์โค้ดจาก Git repository
             }
         }
         stage('Install Dependencies') {
             steps {
+                echo 'Installing dependencies...'
                 sh 'npm install'  // ติดตั้ง dependencies ที่จำเป็น
             }
         }
@@ -18,12 +20,14 @@ pipeline {
             steps {
                 script {
                     try {
+                        echo 'Running Unit Tests...'
                         sh 'npm test -- --coverage --ci'  // รัน Unit Tests ด้วย Jest
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'  // ถ้ามีข้อผิดพลาดในการทดสอบ
                         throw e  // ทำให้ pipeline หยุดทำงาน
                     }
                 }
+
             }
         }
     }
