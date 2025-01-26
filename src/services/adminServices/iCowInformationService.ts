@@ -8,9 +8,9 @@ export interface iCowInformationService {
     birthDate: Date,
     breed: string,
     healthStatus: string
-  ): Promise<Cow>
-  editCow(id: bigint) : Promise<Cow>
-  deleteCow(id: bigint): Promise<void>
+  ): Promise<Cow | null>
+  editCow(id: bigint, updatedData: Partial<Cow>) : Promise<Cow | null>
+  deleteCow(id: bigint): Promise<string>
   getAllCow(): Promise<Cow[]>
   getCowByID(id: bigint): Promise<Cow | null>
 }
