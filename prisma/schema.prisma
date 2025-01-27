@@ -47,7 +47,6 @@ model Supervisor {
   userId                BigInt @unique
   user                  User   @relation(fields: [userId], references: [id])
 
-  tasks                 Task[]
   productReports        ProductReport[]
 
   @@map("supervisors")
@@ -58,8 +57,6 @@ model DairyWorker {
   userId                BigInt @unique
   user                  User   @relation(fields: [userId], references: [id])
 
-  tasks                 Task[]
-
   @@map("dairy_workers")
 }
 
@@ -69,7 +66,6 @@ model Veterian {
   user                  User   @relation(fields: [userId], references: [id])
 
   treatments            Treatment[]
-  vaccinations          Vaccination[]
   cows                  Cow[]
 
   @@map("veterians")
@@ -90,21 +86,6 @@ model FoodImp {
   @@map("food_imps")
 }
 
-model Task {
-  id                    BigInt   @id @default(autoincrement())
-  taskName              String
-  description           String
-  dueDateTime           DateTime
-  status                String
-
-  supervisorId          BigInt?
-  supervisor            Supervisor? @relation(fields: [supervisorId], references: [id])
-
-  dairyWorkerId         BigInt?
-  dairyWorker           DairyWorker? @relation(fields: [dairyWorkerId], references: [id])
-
-  @@map("tasks")
-}
 
 model ProductReport {
   id                    BigInt   @id @default(autoincrement())
@@ -160,7 +141,6 @@ model Cow {
   veterian              Veterian? @relation(fields: [veterianId], references: [id])
 
   treatments            Treatment[]
-  vaccinations          Vaccination[]
 
   @@map("cows")
 }
@@ -185,26 +165,7 @@ model Treatment {
   @@map("treatments")
 }
 
-model Vaccination {
-  id                    BigInt   @id @default(autoincrement())
-  name                  String
-  cowName               String
-  dose                  Int
-  injectDate            DateTime
-  injectNextDate        DateTime
-  status                String
-  injector              String
-  sideEffects           String
-  notation              String
 
-  veterianId            BigInt
-  veterian              Veterian @relation(fields: [veterianId], references: [id])
-
-  cowId                 BigInt
-  cow                   Cow      @relation(fields: [cowId], references: [id])
-
-  @@map("vaccinations")
-}
 
 enum Gender {
   MALE
