@@ -37,7 +37,9 @@ export interface ITreatmentData {
         drugName?: string,
         status?: string,
         responsibleMan?: string,
-        notation?: string
+        notation?: string,
+        veterianId?: bigint,
+        cowId?: bigint
     ): Promise<Treatment | null>
 
     deleteTreatmentData(
