@@ -178,7 +178,7 @@ model Treatment {
   veterian              Veterian @relation(fields: [veterianId], references: [id])
 
   cowId                 BigInt
-  cow                   Cow      @relation(fields: [cowId], references: [id])
+  cow                   Cow      @relation(fields: [cowId], references: [id], onDelete: Cascade)
 
   @@map("treatments")
 }
