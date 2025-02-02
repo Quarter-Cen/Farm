@@ -14,8 +14,8 @@ export class CowData implements ICowData {
         birthdate: Date | null,
         breed: string | null,
         healthStatus: string | null,
-        recordedAt: Date | null
-        // veterianId: bigint | null
+        recordedAt: Date | null,
+        veterianId: bigint | null
     ): Promise<Cow | null> {
         const whereClause: any = {};
 
@@ -28,7 +28,7 @@ export class CowData implements ICowData {
         if (breed) whereClause.breed = breed;
         if (healthStatus) whereClause.healthStatus = healthStatus;
         if (recordedAt) whereClause.recordedAt = recordedAt;
-        // if (veterianId) whereClause.veterianId = veterianId;
+        if (veterianId) whereClause.veterianId = veterianId;
 
         console.log(whereClause)
         return await prisma.cow.findFirst({
@@ -46,7 +46,8 @@ export class CowData implements ICowData {
         birthdate?: Date,
         breed?: string,
         healthStatus?: string,
-        recordedAt?: Date
+        recordedAt?: Date,
+        veterianId?: bigint
     ): Promise<Cow | null> {
         return await prisma.cow.update({
             where: { id },
@@ -58,7 +59,8 @@ export class CowData implements ICowData {
                 birthDate: birthdate,
                 breed,
                 healthStatus,
-                recordedAt
+                recordedAt,
+                veterianId
             },
         });
     }
@@ -91,14 +93,25 @@ export class CowData implements ICowData {
     }
 
     //ฟังก์ชันลบข้อมูลวัว
-    // async deleteCowData(id: bigint): Promise<Cow | null> {
-    //     try {
-    //         return await prisma.cow.delete({
-    //             where: { id },
-    //         })
-    //     } catch (error) {
-    //         console.log("Error deleting cow data:", error)
-    //         return null
-    //     }
-    // }
+    async deleteCowData(id: bigint): Promise<Cow | null> {
+        try {
+            // const cow = await prisma.cow.findUnique({
+            //     where: { id },
+            // });
+    
+            // if (!cow) {
+            //     console.log("Cow not found, cannot delete.");
+            //     return null;
+            // }
+    
+            console.log("Deleting cow with ID:", id);
+            return await prisma.cow.delete({
+                where: { id },
+            });
+        } catch (error) {
+            console.error("Error deleting cow data:", error);
+            return null;
+        }
+    }
+    
 }
