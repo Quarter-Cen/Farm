@@ -82,7 +82,9 @@ export class TreatmentData implements ITreatmentData {
         drugName?: string,
         status?: string,
         responsibleMan?: string,
-        notation?: string
+        notation?: string,
+        veterianId?: bigint,
+        cowId?: bigint
     ): Promise<Treatment | null> {
         try {
             // การอัปเดตข้อมูลการรักษาโดยใช้ prisma.update
@@ -97,6 +99,8 @@ export class TreatmentData implements ITreatmentData {
                     status,
                     responsibleMan,
                     notation,
+                    veterianId,
+                    cowId
                 },
             });
             return updatedTreatment;
