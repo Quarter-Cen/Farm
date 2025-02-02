@@ -24,6 +24,7 @@ export interface ICowData {
         breed?: string,
         healthStatus?: string,
         recordedAt?: Date,
+        veterianId?: bigint
     ): Promise<Cow | null>;
 
     createCowData(
@@ -38,7 +39,7 @@ export interface ICowData {
         veterianId: bigint
     ): Promise<Cow>
 
-    // deleteCowData(
-    //     id: bigint
-    // ): Promise<Cow | null>
+    deleteCowData(
+        id: bigint
+    ): Promise<Cow | null>
 }
