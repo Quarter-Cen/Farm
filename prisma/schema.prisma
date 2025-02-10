@@ -101,7 +101,6 @@ model ProductReport {
 
 model Export {
   id                    BigInt   @id @default(autoincrement())
-  cowName               String
   customer              String
   quantity              Int
   status                String

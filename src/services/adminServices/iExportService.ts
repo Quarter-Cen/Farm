@@ -2,7 +2,6 @@ import { Export } from "@prisma/client";
 
 export interface iExportService {
   addExport(
-    cowName: string,
     customer: string,
     quantity: number,
     status: string,
