@@ -60,7 +60,7 @@ async function createUser(req: Request, res: Response) {
   }
 }
 
-
+// ฟังก์ชันในการแก้ไขข้อมูลผู้ใช้
 async function updateUser(req: Request, res: Response) {
   const { id } = req.params
   const { firstName, lastName, gender, employmentDurationHours, workLocation, salary, startDate, workHour, phoneNumber, address, birthdate, email, role } = req.body
