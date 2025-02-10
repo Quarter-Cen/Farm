@@ -70,23 +70,23 @@ describe("CowData Tests", () => {
     //     await prisma.$disconnect();
     // });
 
-    // test("Get Cow by ID - Success", async () => {
-    //     const result = await cowdata.getCowData(
-    //         BigInt(1), // id
-    //         "Bessie", // name
-    //         "Female", // gender
-    //         5, // age
-    //         500, //weight
-    //         new Date("2018-01-01"), // birthdate
-    //         "Holstein", // breed
-    //         "Healthy",  // healthStatus
-    //         new Date("2025-01-25"),
-    //         // null
-    //     );
-    //     expect(result).not.toBeNull();
-    //     expect(result?.name).toBe("Bessie");
-    //     expect(result?.gender).toBe("Female");
-    // });
+    test("Get Cow by ID - Success", async () => {
+        const result = await cowdata.getCowData(
+            BigInt(1), // id
+            "Updated Bessie", // name
+            "Male", // gender
+            6, // age
+            600, //weight
+            new Date("2021-04-01"), // birthdate
+            "Thai", // breed
+            "สุขภาพดี",  // healthStatus
+            new Date("2025-01-24"),
+            BigInt(2)
+        );
+        expect(result).not.toBeNull();
+        expect(result?.name).toBe("Updated Bessie");
+        expect(result?.gender).toBe("Male");
+    });
 
     // test("Get Cow by Name - Success", async () => {
     //     const result = await cowdata.getCowData(
@@ -176,10 +176,11 @@ describe("CowData Tests", () => {
     //         "Male",
     //         6,
     //         600,
-    //         undefined,
-    //         "Jersey",
-    //         undefined,
-    //         new Date("2025-01-24")
+    //         new Date("2021-04-01"),
+    //         "Thai",
+    //         "สุขภาพดี",
+    //         new Date("2025-01-24"),
+    //         BigInt(2)
     
     //     );
     
@@ -188,8 +189,10 @@ describe("CowData Tests", () => {
     //     expect(updatedCow?.gender).toBe("Male");
     //     expect(updatedCow?.age).toBe(6);
     //     expect(updatedCow?.weight).toBe(600);
-    //     expect(updatedCow?.breed).toBe("Jersey");
+    //     expect(updatedCow?.breed).toBe("Thai");
     //     expect(updatedCow?.recordedAt).toEqual(new Date("2025-01-24"))
+    //     expect(updatedCow?.birthDate).toEqual(new Date("2021-04-01"))
+    //     expect(updatedCow?.veterianId).toEqual(BigInt(2))
     // });
 
     // test("createCowData should create a new cow record", async () => {
@@ -218,12 +221,12 @@ describe("CowData Tests", () => {
     // });
 
     // test("Delete Cow - Success", async () => {
-    //     const result = await cowdata.deleteCowData(BigInt(1));
+    //     const result = await cowdata.deleteCowData(BigInt(5));
     //     expect(result).not.toBeNull(); // ควรลบสำเร็จและคืนข้อมูลวัวที่ถูกลบ
-    //     expect(result?.name).toBe("Updated Bessie");
+    //     expect(result?.name).toBe("Jason");
 
     //     const checkCow = await prisma.cow.findUnique({
-    //         where: { id: BigInt(1) },
+    //         where: { id: BigInt(5) },
     //     });
     //     expect(checkCow).toBeNull(); // ตรวจสอบว่าไม่มีข้อมูลในฐานข้อมูลแล้ว
     // });

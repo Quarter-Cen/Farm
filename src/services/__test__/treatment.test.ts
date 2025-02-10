@@ -7,12 +7,12 @@
 // const treatmentService = new TreatmentData();
 
 // describe("TreatmentData Tests", () => {
-    // เตรียมข้อมูลก่อนการทดสอบ
-    //beforeAll(async () => {
-        // ลบข้อมูลเก่าในตาราง treatment (เฉพาะในฐานข้อมูลทดสอบ)
-        // await prisma.treatment.deleteMany();
+    //เตรียมข้อมูลก่อนการทดสอบ
+    // beforeAll(async () => {
+    //     //ลบข้อมูลเก่าในตาราง treatment (เฉพาะในฐานข้อมูลทดสอบ)
+    //     await prisma.treatment.deleteMany();
 
-        // เพิ่มข้อมูลตัวอย่าง
+    //     //เพิ่มข้อมูลตัวอย่าง
     //     await prisma.treatment.createMany({
     //         data: [
     //             {
@@ -156,19 +156,23 @@
     //         "Updated Disease",
     //         "Follow-up Check",
     //         "Cattle showing improved symptoms.",
-    //         new Date("2025-02-01"),
-    //         undefined,
-    //         undefined,
+    //         new Date("2025-02-10"),
+    //         "Update Drug",
+    //         "Update Status",
     //         "Dr. Jane Smith",
     //         "Treatment completed",
+    //         BigInt(2),
+    //         BigInt(2)
     //     )
     //     expect(updateTreatment).not.toBeNull()
     //     expect(updateTreatment?.nameDisease).toBe("Updated Disease")
     //     expect(updateTreatment?.events).toBe("Follow-up Check")
     //     expect(updateTreatment?.details).toBe("Cattle showing improved symptoms.")
-    //     expect(updateTreatment?.date).toEqual(new Date("2025-02-01"))
+    //     expect(updateTreatment?.date).toEqual(new Date("2025-02-10"))
     //     expect(updateTreatment?.responsibleMan).toBe("Dr. Jane Smith")
     //     expect(updateTreatment?.notation).toBe("Treatment completed")
+    //     expect(updateTreatment?.veterianId).toEqual(BigInt(2))
+    //     expect(updateTreatment?.cowId).toEqual(BigInt(2))
     // })
 
     //Test Delete Function
