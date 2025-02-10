@@ -14,6 +14,7 @@ export class ProductReportService {
             where: { id: id },
         });
     }
+    
 
     async addProductReport(
         date: Date,

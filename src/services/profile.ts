@@ -31,7 +31,6 @@ async function getEmployeeProfile(req: Request, res: Response) {
       }
     })
 
-    // ตรวจสอบว่าไม่พบข้อมูลผู้ใช้
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }

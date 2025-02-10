@@ -41,7 +41,6 @@ async function getUserList(): Promise<UserList[]> {
   })
 }
 
-// Example usage
 getUserList().then(userList => {
   console.log(userList)
 }).catch(error => {
