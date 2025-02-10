@@ -2,7 +2,7 @@ import { CowData } from "@/services/cow";
 import { NextRequest, NextResponse } from "next/server";
 
 let cowData = new CowData();
-
+//Create
 export async function POST(req: NextResponse) {
     try {
         const body = await req.json();
@@ -58,7 +58,7 @@ export async function POST(req: NextResponse) {
     }
 }
 
-
+//Update
 export async function PUT(req: NextResponse) {
     try {
         const body = await req.json();
@@ -112,6 +112,7 @@ export async function PUT(req: NextResponse) {
     }
 }
 
+//Delete
 export async function DELETE(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
@@ -149,6 +150,7 @@ export async function DELETE(req: NextRequest) {
     }
 }
 
+//Pull
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
