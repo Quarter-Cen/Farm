@@ -7,3 +7,5 @@ export class DairyWorkerRole implements Role {
         return this.name;
     }
 }
+
+export type { Role };

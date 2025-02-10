@@ -7,3 +7,5 @@ export class SupervisorRole implements Role {
         return this.name;
     }
 }
+
+export type { Role };
