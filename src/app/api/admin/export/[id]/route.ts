@@ -1,42 +1,42 @@
-import { CowService } from "@/services/cowInformation";
+import { ExportService } from "@/services/export";
 import { NextResponse } from "next/server"
 
 export async function  GET(request: Request, { params }: { params: { id: string } }){
         try { 
-            const cowId = BigInt(params.id)
-            let getCowByID = new CowService()
-            let getResponse = await getCowByID.getCowByID(cowId)
+            const Id = BigInt(params.id)
+            let getExportByID = new ExportService()
+            let getResponse = await getExportByID.getExportByID(Id)
             return NextResponse.json({ data : getResponse}, { status: 200 })
         } catch (error:any) {
-            console.error("Error fetching cow:", error)
+            console.error("Error fetching export:", error)
             return NextResponse.json(
-                { message: "Error fetching cow", error: error.message },
+                { message: "Error fetching export", error: error.message },
                 { status: 500 }
             )
         }
 } 
 
 export async function PUT(request: Request, { params }: { params: { id: string } }){
-try {
+    try {
         const Id = BigInt(params.id)
-        const cowService = new CowService()
+        const exportService = new ExportService()
 
-        const currentStock = await cowService.getCowByID(Id);
+        const currentStock = await exportService.getExportByID(Id);
         if (!currentStock) {
             return NextResponse.json(
-                { message: "Cow not found" },
+                { message: "Export not found" },
                 { status: 404 }
             )
         }
 
         const updatedData = await request.json()
-        const newCowData = { ...currentStock, ...updatedData };
-        const editResponse = await cowService.editCow(Id, newCowData);
+        const newExportData = { ...currentStock, ...updatedData };
+        const editResponse = await exportService.editExport(Id, newExportData);
         return NextResponse.json({ detail: editResponse }, { status: 200 });
     } catch (error: any) {
-        console.error("Error editing cow:", error);
+        console.error("Error editing export:", error);
         return NextResponse.json(
-            { message: "Error editing cow", error: error.message },
+            { message: "Error editing export", error: error.message },
             { status: 500 }
         );
     }
@@ -44,14 +44,14 @@ try {
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }){
     try { 
-        const cowId = BigInt(params.id)
-        let delCowByID = new CowService()
-        let delResponse = await delCowByID.deleteCow(cowId)
+        const Id = BigInt(params.id)
+        let delExportByID = new ExportService()
+        let delResponse = await delExportByID.deleteExport(Id)
         return NextResponse.json({ message : delResponse}, { status: 200 })
     } catch (error:any) {
-        console.error("Error deleting cow:", error)
+        console.error("Error deleting export:", error)
         return NextResponse.json(
-            { message: "Error deleting cow", error: error.message },
+            { message: "Error deleting export", error: error.message },
             { status: 500 }
         )
     }

@@ -5,15 +5,14 @@ import { Export } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class ExportService implements iExportService {
-    async addExport(cowName: string, customer: string, quantity: number, status: string, type: string, destination: string, pricePerQuantity: number): Promise<Export | null> {
+    async addExport(customer: string, quantity: number, status: string, type: string, destination: string, pricePerQuantity: number): Promise<Export | null> {
         try {
-            if(cowName == '' || customer == '' || status =='' || type == ''|| destination ==''){
+            if(customer == '' || status =='' || type == ''|| destination ==''){
                 console.error('No field has to be empty')
                 return null
             }
             return await prisma.export.create({
                 data: {
-                    cowName: cowName,
                     customer: customer,
                     quantity: quantity,
                     status: status,
