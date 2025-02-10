@@ -6,59 +6,115 @@ import { DairyWorkerRole } from './loginServices/roles/dairyWorkerRole';
 import { VeterianRole } from './loginServices/roles/veterianRole';
 import { Role } from './loginServices/iLoginService';
 import { ILoginService } from './loginServices/iLoginService';
+import { serialize } from 'cookie';
+import * as jose from 'jose';
+import * as dotenv from 'dotenv';
+
+dotenv.config(); 
 
 const prisma = new PrismaClient();
 
 export class LoginService implements ILoginService {
-    async login(username: string, password: string): Promise<User | null> {
-        return null
+    async login(email: string, password: string): Promise<User | null> {
+        const prisma = new PrismaClient();
+        try {
+            return await prisma.user.findUniqueOrThrow({
+                where: {
+                    email: email,
+                    password: password
+                }
+            });
+        } catch (exception) {
+            return null;
+        }
     }
 
     async createCookie(user: User): Promise<string> {
-        let cookie = ""
+
+        const byteSecret = jose.base64url.decode(String(process.env.SECRET_KEY));
+
+
+        const jwt = await new jose.EncryptJWT({'email': user.email, 'fullname': user.firstName + " " + user.lastName })
+            .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' }) 
+            .setExpirationTime('1w')
+            .encrypt(byteSecret);  
+        console.log(jwt);  
+
+    
+        const cookie = serialize('session', jwt, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 60 * 24 * 7, 
+            path: '/',
+        });
+
         return cookie;
     }
 
     async getUserFromSession(session: string):Promise<User | null> {
+        const byteSecret = jose.base64url.decode(String(process.env.SECRET_KEY))
+        let {payload, protectedHeader} = await jose.jwtDecrypt(session,byteSecret)
+        let time = (new Date()).getTime()
+        console.log(time,payload.exp)
+        if (payload.exp && time < payload.exp * 1000){
+            let email = payload.email ?? null
+            if(email){
+                const prisma = new PrismaClient()
+                let user = await prisma.user.findFirst({
+                    where : {
+                        email: email
+                    }
+                })
+                return user
+            }
+        }
+        console.error("not found user from session")
         return null
     }
 
     async getCurrentRoles(session: string): Promise<Role[]> {
-    const user = await prisma.user.findUnique({
-        where: { email: session }, // หรือถ้า session คือ userId ก็ใช้ userId
-        include: {
-            admin: true,       // เพิ่มการดึงข้อมูล admin
-            supervisor: true,  // เพิ่มการดึงข้อมูล supervisor
-            dairyWorker: true, // เพิ่มการดึงข้อมูล dairyWorker
-            veterian: true,    // เพิ่มการดึงข้อมูล veterian
-        },
-    });
+        let user = await this.getUserFromSession(session)
+        if (!user) {
+            
+            return [];
+        }
+        console.log('User details:', user);
 
-    if (!user) {
-        return [];
-    }
+        const currentUser = await prisma.user.findUnique({
+            where: { id: user.id },
+            include: {
+              admin: true,
+              supervisor: true,
+              dairyWorker: true,
+              veterian: true,
+            },
+          });
+
+        if (!currentUser) {
+            console.error("not found current user")
+            return [];
+        }
+
 
     const roles: Role[] = [];
 
-    if (user.admin) {
+    if (currentUser.admin) {
         roles.push(new AdminRole());
     }
 
-    if (user.supervisor) {
+    if (currentUser.supervisor) {
         roles.push(new SupervisorRole());
     }
 
-    if (user.dairyWorker) {
+    if (currentUser.dairyWorker) {
         roles.push(new DairyWorkerRole());
     }
 
-    if (user.veterian) {
+    if (currentUser.veterian) {
         roles.push(new VeterianRole());
     }
 
     return roles;
 }
-    ok(): string {
-        return "OK พ่อมึงถถถ"
-    }
+
 }
