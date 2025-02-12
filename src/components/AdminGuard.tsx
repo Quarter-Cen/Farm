@@ -4,8 +4,9 @@ import { PropsWithChildren } from "react";
 
 
 export default async function AdminGuard({ children }: PropsWithChildren) {
+    let cookiesValue = await cookies()
     let me = await fetch("http://localhost:3000/api/auth/me", {
-        headers : { Cookie: cookies().toString()}
+        headers : { Cookie: cookiesValue.toString()}
     })
 
     if(!me.ok){
@@ -13,7 +14,7 @@ export default async function AdminGuard({ children }: PropsWithChildren) {
     }
 
     let roles = await fetch("http://localhost:3000/api/auth/me/roles", {
-        headers : { Cookie: cookies().toString()}
+        headers : { Cookie: cookiesValue.toString()}
     })
 
     if (!roles.ok) {
