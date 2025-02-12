@@ -1,10 +1,11 @@
-import LoginForm from "@/components/LoginForm"
-import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
+import LoginForm from "@/components/LoginForm";
+import { redirect } from "next/navigation"; 
+import { cookies } from "next/headers";
 
 export default async function LoginPage() {
-          const cookiesValue = await cookies()
-          let roles = await fetch("http://localhost:3000/api/auth/me/roles", {
+          const cookiesValue = await cookies();
+          if(cookiesValue.get('session')){
+            let roles = await fetch("http://localhost:3000/api/auth/me/roles", {
               headers : { Cookie: cookiesValue.toString()}
           })
     
@@ -22,6 +23,7 @@ export default async function LoginPage() {
             } else if (roleNames.includes("Supervisor")) {
               redirect("/supervisor/dashboard")
             }
+          }
         }
     return (
         <div className="h-screen content-center">
