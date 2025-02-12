@@ -2,37 +2,28 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { PropsWithChildren } from "react";
 
+interface RoleGuardProps extends PropsWithChildren {
+    role: string[]
+}
 
-export default async function AdminGuard({ children }: PropsWithChildren) {
-    let cookiesValue = await cookies()
-    let me = await fetch("http://localhost:3000/api/auth/me", {
-        headers : { Cookie: cookiesValue.toString()}
-    })
-
-    if(!me.ok){
-        redirect('/login')
-    }
-
+export default async function RoleGuard({ children, role }: RoleGuardProps) {
+    let cookiesValue = await cookies();
     let roles = await fetch("http://localhost:3000/api/auth/me/roles", {
-        headers : { Cookie: cookiesValue.toString()}
+        headers: { Cookie: cookiesValue.toString() }
     })
 
     if (!roles.ok) {
         redirect('/login');
     }
 
-    const user = await roles.json();
-    const allowedRoles = ['Admin', 'Manager'];
+    const userRoles = await roles.json()
 
-    const hasAccess = user.some((role:any) => allowedRoles.includes(role.name));
+
+    const hasAccess = userRoles.some((userRole: any) => role.includes(userRole.name))
 
     if (!hasAccess) {
-        redirect('/login');
+        redirect('/login')
     }
 
-    return (
-        <>
-            { children }
-        </>
-    )
+    return <>{children}</>
 }
