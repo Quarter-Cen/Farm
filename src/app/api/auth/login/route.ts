@@ -1,6 +1,7 @@
 import { LoginService } from "@/services/login"
 import { NextResponse } from "next/server";
 import * as cookie from 'cookie'
+
 export async function POST(request:Request) {
     let data = await request.json()
     let loginService = new LoginService()
