@@ -1,4 +1,4 @@
-import AdminGuard from '@/components/AdminGuard'
+import AdminGuard from '@/components/RoleGuard'
 
 
 export default function DairyWorkerDashBoard() {
