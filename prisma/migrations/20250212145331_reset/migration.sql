@@ -71,19 +71,6 @@ CREATE TABLE `food_imps` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `tasks` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `taskName` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
-    `dueDateTime` DATETIME(3) NOT NULL,
-    `status` VARCHAR(191) NOT NULL,
-    `supervisorId` BIGINT NULL,
-    `dairyWorkerId` BIGINT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `product_reports` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `date` DATETIME(3) NOT NULL,
@@ -150,24 +137,6 @@ CREATE TABLE `treatments` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
-CREATE TABLE `vaccinations` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
-    `cowName` VARCHAR(191) NOT NULL,
-    `dose` INTEGER NOT NULL,
-    `injectDate` DATETIME(3) NOT NULL,
-    `injectNextDate` DATETIME(3) NOT NULL,
-    `status` VARCHAR(191) NOT NULL,
-    `injector` VARCHAR(191) NOT NULL,
-    `sideEffects` VARCHAR(191) NOT NULL,
-    `notation` VARCHAR(191) NOT NULL,
-    `veterianId` BIGINT NOT NULL,
-    `cowId` BIGINT NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 -- AddForeignKey
 ALTER TABLE `admins` ADD CONSTRAINT `admins_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -182,12 +151,6 @@ ALTER TABLE `veterians` ADD CONSTRAINT `veterians_userId_fkey` FOREIGN KEY (`use
 
 -- AddForeignKey
 ALTER TABLE `food_imps` ADD CONSTRAINT `food_imps_adminId_fkey` FOREIGN KEY (`adminId`) REFERENCES `admins`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `tasks` ADD CONSTRAINT `tasks_supervisorId_fkey` FOREIGN KEY (`supervisorId`) REFERENCES `supervisors`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `tasks` ADD CONSTRAINT `tasks_dairyWorkerId_fkey` FOREIGN KEY (`dairyWorkerId`) REFERENCES `dairy_workers`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `product_reports` ADD CONSTRAINT `product_reports_supervisorId_fkey` FOREIGN KEY (`supervisorId`) REFERENCES `supervisors`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -206,9 +169,3 @@ ALTER TABLE `treatments` ADD CONSTRAINT `treatments_veterianId_fkey` FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE `treatments` ADD CONSTRAINT `treatments_cowId_fkey` FOREIGN KEY (`cowId`) REFERENCES `cows`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `vaccinations` ADD CONSTRAINT `vaccinations_veterianId_fkey` FOREIGN KEY (`veterianId`) REFERENCES `veterians`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `vaccinations` ADD CONSTRAINT `vaccinations_cowId_fkey` FOREIGN KEY (`cowId`) REFERENCES `cows`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
