@@ -1,11 +1,12 @@
 import AdminGuard from '@/components/AdminGuard'
+import Dashboard from '@/components/AdminDashboard'
 
 
 export default function AdminDashboard() {
     return (
         <>
             <AdminGuard role={['Admin',]}>
-                <h1>Hello Admin</h1>
+                <Dashboard/>
             </AdminGuard>
         </>
     )
