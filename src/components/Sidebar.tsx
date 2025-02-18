@@ -1,20 +1,25 @@
-"use client";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation"; // ✅ Import usePathname
+"use client"
+
+import { redirect } from "next/navigation"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 
 type Role = "Admin" | "Veterian" | "Supervisor" | "Dairyworker";
 
 const roleLinks: Record<Role, { href: string; label: string }[]> = {
   Admin: [
     { href: "/admin/dashboard", label: "Dashboard" },
-    { href: "/admin/dashboard/users", label: "Manage Users" },
-    { href: "/admin/dashboard/settings", label: "Settings" },
+    { href: "/admin/cow", label: "Cow" },
+    { href: "/admin/cow-care", label: "Cow Care" },
+    { href: "/admin/products", label: "Products" },
+    { href: "/admin/exports", label: "Exports" },
+    { href: "/admin/resorce", label: "Resorce" },
   ],
   Veterian: [
     { href: "/veterian/dashboard", label: "Dashboard" },
-    { href: "/veterian/profile", label: "Profile" },
+    { href: "/veterian/cow", label: "Cow" },
+    { href: "/veterian/vaccination", label: "Vaccination" },
   ],
   Supervisor: [
     { href: "/supervisor/dashboard", label: "Dashboard" },
@@ -75,7 +80,7 @@ export default function Sidebar() {
       <h2 className="text-xl font-bold mb-6">{role} Dashboard</h2>
       <ul>
         {roleLinks[role].map(({ href, label }) => {
-          const isActive = pathname.startsWith(href)
+          const isActive = pathname.match(new RegExp(`^${href}(/|$)`))
 
           return (
             <li key={href} className="mb-2">
@@ -95,7 +100,7 @@ export default function Sidebar() {
             onClick={handleLogout}
             className="block px-4 py-2 hover:bg-gray-600 rounded w-full text-left"
           >
-            Log Out
+            Sign Out
           </button>
         </li>
       </ul>
