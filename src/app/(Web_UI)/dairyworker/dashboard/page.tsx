@@ -1,12 +1,12 @@
-import AdminGuard from '@/components/RoleGuard'
+import RoleGuard from '@/components/RoleGuard'
 
 
 export default function DairyWorkerDashBoard() {
     return (
         <>
-            <AdminGuard role={['DairyWorker']}>
+            <RoleGuard role={['DairyWorker']}>
                 <h1>Hello DairyWorker</h1>
-            </AdminGuard>
+            </RoleGuard>
         </>
     )
 }
