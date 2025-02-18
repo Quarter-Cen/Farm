@@ -6,7 +6,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
     <>  
         <DefaultGuard>
             <div className="flex min-h-screen">
-                <Sidebar/>
+                <Sidebar />
                 <main className="flex-1 p-6">{children}</main>
             </div>
         </DefaultGuard>
