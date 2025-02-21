@@ -136,7 +136,6 @@ model Cow {
   birthDate             DateTime
   breed                 String
   healthStatus          String
-
   veterianId            BigInt?
   veterian              Veterian? @relation(fields: [veterianId], references: [id])
 
@@ -153,7 +152,6 @@ model Treatment {
   date                  DateTime
   drugName              String
   status                String
-  responsibleMan        String
   notation              String
 
   veterianId            BigInt
