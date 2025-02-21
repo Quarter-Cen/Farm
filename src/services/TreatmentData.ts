@@ -1,17 +1,17 @@
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from '@prisma/client';
 import { ITreatmentData } from "./veterianServices/ITreatmentData";
 import { Treatment } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export class TreatmentService implements ITreatmentData {
-    async AddTreatmentData(nameDisease: string, events: string, details: string, date: Date, drugName: string, status: string, notation: string): Promise<Treatment | null> {
+    async AddTreatmentData(nameDisease: string, events: string, details: string, date: Date, drugName: string, status: string, notation: string, veterianId: bigint, cowId: bigint): Promise<Treatment | null> {
         try {
             if(nameDisease == '' || events == ''){
                 console.error('NameDisease and events cannot be empty')
                 return null
             }
-            return await prisma.create({
+            return await prisma.treatment.create({
                 data : {
                     nameDisease: nameDisease,
                     events: events,
@@ -19,7 +19,9 @@ export class TreatmentService implements ITreatmentData {
                     date: date,
                     drugName: drugName,
                     status: status,
-                    notation: notation
+                    notation: notation,
+                    veterianId: veterianId,
+                    cowId: cowId
                 }
             })
         } catch (exception) {
