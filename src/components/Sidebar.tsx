@@ -19,7 +19,7 @@ const roleLinks: Record<Role, { href: string; label: string }[]> = {
   Veterian: [
     { href: "/veterian/dashboard", label: "Dashboard" },
     { href: "/veterian/cow", label: "Cow" },
-    { href: "/veterian/vaccination", label: "Vaccination" },
+    { href: "/veterian/treatment", label: "Treatmentation" },
   ],
   Supervisor: [
     { href: "/supervisor/dashboard", label: "Dashboard" },
