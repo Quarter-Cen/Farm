@@ -5,7 +5,7 @@ import { Treatment } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class TreatmentService implements ITreatmentData {
-    async AddTreatmentData(nameDisease: string, events: string, details: string, date: Date, drugName: string, status: string, notation: string, veterianId: bigint, cowId: bigint): Promise<Treatment | null> {
+    async AddTreatmentData(nameDisease: string, events: string, details: string, date: Date, drugName: string, status: string, notation: string, veterianId: bigint, cowId: bigint, cowWeight: number): Promise<Treatment | null> {
         try {
             if(nameDisease == '' || events == ''){
                 console.error('NameDisease and events cannot be empty')
@@ -20,6 +20,7 @@ export class TreatmentService implements ITreatmentData {
                     drugName: drugName,
                     status: status,
                     notation: notation,
+                    cowWeight: cowWeight,
                     veterianId: veterianId,
                     cowId: cowId
                 }
@@ -55,7 +56,7 @@ export class TreatmentService implements ITreatmentData {
         }
     }
 
-    async getCowWithTreatment(): Promise<Treatment[]> {
+    async getCowWithTreatment(): Promise<(Treatment & { cow: any, veterian: any })[]> {
         const treatments = await prisma.treatment.findMany({
             include: {
                 cow: true,       // ดึงข้อมูลจากตาราง Cow ที่เชื่อมโยงกับ Treatment
