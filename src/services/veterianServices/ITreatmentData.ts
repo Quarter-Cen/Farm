@@ -10,7 +10,8 @@ export interface ITreatmentData {
         status: string,
         notation: string,
         veterianId: bigint,
-        cowId: bigint
+        cowId: bigint,
+        cowWeight: number,
     ): Promise<Treatment | null>
     editTreatmentData(id: bigint, updatedData: Partial<Treatment>): Promise<Treatment | null>
     deleteTreatmentData(id: bigint):Promise<String>
