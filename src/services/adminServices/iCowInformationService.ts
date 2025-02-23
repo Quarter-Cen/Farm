@@ -1,4 +1,4 @@
-import { Cow } from "@prisma/client";
+import { $Enums, Cow } from "@prisma/client";
 
 export interface iCowInformationService {
   AddCow(
@@ -7,10 +7,12 @@ export interface iCowInformationService {
     age: number,
     birthDate: Date,
     breed: string,
-    healthStatus: string
+    healthStatus: $Enums.HealthStatus,
+    weight: number,
+    
   ): Promise<Cow | null>
   editCow(id: bigint, updatedData: Partial<Cow>) : Promise<Cow | null>
-  deleteCow(id: bigint): Promise<string>
+  deleteCow(id: bigint): Promise<Cow | null>
   getAllCow(): Promise<Cow[]>
   getCowByID(id: bigint): Promise<Cow | null>
 }

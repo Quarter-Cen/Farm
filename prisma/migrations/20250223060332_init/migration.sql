@@ -129,7 +129,6 @@ CREATE TABLE `treatments` (
     `date` DATETIME(3) NOT NULL,
     `drugName` VARCHAR(191) NOT NULL,
     `status` VARCHAR(191) NOT NULL,
-    `responsibleMan` VARCHAR(191) NOT NULL,
     `notation` VARCHAR(191) NOT NULL,
     `veterianId` BIGINT NOT NULL,
     `cowId` BIGINT NOT NULL,
