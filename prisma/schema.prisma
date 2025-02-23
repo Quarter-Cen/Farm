@@ -127,6 +127,7 @@ model PaymentMethod {
   @@map("payment_methods")
 }
 
+
   model Cow {
     id                    BigInt    @id @default(autoincrement())
     name                  String
@@ -144,18 +145,20 @@ model PaymentMethod {
     @@map("cows")
   }
 
-  model Treatment {
-    id                    BigInt   @id @default(autoincrement())
-    nameDisease           String
-    events                String
-    details               String
-    date                  DateTime
-    drugName              String
-    status                String
-    notation              String
 
-    veterianId            BigInt
-    veterian              Veterian @relation(fields: [veterianId], references: [id])
+model Treatment {
+  id                    BigInt   @id @default(autoincrement())
+  nameDisease           String
+  events                String
+  details               String
+  date                  DateTime
+  drugName              String
+  status                String
+  notation              String
+
+  veterianId            BigInt
+  veterian              Veterian @relation(fields: [veterianId], references: [id])
+
 
     cowId                 BigInt
     cow                   Cow      @relation(fields: [cowId], references: [id])
