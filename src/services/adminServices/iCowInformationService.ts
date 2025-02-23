@@ -11,7 +11,16 @@ export interface iCowInformationService {
     weight: number,
     
   ): Promise<Cow | null>
-  editCow(id: bigint, updatedData: Partial<Cow>) : Promise<Cow | null>
+  editCow(id: bigint, data: {
+    name: string;
+    gender: string;
+    age: number;
+    weight: number;
+    birthDate: Date;
+    breed: string;
+    healthStatus: $Enums.HealthStatus;
+    veterianId: bigint | null;
+  }): Promise<Cow>
   deleteCow(id: bigint): Promise<Cow | null>
   getAllCow(): Promise<Cow[]>
   getCowByID(id: bigint): Promise<Cow | null>
