@@ -4,7 +4,6 @@ import { HealthStatus } from "@prisma/client";
 
 let cowService = new CowService()
 
-
 export async function GET(req: NextRequest) {
     try {
         const cow = await cowService.getAllCow();

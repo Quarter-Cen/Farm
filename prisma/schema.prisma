@@ -136,7 +136,7 @@ model PaymentMethod {
     weight                Float
     birthDate             DateTime
     breed                 String
-  healthStatus            HealthStatus
+    healthStatus          HealthStatus
     veterianId            BigInt?
     veterian              Veterian? @relation(fields: [veterianId], references: [id])
 
