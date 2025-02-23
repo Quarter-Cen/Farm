@@ -1,45 +1,77 @@
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient, HealthStatus  } from "@prisma/client";
 import { iCowInformationService } from "./adminServices/iCowInformationService";
 import { Cow } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export class CowService implements iCowInformationService {
-    async AddCow(name: string, gender: string, age: number, birthDate: Date, breed: string, healthStatus: string): Promise<Cow | null > {
+    async AddCow(
+        name: string,
+        gender: string,
+        age: number,
+        birthDate: string | Date,
+        breed: string,
+        healthStatus: HealthStatus,
+        weight: number,
+        veterianId?: bigint
+    ): Promise<Cow> {
         try {
-            if(name == '' || gender == ''){
-                console.error('Name and gender cannot be empty')
-                return null
+
+            if (
+                !name.trim() ||
+                !gender.trim() ||
+                age <= 0 ||
+                !birthDate ||
+                !breed.trim() ||
+                !healthStatus.trim() ||
+                weight <= 0
+            ) {
+                throw new Error("Invalid input: Required fields are missing or invalid");
             }
+
+            // แปลง birthDate เป็น Date ถ้าเป็น string
+            const formattedBirthDate = typeof birthDate === "string" ? new Date(birthDate) : birthDate;
+
             return await prisma.cow.create({
                 data: {
-                    name: name,
-                    gender: gender,
-                    age: age,
-                    birthDate: birthDate,
-                    breed: breed,
-                    healthStatus: healthStatus
+                    name,
+                    gender,
+                    age,
+                    birthDate: formattedBirthDate,
+                    breed,
+                    healthStatus,
+                    weight,
+                    veterianId: veterianId ? BigInt(veterianId) : undefined
                 },
-            })
-        } catch (exception){
-            console.error('Error adding cow: ', exception)
-            return null
+            });
+        } catch (exception) {
+            console.error("Error adding cow:", exception);
+            throw new Error("Failed to add cow");
         }
     }
 
-    async deleteCow(id: bigint): Promise<string> {
-        try {
-            await prisma.cow.delete({
-                where: {
-                    id: id,
-                },
-            });
-            return 'Cow deleted successfully';
-        } catch (error) {
-            console.error(error);
-            return 'Error deleting cow';
+
+    async deleteCow(id: bigint): Promise<Cow | null> {
+            try {
+                // ตรวจสอบว่ามีวัวอยู่หรือไม่
+                const existingCow = await prisma.cow.findUnique({
+                    where: { id }
+                });
+    
+                if (!existingCow) {
+                    throw new Error("Cow not found");
+                }
+    
+                // ลบวัว
+                return await prisma.cow.delete({
+                    where: { id }
+                });
+            } catch (exception) {
+                console.error("Error deleting cow:", exception);
+                throw new Error("Failed to delete cow");
+            }
         }
-    }
+    
 
     async editCow(id: bigint, updatedData: Partial<Cow>): Promise<Cow | null> {
         try {
@@ -65,12 +97,19 @@ export class CowService implements iCowInformationService {
 
     async getCowByID(id: bigint): Promise<Cow | null> {
         try {
-            return await prisma.cow.findUnique({
-                where: { id: id },
+            // ค้นหาวัวตาม ID
+            const cow = await prisma.cow.findUnique({
+                where: { id }
             });
-        } catch (error) {
-            console.error('Error fetching cow by ID:', error);
-            return null;
+
+            if (!cow) {
+                return null; // ถ้าไม่พบวัว
+            }
+
+            return cow;
+        } catch (exception) {
+            console.error("Error fetching cow:", exception);
+            throw new Error("Failed to fetch cow");
         }
     }
 }
