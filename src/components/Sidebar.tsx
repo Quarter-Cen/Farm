@@ -76,7 +76,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-64 bg-gray-800 text-white min-h-screen p-4">
+    <div className="w-64 bg-gray-800 text-white min-h-screen p-4 fixed">
       <h2 className="text-xl font-bold mb-6">{role} Dashboard</h2>
       <ul>
         {roleLinks[role].map(({ href, label }) => {
