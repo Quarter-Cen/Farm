@@ -5,7 +5,7 @@ import React from 'react'
 export default function addTreatment() {
     return (
         <>
-            <div className='flex items-center justify-center ml-[250px]'>
+            <div className='flex items-center justify-center ml-[2%]'>
                 <form className='bg-[#88D64C] w-[450px] rounded-lg shadow-lg px-12 py-8'>
                     <div className='text-center pb-2'>
                         <span className='text-2xl font-bold'>ข้อมูลการรักษา</span>
