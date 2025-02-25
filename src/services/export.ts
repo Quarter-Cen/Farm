@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { iExportService } from "./adminServices/iExportService";
 import { Export } from "@prisma/client";
 import { ExportStatus } from "@prisma/client";
+import { error } from "console";
 
 const prisma = new PrismaClient();
 
@@ -24,9 +25,10 @@ export class ExportService implements iExportService {
                     methodId : paymentID
                 },
             })
-        } catch (exception){
+        } catch (exception:any){
+            console.log(exception.stack)
             console.error('Error adding export: ', exception)
-            return null
+            throw new Error("Failed to add export");
         }
     }
 

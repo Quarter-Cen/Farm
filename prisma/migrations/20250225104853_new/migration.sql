@@ -62,10 +62,34 @@ CREATE TABLE `food_imps` (
     `name` VARCHAR(191) NOT NULL,
     `date` DATETIME(3) NOT NULL,
     `importFrom` VARCHAR(191) NOT NULL,
-    `type` VARCHAR(191) NOT NULL,
+    `type` ENUM('VEGETABLE', 'MEAT', 'DAIRY', 'GRAIN') NOT NULL,
     `quantity` INTEGER NOT NULL,
     `pricePerUnit` DOUBLE NOT NULL,
     `adminId` BIGINT NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `stocks` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `type` ENUM('VEGETABLE', 'MEAT', 'DAIRY', 'GRAIN') NOT NULL,
+    `quantity` INTEGER NOT NULL,
+    `unit` INTEGER NOT NULL,
+    `status` ENUM('AVAILABLE', 'OUT_OF_STOCK', 'RESERVED') NOT NULL DEFAULT 'AVAILABLE',
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `stocks_type_key`(`type`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `stock_usages` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `stockType` ENUM('VEGETABLE', 'MEAT', 'DAIRY', 'GRAIN') NOT NULL,
+    `quantity` INTEGER NOT NULL,
+    `usedById` BIGINT NOT NULL,
+    `usedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -150,6 +174,9 @@ ALTER TABLE `veterians` ADD CONSTRAINT `veterians_userId_fkey` FOREIGN KEY (`use
 
 -- AddForeignKey
 ALTER TABLE `food_imps` ADD CONSTRAINT `food_imps_adminId_fkey` FOREIGN KEY (`adminId`) REFERENCES `admins`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `stock_usages` ADD CONSTRAINT `stock_usages_usedById_fkey` FOREIGN KEY (`usedById`) REFERENCES `dairy_workers`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `product_reports` ADD CONSTRAINT `product_reports_supervisorId_fkey` FOREIGN KEY (`supervisorId`) REFERENCES `supervisors`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

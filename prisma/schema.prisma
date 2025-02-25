@@ -57,6 +57,7 @@ model DairyWorker {
   userId                BigInt @unique
   user                  User   @relation(fields: [userId], references: [id])
 
+  stockUsage            StockUsage[]
   @@map("dairy_workers")
 }
 
@@ -76,7 +77,7 @@ model FoodImp {
   name                  String
   date                  DateTime
   importFrom            String
-  type                  String
+  type                  FoodType
   quantity              Int
   pricePerUnit          Float
 
@@ -86,6 +87,27 @@ model FoodImp {
   @@map("food_imps")
 }
 
+model Stock {
+  id                  BigInt   @id @default(autoincrement())
+  type                FoodType @unique  // เชื่อมกับ FoodType แทน id ของ FoodImp
+  quantity            Int
+  unit                Int
+  status              StockStatus @default(AVAILABLE)
+  updatedAt           DateTime @updatedAt
+
+  @@map("stocks")
+}
+
+model StockUsage {
+  id          BigInt   @id @default(autoincrement())
+  stockType   FoodType
+  quantity    Int
+  usedById    BigInt
+  usedBy      DairyWorker   @relation(fields: [usedById], references: [id])
+  usedAt      DateTime @default(now())
+
+  @@map("stock_usages")
+}
 
 model ProductReport {
   id                    BigInt   @id @default(autoincrement())
@@ -154,7 +176,7 @@ model Treatment {
   drugName              String
   status                String
   notation              String
-  cowWeight             Float
+
   veterianId            BigInt
   veterian              Veterian @relation(fields: [veterianId], references: [id])
 
@@ -185,4 +207,18 @@ enum HealthStatus {
   SICK
   INJURED
   DEAD
+}
+
+
+enum FoodType {
+  VEGETABLE
+  MEAT
+  DAIRY
+  GRAIN
+}
+
+enum StockStatus {
+  AVAILABLE
+  OUT_OF_STOCK
+  RESERVED
 }

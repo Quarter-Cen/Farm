@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ExportService } from "@/services/export";
 import { ExportStatus } from '@prisma/client'
-let exportService = new ExportService()
+import { StockService } from "@/services/stock";
+let stockService = new StockService()
 
 export async function GET(req: NextRequest) {
     try {
-        const exp = await exportService.getAllExports();
+        const res = await stockService.getAllStock();
 
-        if (!exp || exp.length === 0) {
+        if (!res || res.length === 0) {
             return NextResponse.json({ error: "Export not found" }, { status: 404 });
         }
 
-        const jsonResponse = JSON.stringify(exp, (key, value) =>
+        const jsonResponse = JSON.stringify(res, (key, value) =>
             typeof value === "bigint" ? value.toString() : value
         );
 
@@ -25,24 +25,19 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: Request) {
     const body = await req.json();
-    const { customer,quantity,status,type,destination,pricePerQuantity,adminId,paymentMethodId } = body
-    if (!ExportStatus || !Object.values(ExportStatus).includes(status as ExportStatus)) {
-        return NextResponse.json({ error: "Invalid exportStatus value" }, { status: 400 });
-    }
-
+    const { name,date,importFrom,type,quantity,pricePerQuantity,adminId } = body
     try {
-      const newExport = await exportService.addExport(
-          customer,
-          quantity,
-          status as ExportStatus,
+      const res = await stockService.addPurchaseOrder(
+          name,
+          new Date(date),
+          importFrom,
           type,
-          destination,
+          quantity,
           pricePerQuantity,
           BigInt(adminId),
-          BigInt(paymentMethodId)
         );
   
-          const jsonResponse = JSON.stringify(newExport, (key, value) =>
+          const jsonResponse = JSON.stringify(res, (key, value) =>
             typeof value === "bigint" ? value.toString() : value
         );
 
