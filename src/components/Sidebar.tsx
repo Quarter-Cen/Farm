@@ -73,7 +73,7 @@ export default function Sidebar() {
   return (
     <div className="w-64 bg-gray-800 text-white h-screen p-4 overflow-y-scroll">
       <h2 className="text-xl font-bold mb-6">{name}</h2>
-      
+
       <ul>
         {roles.map((role) => {
           if (!roleLinks[role]) return null; // ตรวจสอบว่า role นี้มีใน roleLinks หรือไม่

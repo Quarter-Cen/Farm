@@ -155,7 +155,7 @@ model Treatment {
   drugName              String
   status                String
   notation              String
-
+  cowWeight             Float
   veterianId            BigInt
   veterian              Veterian @relation(fields: [veterianId], references: [id])
 
