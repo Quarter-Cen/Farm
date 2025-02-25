@@ -127,22 +127,24 @@ model PaymentMethod {
   @@map("payment_methods")
 }
 
-model Cow {
-  id                    BigInt    @id @default(autoincrement())
-  name                  String
-  gender                String
-  age                   Int
-  weight                Float
-  birthDate             DateTime
-  breed                 String
-  healthStatus          String
-  veterianId            BigInt?
-  veterian              Veterian? @relation(fields: [veterianId], references: [id])
 
-  treatments            Treatment[]
+  model Cow {
+    id                    BigInt    @id @default(autoincrement())
+    name                  String
+    gender                String
+    age                   Int
+    weight                Float
+    birthDate             DateTime
+    breed                 String
+  healthStatus            HealthStatus
+    veterianId            BigInt?
+    veterian              Veterian? @relation(fields: [veterianId], references: [id])
 
-  @@map("cows")
-}
+    treatments            Treatment[]
+
+    @@map("cows")
+  }
+
 
 model Treatment {
   id                    BigInt   @id @default(autoincrement())
@@ -157,11 +159,12 @@ model Treatment {
   veterianId            BigInt
   veterian              Veterian @relation(fields: [veterianId], references: [id])
 
-  cowId                 BigInt
-  cow                   Cow      @relation(fields: [cowId], references: [id])
 
-  @@map("treatments")
-}
+    cowId                 BigInt
+    cow                   Cow      @relation(fields: [cowId], references: [id])
+
+    @@map("treatments")
+  }
 
 
 
@@ -169,4 +172,11 @@ enum Gender {
   MALE
   FEMALE
   OTHER
+}
+
+enum HealthStatus {
+  HEALTHY
+  SICK
+  INJURED
+  DEAD
 }

@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+
+  /* ซ่อนลูกศรและเพิ่มสีให้ scrollbar */
+  ::-webkit-scrollbar {
+    width: 3px; /* ขนาดของ scrollbar */
+    height: 1px; /* สำหรับ scrollbar แนวนอน */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #38e852; /* สีของตัวเลื่อน (thumb) */
+  
+  }
+  
+  /* เมื่อ hover ที่ scrollbar */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #269c38; /* สีของตัวเลื่อนเมื่อ hover */
+  }
+  
+  /* ซ่อนลูกศรของ scrollbar */
+  ::-webkit-scrollbar-button {
+    display: none; /* ซ่อนลูกศรทั้งสอง */
+  }
+  ::-webkit-scrollbar-track {
+    background: rgba(224, 224, 224, 0.18);
+  }
+    
+    }
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -19,3 +47,5 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
