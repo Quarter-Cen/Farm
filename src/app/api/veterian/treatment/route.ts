@@ -50,6 +50,12 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
+        console.log("🚀 Received body:", body); // เช็คค่าที่รับมา
+
+        // ตรวจสอบค่าว่าง
+        if (!body || Object.keys(body).length === 0) {
+            return NextResponse.json({ error: "Request body is empty" }, { status: 400 });
+        }
 
         const requiredFields = ["nameDisease", "events", "details", "date", "drugName", "status", "notation", "veterianId", "cowId", "cowWeight"];
         for (const field of requiredFields) {
@@ -57,6 +63,8 @@ export async function POST(req: NextRequest) {
                 return NextResponse.json({ error: `${field} is required` }, { status: 400 });
             }
         }
+
+        console.log("✅ Data passed validation");
 
         const newTreatment = await treatmentService.AddTreatmentData(
             body.nameDisease,
