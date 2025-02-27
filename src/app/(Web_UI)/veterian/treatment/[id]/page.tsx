@@ -49,10 +49,10 @@ export default function CowDetails() {
             .catch((error) => console.error("Error fetching treatments:", error));
     }, [id]);
 
-    if (!cow) return <p className="text-center mt-10 text-gray-500">⏳ กำลังโหลดข้อมูล...</p>;
+    if (!cow) return <p className="text-center mt-10 text-gray-500">ยังไม่มีข้อมูลการรักษา...</p>;
 
     return (
-        <div className="flex flex-col items-center justify-center ml-[250px] mt-10 mx-auto">
+        <div className="flex flex-col items-center justify-center mt-10 mx-auto">
             <h1 className="text-3xl font-bold text-gray-800 mb-6">🐄 รายละเอียดวัวและการรักษา</h1>
 
             {/* 🐄 ข้อมูลวัว */}
@@ -100,14 +100,23 @@ export default function CowDetails() {
                                         <td className="px-4 py-2 text-center border">{treatment.details}</td>
                                         <td className="px-4 py-2 text-center border">{treatment.drugName}</td>
                                         <td className="px-4 py-2 text-center border">
-                                            <span className={`px-3 py-1 rounded-full text-white text-sm ${treatment.status === "Completed" ? "bg-green-500" : "bg-yellow-500"}`}>
-                                                {treatment.status === "Completed" ? "✅ รักษาแล้ว" : "🟡 กำลังรักษา"}
+                                            <span className={`px-3 py-1 rounded-full text-white text-sm ${treatment.status === "รักษาแล้ว"
+                                                ? "bg-[#28A745]"
+                                                : treatment.status === "กำลังรักษา"
+                                                    ? "bg-[#FFC107]"
+                                                    : "bg-[#FD7E14]"
+                                                }`}>
+                                                {treatment.status === "รักษาแล้ว"
+                                                    ? "รักษาแล้ว" :
+                                                    treatment.status === "กำลังรักษา"
+                                                        ? "กำลังรักษา"
+                                                        : "รอดำเนินการ"}
                                             </span>
                                         </td>
                                         <td className="px-4 py-2 text-center border">{treatment.notation}</td>
                                         <td className="px-4 py-2 text-center border">
                                             <div className="flex justify-center gap-2">
-                                                <Link href={`/veterian/treatment/editbyID?id=${treatment.id}`}>
+                                                <Link href={`/veterian/treatment/edittreatment/${treatment.id}`}>
                                                     <button className="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded-md">
                                                         แก้ไข
                                                     </button>
