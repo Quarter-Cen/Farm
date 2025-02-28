@@ -127,7 +127,7 @@ export default function EditTreatment() {
 
                 <div className="text-center mt-6">
                     <button type="submit" className="hover:bg-[#70b13f] px-3 py-1 mx-6 rounded-sm">ยืนยัน</button>
-                    <button type="button" onClick={() => router.push(`/veterian/treatment/${id}`)} className="bg-white px-3 py-1 mx-6 rounded-sm text-black hover:bg-[#88D64C]">ยกเลิก</button>
+                    <button type="button" onClick={() => router.push(`/veterian/cow`)} className="bg-white px-3 py-1 mx-6 rounded-sm text-black hover:bg-[#88D64C]">ยกเลิก</button>
                 </div>
             </form>
         </div>
