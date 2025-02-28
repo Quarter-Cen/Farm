@@ -6,19 +6,19 @@ interface Treatment {
     nameDisease: string;
     events: string;
     details: string;
-    date: string; // เปลี่ยนเป็น string เพื่อให้ตรงกับ API response
+    date: string;
     drugName: string;
     status: string;
     notation: string;
 }
 
 export default function VeterianTreatment() {
-    const [cowData, setCowData] = useState<Treatment[]>([]);
+    const [treatmentData, setTreatmentData] = useState<Treatment[]>([]);
 
     useEffect(() => {
         fetch("/api/veterian/treatment")
             .then((res) => res.json())
-            .then((data: Treatment[]) => setCowData(data))
+            .then((data: Treatment[]) => setTreatmentData(data))
             .catch((error) => console.error("Error fetching treatments:", error));
     }, []);
 
@@ -37,7 +37,7 @@ export default function VeterianTreatment() {
                     </tr>
                 </thead>
                 <tbody className="bg-[#F4F4F4] text-center">
-                    {cowData.map((treatment, index) => (
+                    {treatmentData.map((treatment) => (
                         <tr key={treatment.id} className="border">
                             <td className="px-6 py-2 border">{new Date(treatment.date).toLocaleDateString("th-TH")}</td>
                             <td className="px-6 py-2 border">{treatment.nameDisease}</td>
@@ -45,9 +45,19 @@ export default function VeterianTreatment() {
                             <td className="px-6 py-2 border">{treatment.details}</td>
                             <td className="px-6 py-2 border">{treatment.drugName}</td>
                             <td className="px-6 py-2 border">
-                                <span className={`px-3 py-1 rounded-full text-white ${treatment.status === "Completed" ? "bg-green-500" : "bg-red-500"}`}>
-                                    {treatment.status === "Completed" ? "รักษาแล้ว" : "กำลังรักษา"}
+                                <span className={`px-3 py-1 rounded-full text-white ${treatment.status === "รักษาแล้ว"
+                                        ? "bg-[#28A745]" 
+                                        : treatment.status === "กำลังรักษา"
+                                            ? "bg-[#FFC107]" 
+                                            : "bg-[#FD7E14]"
+                                    }`}>
+                                    {treatment.status === "รักษาแล้ว"
+                                        ? "รักษาแล้ว"
+                                        : treatment.status === "กำลังรักษา"
+                                            ? "กำลังรักษา"
+                                            : "รอดำเนินการ"}
                                 </span>
+
                             </td>
                             <td className="px-6 py-2 border">{treatment.notation || "-"}</td>
                         </tr>
