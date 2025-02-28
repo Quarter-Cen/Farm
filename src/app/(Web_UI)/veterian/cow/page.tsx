@@ -63,7 +63,7 @@ export default function VeterianCowInfo() {
                                         }
                                     </span>
                                 </td>
-                                <td className="px-12 py-2 text-center flex gap-1">
+                                <td className="px-12 py-2 text-center flex gap-1 border">
                                     <Link href={`/veterian/treatment/addtreatment/${cow.id}`}>
                                         <button className="bg-[#88D64C] hover:bg-[#76b942] px-3 py-1 rounded-md">
                                             <span>เพิ่มข้อมูล</span>
