@@ -48,7 +48,30 @@ export async function PUT(req: NextRequest, params: { params: { id: string } }) 
         const { id } = await params.params;
         const body = await req.json();
 
-        const editTreatment = await treatmentService.editTreatmentData(BigInt(id), body)
+        console.log("✅ ข้อมูลที่ได้รับจากฟอร์ม:", body); // ตรวจสอบค่า formData
+
+        // ตรวจสอบว่า id และ body ไม่เป็น null
+        if (!id || !body) {
+            return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+        }
+
+        // แปลงค่าก่อนส่งให้ Prisma
+        const validBody = {
+            nameDisease: body.nameDisease,
+            events: body.events,
+            details: body.details,
+            date: body.date ? new Date(body.date) : undefined, 
+            drugName: body.drugName,
+            status: body.status,
+            notation: body.notation,
+            cowWeight: body.cowWeight ? Number(body.cowWeight) : undefined, 
+            veterianId: body.veterianId ? BigInt(body.veterianId) : undefined, 
+            cowId: body.cowId ? BigInt(body.cowId) : undefined,
+        };
+
+        console.log("📌 ข้อมูลที่ส่งไป editTreatmentData:", validBody);
+
+        const editTreatment = await treatmentService.editTreatmentData(BigInt(id), validBody)
 
         if (!editTreatment) {
             return NextResponse.json({ error: "Treatment not found" }, { status: 404 });
@@ -63,6 +86,7 @@ export async function PUT(req: NextRequest, params: { params: { id: string } }) 
 
         return NextResponse.json(formattedTreatment, { status: 200 });
     } catch (error) {
-        
+        console.error("Error updating treatment:", error);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link'
 import React from 'react'
-
+// ee
 export default function addTreatment() {
     return (
         <>
