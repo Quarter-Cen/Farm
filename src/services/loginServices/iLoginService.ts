@@ -6,7 +6,7 @@ export interface ILoginService {
     createCookie(user:User): Promise<string>;
     getUserFromSession(session: string): Promise<User | null>
     getCurrentRoles(session: string):Promise<Role[]>
-    getUserRoleIds(session: string):Promise<number[]>
+    getUserRoleIds(session: string): Promise<{ id: number, role: Role }[]>
 }
 
 export interface Role {

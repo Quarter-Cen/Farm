@@ -118,28 +118,46 @@ export class LoginService implements ILoginService {
         return roles;
     }
 
-    async getUserRoleIds(session: string): Promise<number[]> {
+    async getUserRoleIds(session: string): Promise<{ id: number, role: Role }[]> {
         let user = await this.getUserFromSession(session);
-        if (!user) return [];
-
+        if (!user) {
+            return [];
+        }
+        console.log('User details:', user);
+    
         const currentUser = await prisma.user.findUnique({
             where: { id: user.id },
-            select: {
+            include: {
                 admin: { select: { id: true } },
                 supervisor: { select: { id: true } },
                 dairyWorker: { select: { id: true } },
                 veterian: { select: { id: true } },
             },
         });
-
-        if (!currentUser) return [];
-
-        const roleIds: number[] = [];
-        if (currentUser.admin) roleIds.push(Number(currentUser.admin.id));
-        if (currentUser.supervisor) roleIds.push(Number(currentUser.supervisor.id));
-        if (currentUser.dairyWorker) roleIds.push(Number(currentUser.dairyWorker.id));
-        if (currentUser.veterian) roleIds.push(Number(currentUser.veterian.id));
-
-        return roleIds;
+    
+        if (!currentUser) {
+            console.error("not found current user");
+            return [];
+        }
+    
+        const roles: { id: number, role: Role }[] = [];
+    
+        if (currentUser.admin) {
+            roles.push({ id: Number(currentUser.admin.id), role: new AdminRole() });
+        }
+    
+        if (currentUser.supervisor) {
+            roles.push({ id: Number(currentUser.supervisor.id), role: new SupervisorRole() });
+        }
+    
+        if (currentUser.dairyWorker) {
+            roles.push({ id: Number(currentUser.dairyWorker.id), role: new DairyWorkerRole() });
+        }
+    
+        if (currentUser.veterian) {
+            roles.push({ id: Number(currentUser.veterian.id), role: new VeterianRole() });
+        }
+    
+        return roles;
     }
 }
