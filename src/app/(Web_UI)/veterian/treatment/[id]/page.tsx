@@ -33,26 +33,34 @@ export default function CowDetails() {
     const { id } = useParams();
     const [cow, setCow] = useState<Cow | null>(null);
     const [treatments, setTreatments] = useState<Treatment[]>([]);
+    
+     useEffect(() => {
+        fetch(`/api/admin/cow-info/${id}`)
+            .then((res) => res.json())
+            .then((data: Cow) => setCow(data))
+            .catch((error) => console.error("Error fetching treatments:", error));
+    }, []);
 
     useEffect(() => {
         if (!id) return;
 
-        fetch("/api/veterian/treatment")
+        fetch("api/veterian/treatment")
             .then((res) => res.json())
             .then((data: Treatment[]) => {
                 const cowTreatment = data.find((treatment) => treatment.cowId === id);
                 if (cowTreatment?.cow) {
-                    setCow(cowTreatment.cow);
                     setTreatments(data.filter((t) => t.cowId === id));
                 }
             })
-            .catch((error) => console.error("Error fetching treatments:", error));
+            .catch((error) => console.log("Error fetching treatments:", error));
     }, [id]);
+
+
 
     if (!cow) return <p className="text-center mt-10 text-gray-500">⏳ กำลังโหลดข้อมูล...</p>;
 
     return (
-        <div className="flex flex-col items-center justify-center ml-[250px] mt-10 mx-auto">
+        <div className="flex flex-col items-center justify-center ml-[2%] mt-10 mx-auto">
             <h1 className="text-3xl font-bold text-gray-800 mb-6">🐄 รายละเอียดวัวและการรักษา</h1>
 
             {/* 🐄 ข้อมูลวัว */}

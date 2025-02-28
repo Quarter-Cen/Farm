@@ -26,9 +26,9 @@ export class StockService implements iStockInformationService {
                     adminId: adminId
                 },
             });
-        } catch (error) {
-            console.error("Error adding purchase order:", error);
-            return null;
+        } catch (error:any) {
+            console.log("Error adding purchase order:", error.stack);
+            throw new Error("Failed to add order");
         }
     }
 

@@ -72,19 +72,31 @@ export class CowService implements iCowInformationService {
             }
         }
     
-
-    async editCow(id: bigint, updatedData: Partial<Cow>): Promise<Cow | null> {
-        try {
-            const updatedCow = await prisma.cow.update({
-                where: { id: id },
-                data: updatedData,
+        async editCow(id: bigint, data: {
+            name: string;
+            gender: string;
+            age: number;
+            weight: number;
+            birthDate: Date;
+            breed: string;
+            healthStatus: HealthStatus;
+            veterianId: bigint
+          }): Promise<Cow> {
+            const cow = await this.getCowByID(id);
+    
+            if (!cow) {
+              throw new Error('Cow not found');
+            }
+        
+            return await prisma.cow.update({
+              where: { id: id },
+              data: {
+                ...data,
+                healthStatus: data.healthStatus, // ให้ Prisma คาดหวังเป็น HealthStatus
+              },
             });
-            return updatedCow;
-        } catch (error) {
-            console.error('Error editing cow:', error);
-            return null;
-        }
-    }
+          }
+        
 
     async getAllCow(): Promise<Cow[]> {
         try {

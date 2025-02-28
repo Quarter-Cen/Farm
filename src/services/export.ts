@@ -1,30 +1,34 @@
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "@prisma/client";
 import { iExportService } from "./adminServices/iExportService";
 import { Export } from "@prisma/client";
+import { ExportStatus } from "@prisma/client";
+import { error } from "console";
 
 const prisma = new PrismaClient();
 
 export class ExportService implements iExportService {
-    async addExport(cowName: string, customer: string, quantity: number, status: string, type: string, destination: string, pricePerQuantity: number): Promise<Export | null> {
+    async addExport( customer: string, quantity: number, status: ExportStatus, type: string, destination: string, pricePerQuantity: number, adminID: bigint, paymentID: bigint): Promise<Export | null> {
         try {
-            if(cowName == '' || customer == '' || status =='' || type == ''|| destination ==''){
+            if(customer == '' || type == ''|| destination ==''){
                 console.error('No field has to be empty')
                 return null
             }
             return await prisma.export.create({
                 data: {
-                    cowName: cowName,
                     customer: customer,
                     quantity: quantity,
                     status: status,
                     type: type,
                     destination: destination,
-                    pricePerQuantity: pricePerQuantity
+                    pricePerQuantity: pricePerQuantity,
+                    adminId: adminID,
+                    methodId : paymentID
                 },
             })
-        } catch (exception){
+        } catch (exception:any){
+            console.log(exception.stack)
             console.error('Error adding export: ', exception)
-            return null
+            throw new Error("Failed to add export");
         }
     }
 
@@ -66,7 +70,7 @@ export class ExportService implements iExportService {
 
     async getExportByID(id: bigint): Promise<Export | null> {
         try {
-            return await prisma.cow.findUnique({
+            return await prisma.export.findUnique({
                 where: { id: id },
             });
         } catch (error) {

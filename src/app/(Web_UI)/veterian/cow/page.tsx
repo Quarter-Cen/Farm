@@ -11,26 +11,20 @@ interface Cow {
     healthStatus: string;
 }
 
-interface Treatment {
-    id: number;
-    nameDisease: string;
-    status: string;
-    cow: Cow;
-}
 
 export default function VeterianCowInfo() {
-    const [cowData, setCowData] = useState<Treatment[]>([]);
+    const [cowData, setCowData] = useState<Cow[]>([]);
 
     useEffect(() => {
-        fetch("/api/veterian/treatment")
+        fetch("/api/admin/cow-info")
             .then((res) => res.json())
-            .then((data: Treatment[]) => setCowData(data))
+            .then((data: Cow[]) => setCowData(data))
             .catch((error) => console.error("Error fetching treatments:", error));
     }, []);
 
     return (
         <>
-            <div className="flex items-center justify-center ml-[250px]">
+            <div className="flex items-center justify-center ml-[2%]">
                 <table className="min-w-full table-auto border border-gray-300">
                     <thead>
                         <tr className="bg-[#DBDBDB]">
@@ -47,13 +41,13 @@ export default function VeterianCowInfo() {
                         {cowData.map((treatment, index) => (
                             <tr key={treatment.id}>
                                 <td className="px-12 py-2 text-center">{index + 1}</td>
-                                <td className="px-12 py-2 text-center">{treatment.cow.name}</td>
-                                <td className="px-12 py-2 text-center">{treatment.cow.gender}</td>
-                                <td className="px-12 py-2 text-center">{treatment.cow.age}</td>
-                                <td className="px-12 py-2 text-center">{treatment.cow.breed}</td>
+                                <td className="px-12 py-2 text-center">{treatment.name}</td>
+                                <td className="px-12 py-2 text-center">{treatment.gender}</td>
+                                <td className="px-12 py-2 text-center">{treatment.age}</td>
+                                <td className="px-12 py-2 text-center">{treatment.breed}</td>
                                 <td className="px-12 py-2 text-center">
-                                    <span className={`px-5 py-1 rounded-full text-white ${treatment.cow.healthStatus === "ดี" ? "bg-[#28A745]" : "bg-[#FF5733]"}`}>
-                                        {treatment.cow.healthStatus === "ดี" ? "ดี" : "ไม่ดี"}
+                                    <span className={`px-5 py-1 rounded-full text-white ${treatment.healthStatus === "HEALTHY" ? "bg-[#28A745]" : "bg-[#FF5733]"}`}>
+                                        {treatment.healthStatus === "HEALTHY" ? "ดี" : "ไม่ดี"}
                                     </span>
                                 </td>
                                 <td className="px-12 py-2 text-center flex gap-1">
@@ -62,7 +56,7 @@ export default function VeterianCowInfo() {
                                             <span>เพิ่มข้อมูล</span>
                                         </button>
                                     </Link>
-                                    <Link href={`/veterian/treatment/${treatment.cow.id}`}>
+                                    <Link href={`/veterian/treatment/${treatment.id}`}>
                                         <button className="bg-[#4c83d6] hover:bg-[#37609c] px-3 py-1 rounded-md">
                                             <span>ดูเพิ่มเติม</span>
                                         </button>

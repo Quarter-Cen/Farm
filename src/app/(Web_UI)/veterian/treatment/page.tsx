@@ -23,7 +23,7 @@ export default function VeterianTreatment() {
     }, []);
 
     return (
-        <div className="flex items-center justify-center ml-[250px]">
+        <div className="flex items-center justify-center ml-[2%]">
             <table className="min-w-full table-auto border border-gray-300">
                 <thead>
                     <tr className="bg-[#DBDBDB] text-gray-700">
