@@ -33,8 +33,8 @@ export class TreatmentService implements ITreatmentData {
                     status: status,
                     notation: notation,
                     cowWeight: Number(cowWeight),
-                    veterianId: Number(veterianId),
-                    cowId: Number(cowId)
+                    veterianId: BigInt(veterianId),
+                    cowId: BigInt(cowId)
                 }
             })
         } catch (exception:any) {
