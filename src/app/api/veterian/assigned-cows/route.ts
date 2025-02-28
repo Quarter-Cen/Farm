@@ -18,10 +18,6 @@ export async function GET(req: NextRequest) {
 
         const cow = await cowService.getAllCowByVetID(BigInt(vetId));
 
-        if (!cow || cow.length === 0) {
-            return NextResponse.json({ error: "Cow not found" }, { status: 404 });
-        }
-
         const jsonResponse = JSON.stringify(cow, (key, value) =>
             typeof value === "bigint" ? value.toString() : value
         );

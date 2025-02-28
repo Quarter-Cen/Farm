@@ -38,6 +38,9 @@ export default function VeterianCowInfo() {
     }, []);
 
     useEffect(() => {
+        // Start loading
+        setLoading(true);
+
         if (isAdmin) {
             fetch("/api/admin/cow-info")
                 .then((res) => res.json())
@@ -53,6 +56,7 @@ export default function VeterianCowInfo() {
             fetch(`/api/veterian/assigned-cows?vetId=${vetId}`)
                 .then((res) => res.json())
                 .then((data: Cow[]) => {
+                    console.log(data);
                     setCowData(data);
                     setLoading(false);
                 })
@@ -62,7 +66,12 @@ export default function VeterianCowInfo() {
                 });
         }
     }, [isAdmin, isVeterian, vetId]);
-    console.log(cowData.length)
+
+    // Log cowData length after fetching and state update
+    useEffect(() => {
+        console.log("cc", cowData.length);
+    }, [cowData]);
+
     return (
         <div className="flex items-center justify-center ml-[2%]">
             {loading ? (
