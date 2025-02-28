@@ -15,6 +15,7 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 export class LoginService implements ILoginService {
+    
     async login(email: string, password: string): Promise<User | null> {
         const prisma = new PrismaClient();
         try {
@@ -73,48 +74,72 @@ export class LoginService implements ILoginService {
     }
 
     async getCurrentRoles(session: string): Promise<Role[]> {
-        let user = await this.getUserFromSession(session)
-        if (!user) {
-            
-            return [];
+            let user = await this.getUserFromSession(session)
+            if (!user) {
+                
+                return [];
+            }
+            console.log('User details:', user);
+
+            const currentUser = await prisma.user.findUnique({
+                where: { id: user.id },
+                include: {
+                admin: true,
+                supervisor: true,
+                dairyWorker: true,
+                veterian: true,
+                },
+            });
+
+            if (!currentUser) {
+                console.error("not found current user")
+                return [];
+            }
+
+
+        const roles: Role[] = [];
+
+        if (currentUser.admin) {
+            roles.push(new AdminRole());
         }
-        console.log('User details:', user);
+
+        if (currentUser.supervisor) {
+            roles.push(new SupervisorRole());
+        }
+
+        if (currentUser.dairyWorker) {
+            roles.push(new DairyWorkerRole());
+        }
+
+        if (currentUser.veterian) {
+            roles.push(new VeterianRole());
+        }
+
+        return roles;
+    }
+
+    async getUserRoleIds(session: string): Promise<number[]> {
+        let user = await this.getUserFromSession(session);
+        if (!user) return [];
 
         const currentUser = await prisma.user.findUnique({
             where: { id: user.id },
-            include: {
-              admin: true,
-              supervisor: true,
-              dairyWorker: true,
-              veterian: true,
+            select: {
+                admin: { select: { id: true } },
+                supervisor: { select: { id: true } },
+                dairyWorker: { select: { id: true } },
+                veterian: { select: { id: true } },
             },
-          });
+        });
 
-        if (!currentUser) {
-            console.error("not found current user")
-            return [];
-        }
+        if (!currentUser) return [];
 
+        const roleIds: number[] = [];
+        if (currentUser.admin) roleIds.push(Number(currentUser.admin.id));
+        if (currentUser.supervisor) roleIds.push(Number(currentUser.supervisor.id));
+        if (currentUser.dairyWorker) roleIds.push(Number(currentUser.dairyWorker.id));
+        if (currentUser.veterian) roleIds.push(Number(currentUser.veterian.id));
 
-    const roles: Role[] = [];
-
-    if (currentUser.admin) {
-        roles.push(new AdminRole());
+        return roleIds;
     }
-
-    if (currentUser.supervisor) {
-        roles.push(new SupervisorRole());
-    }
-
-    if (currentUser.dairyWorker) {
-        roles.push(new DairyWorkerRole());
-    }
-
-    if (currentUser.veterian) {
-        roles.push(new VeterianRole());
-    }
-
-    return roles;
-}
-
 }
