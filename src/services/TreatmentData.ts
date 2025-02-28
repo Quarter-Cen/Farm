@@ -37,7 +37,8 @@ export class TreatmentService implements ITreatmentData {
                     cowId: Number(cowId)
                 }
             })
-        } catch (exception) {
+        } catch (exception:any) {
+            console.log(exception.stack)
             console.error('Error adding cow: ', exception)
             return null
         }
