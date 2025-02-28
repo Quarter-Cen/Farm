@@ -124,4 +124,15 @@ export class CowService implements iCowInformationService {
             throw new Error("Failed to fetch cow");
         }
     }
+
+    async getAllCowByVetID(id: bigint): Promise<Cow[] | null>{
+        try {
+            return await prisma.cow.findMany({
+                where: {veterianId: id}
+            })
+        } catch (error) {
+            console.error("Error getAllCoWByVetID")
+            return null
+        }
+    }
 }

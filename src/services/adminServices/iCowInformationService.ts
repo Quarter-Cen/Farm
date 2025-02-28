@@ -24,4 +24,5 @@ export interface iCowInformationService {
   deleteCow(id: bigint): Promise<Cow | null>
   getAllCow(): Promise<Cow[]>
   getCowByID(id: bigint): Promise<Cow | null>
+  getAllCowByVetID(id: bigint): Promise<Cow[] | null>
 }
