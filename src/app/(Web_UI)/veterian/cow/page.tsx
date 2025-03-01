@@ -45,6 +45,7 @@ export default function VeterianCowInfo() {
             fetch("/api/admin/cow-info")
                 .then((res) => res.json())
                 .then((data: Cow[]) => {
+                    console.log(data)
                     setCowData(data);
                     setLoading(false);
                 })
@@ -78,12 +79,7 @@ export default function VeterianCowInfo() {
                 <p className="text-center text-gray-500 text-lg">กำลังโหลดข้อมูล...</p>
             ) : cowData.length === 0 ? (
                 <div className="text-center">
-                    <p className="text-gray-600 text-lg font-semibold">ไม่มีข้อมูลวัว</p>
-                    <Link href="/admin/add-cow">
-                        <button className="mt-3 bg-[#4c83d6] hover:bg-[#37609c] px-4 py-2 rounded-md text-white">
-                            เพิ่มข้อมูลวัว
-                        </button>
-                    </Link>
+                    <span className="text-gray-600 text-lg font-semibold">ไม่มีข้อมูลวัว</span>
                 </div>
             ) : (
                 <table className="min-w-full table-auto border border-gray-300">

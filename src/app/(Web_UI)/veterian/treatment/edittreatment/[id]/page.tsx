@@ -104,16 +104,20 @@ export default function EditTreatment() {
 
                 {/* สถานะ */}
                 <div className="py-1">
-                    <input type="radio" value="รักษาแล้ว" id="รักษาแล้ว" name="status" onChange={handleChange} checked={formData.status === "รักษาแล้ว"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#28A745] checked:border-[#28A745] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
-                    <label>รักษาแล้ว</label>
+                    <input type="radio" value="HEALTHY" id="HEALTHY" name="status" onChange={handleChange} checked={formData.status === "HEALTHY"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#28A745] checked:border-[#28A745] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
+                    <label>HEALTHY</label>
                 </div>
                 <div className="py-1">
-                    <input type="radio" value="กำลังรักษา" id="กำลังรักษา" name="status" onChange={handleChange} checked={formData.status === "กำลังรักษา"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#FD7E14] checked:border-[#FD7E14] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
-                    <label>กำลังรักษา</label>
+                    <input type="radio" value="SICK" id="SICK" name="status" onChange={handleChange} checked={formData.status === "SICK"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#FFC107] checked:border-[#FFC107] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
+                    <label>SICK</label>
                 </div>
                 <div className="py-1">
-                    <input type="radio" value="รอดำเนินการ" id="รอดำเนินการ" name="status" onChange={handleChange} checked={formData.status === "รอดำเนินการ"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#FFC107] checked:border-[#FFC107] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
-                    <label>รอดำเนินการ</label>
+                    <input type="radio" value="INJURED" id="INJURED" name="status" onChange={handleChange} checked={formData.status === "INJURED"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#DC3545] checked:border-[#DC3545] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
+                    <label>INJURED</label>
+                </div>
+                <div className="py-1">
+                    <input type="radio" value="DEAD" id="DEAD" name="status" onChange={handleChange} checked={formData.status === "DEAD"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#6C757D] checked:border-[#6C757D] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
+                    <label>DEAD</label>
                 </div>
 
                 <div className="py-1">

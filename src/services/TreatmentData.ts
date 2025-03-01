@@ -37,7 +37,7 @@ export class TreatmentService implements ITreatmentData {
                     cowId: BigInt(cowId)
                 }
             })
-        } catch (exception:any) {
+        } catch (exception: any) {
             console.log(exception.stack)
             console.error('Error adding cow: ', exception)
             return null
@@ -70,20 +70,20 @@ export class TreatmentService implements ITreatmentData {
     }
 
     async getCowWithTreatment(): Promise<(Treatment & { cow: any, veterian: any })[] | null> {
-        
-        try {
-        const treatments = await prisma.treatment.findMany({
-            include: {
-                cow: true,       // ดึงข้อมูลจากตาราง Cow ที่เชื่อมโยงกับ Treatment
-                veterian: true,  // ดึงข้อมูลจากตาราง Veterian ที่ดูแลการรักษานี้
-            },
-        });
-        console.log(treatments)
-        return treatments;
 
-        } catch (error:any) {
+        try {
+            const treatments = await prisma.treatment.findMany({
+                include: {
+                    cow: true,       // ดึงข้อมูลจากตาราง Cow ที่เชื่อมโยงกับ Treatment
+                    veterian: true,  // ดึงข้อมูลจากตาราง Veterian ที่ดูแลการรักษานี้
+                },
+            });
+
+            return treatments;
+
+        } catch (error: any) {
             console.error("Error fetching treatment by ID:", error.stack)
-        return null
+            return null
         }
     }
 
@@ -97,4 +97,22 @@ export class TreatmentService implements ITreatmentData {
             return null;
         }
     }
+
+    async getAllTreatmentByVetID(id: bigint): Promise<Treatment[] | null> {
+        try {
+            return await prisma.treatment.findMany({
+                where: {
+                    veterianId: id,  // ✅ ค้นหาจาก veterianId
+                },
+                include: {
+                    cow: true, // ✅ รวมข้อมูลวัว (cow)
+                    veterian: true, // ✅ รวมข้อมูลสัตวแพทย์ (ถ้าต้องการ)
+                },
+            });
+        } catch (error) {
+            console.error("Error getAllTreatmentByVetID", error);
+            return null;
+        }
+    }
+    
 }

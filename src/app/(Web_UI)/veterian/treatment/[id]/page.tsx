@@ -33,8 +33,8 @@ export default function CowDetails() {
     const { id } = useParams();
     const [cow, setCow] = useState<Cow | null>(null);
     const [treatments, setTreatments] = useState<Treatment[]>([]);
-    
-     useEffect(() => {
+
+    useEffect(() => {
         fetch(`/api/admin/cow-info/${id}`)
             .then((res) => res.json())
             .then((data: Cow) => setCow(data))
@@ -55,7 +55,7 @@ export default function CowDetails() {
     }, [id]);
 
 
-    if (!cow) return <p className="text-center mt-10 text-gray-500">ยังไม่มีข้อมูลการรักษา...</p>;
+    if (!cow) return <p className="text-center mt-10 text-gray-500">กำลังโหลดข้อมูล...</p>;
 
     const deleteTreatment = async (treatmentId: string) => {
         try {
@@ -87,15 +87,15 @@ export default function CowDetails() {
             {/* 🐄 ข้อมูลวัว */}
             <div className="border p-6 rounded-lg shadow-lg bg-white w-full mb-6">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">🐄 ข้อมูลวัว</h2>
-                    <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-gray-700">
-                        <p><strong>ชื่อ:</strong> {cow.name}</p>
-                        <p><strong>เพศ:</strong> {cow.gender}</p>
-                        <p><strong>อายุ:</strong> {cow.age} ปี</p>
-                        <p><strong>น้ำหนัก:</strong> {cow.weight} กก.</p>
-                        <p><strong>วันเกิด:</strong> {new Date(cow.birthDate).toLocaleDateString("th-TH")}</p>
-                        <p><strong>สายพันธุ์:</strong> {cow.breed}</p>
-                        <p className="col-span-2"><strong>สถานะสุขภาพ:</strong> <span className="text-red-500">{cow.healthStatus}</span></p>
-                    </div>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-gray-700">
+                    <p><strong>ชื่อ:</strong> {cow.name}</p>
+                    <p><strong>เพศ:</strong> {cow.gender}</p>
+                    <p><strong>อายุ:</strong> {cow.age} ปี</p>
+                    <p><strong>น้ำหนัก:</strong> {cow.weight} กก.</p>
+                    <p><strong>วันเกิด:</strong> {new Date(cow.birthDate).toLocaleDateString("th-TH")}</p>
+                    <p><strong>สายพันธุ์:</strong> {cow.breed}</p>
+                    <p className="col-span-2"><strong>สถานะสุขภาพ:</strong> <span className="text-red-500">{cow.healthStatus}</span></p>
+                </div>
             </div>
 
             {/* 💉 ข้อมูลการรักษา */}
@@ -132,17 +132,22 @@ export default function CowDetails() {
                                             <td className="px-4 py-2 text-center border">{treatment.details}</td>
                                             <td className="px-4 py-2 text-center border">{treatment.drugName}</td>
                                             <td className="px-4 py-2 text-center border">
-                                                <span className={`px-3 py-1 rounded-full text-white text-sm ${treatment.status === "รักษาแล้ว"
+                                                <span className={`px-3 py-1 rounded-full text-white text-sm ${treatment.status === "HEALTHY"
                                                     ? "bg-[#28A745]"
-                                                    : treatment.status === "กำลังรักษา"
+                                                    : treatment.status === "SICK"
                                                         ? "bg-[#FFC107]"
-                                                        : "bg-[#FD7E14]"
+                                                        : treatment.status === "INJURED"
+                                                            ? "bg-[#DC3545]"
+                                                            : "bg-[#6C757D]"
                                                     }`}>
-                                                    {treatment.status === "รักษาแล้ว"
-                                                        ? "รักษาแล้ว" :
-                                                        treatment.status === "กำลังรักษา"
-                                                            ? "กำลังรักษา"
-                                                            : "รอดำเนินการ"}
+                                                    {treatment.status === "HEALTHY"
+                                                        ? "HEALTHY"
+                                                        : treatment.status === "SICK"
+                                                            ? "SICK"
+                                                            : treatment.status === "INJURED"
+                                                                ? "INJURED"
+                                                                : "DEAD"
+                                                    }
                                                 </span>
                                             </td>
                                             <td className="px-4 py-2 text-center border">{treatment.notation}</td>

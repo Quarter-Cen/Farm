@@ -17,4 +17,5 @@ export interface ITreatmentData {
     deleteTreatmentData(id: bigint):Promise<String>
     getCowWithTreatment(): Promise<Treatment[] | null>
     getTreatmentByID(id: bigint): Promise<Treatment | null>
+    getAllTreatmentByVetID(id: bigint):Promise<Treatment[] | null>
 }
