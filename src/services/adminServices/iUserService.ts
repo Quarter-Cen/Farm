@@ -13,5 +13,7 @@ export interface iUserService {
           address: string,
           birthdate: Date,
           email: string,
-          password: string) : Promise<User | null>
+          password: string,
+          roles:[] // เปลี่ยนเป็น array เพื่อรองรับหลาย role
+        ) : Promise<User | null>
 }

@@ -12,7 +12,8 @@ const UserProfileForm = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [birthdate, setBirthdate] = useState("");
-  const [Role, setRole] = useState("");
+  const [Role, setRole] = useState<string[]>([]); // Change from string to string[]
+
   const [startDate, setStartDate] = useState("");
   const [EmploymentDuration, setEmploymentDuration] = useState("");
   const [WorkLocation, setWorkLocation] = useState("");
@@ -47,6 +48,16 @@ const UserProfileForm = () => {
     password.trim() !== "" &&
     password === confirmPassword;
 
+    const handleRoleChange = (e:any) => {
+      const { value, checked } = e.target;
+      if (checked) {
+        setRole((prevRoles) => [...prevRoles, value]); // Add the role
+      } else {
+        setRole((prevRoles) => prevRoles.filter((role) => role !== value)); // Remove the role
+      }
+    };
+    
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -73,28 +84,29 @@ const UserProfileForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-    
+
       if (!response.ok) {
         let errorMessage = "Failed to create user"; // ข้อความเริ่มต้น
         const contentType = response.headers.get("content-type");
-    
+
         if (contentType && contentType.includes("application/json")) {
           const errorData = await response.json();
           console.error("Error response:", errorData);
           errorMessage = errorData.error || errorMessage;
         }
-    
+
         throw new Error(errorMessage);
       }
-    
+
       alert("User created successfully!");
-      router.push("/userList");
-    } catch (error:any) {
+      router.push("/admin/userList");
+    } catch (error: any) {
       console.error("Error:", error);
       alert(error.message);
     }
-  }
-    
+  };
+
+  
 
   return (
     <div className=" h-screen flex justify-center items-center bg-white overflow-hidden">
@@ -216,20 +228,51 @@ const UserProfileForm = () => {
             />
           </div>
 
-          {/* Role */}
+          {/* Roles */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Role</label>
-            <select
-              value={Role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#88D64C]"
-            >
-              <option value="">Select Role</option>
-              <option value="Admin">Admin</option>
-              <option value="Supervisor">Supervisor</option>
-              <option value="DairyWorker">DairyWorker</option>
-              <option value="Veterian">Veterian</option>
-            </select>
+            <label className="block font-semibold mb-2">Roles</label>
+            <div className="flex flex-col">
+              <label className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  value="Admin"
+                  checked={Role.includes("Admin")}
+                  onChange={(e) => handleRoleChange(e)}
+                  className="mr-2"
+                />
+                Admin
+              </label>
+              <label className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  value="Supervisor"
+                  checked={Role.includes("Supervisor")}
+                  onChange={(e) => handleRoleChange(e)}
+                  className="mr-2"
+                />
+                Supervisor
+              </label>
+              <label className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  value="DairyWorker"
+                  checked={Role.includes("DairyWorker")}
+                  onChange={(e) => handleRoleChange(e)}
+                  className="mr-2"
+                />
+                DairyWorker
+              </label>
+              <label className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  value="Veterian"
+                  checked={Role.includes("Veterian")}
+                  onChange={(e) => handleRoleChange(e)}
+                  className="mr-2"
+                />
+                Veterian
+              </label>
+            </div>
           </div>
 
           {/* Start Date */}
@@ -333,9 +376,7 @@ const UserProfileForm = () => {
 
           {/* Confirm Password */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">
-              Confirm Password
-            </label>
+            <label className="block font-semibold mb-2">Confirm Password</label>
             <input
               type="password"
               placeholder="Confirm your password"

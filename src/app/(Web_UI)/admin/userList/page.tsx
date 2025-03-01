@@ -40,6 +40,11 @@ const UserList: React.FC = () => {
     setIsFilterOpen(!isFilterOpen);
   };
 
+  const handleRoleFilter = (role: string) => {
+    setFilter(role); // set filter to the selected role
+    setIsFilterOpen(false); // ปิดเมนูตัวเลือกหลังจากเลือก
+  };
+
   return (
     <div className="p-5 px-64">
       {/* Content Section */}
@@ -53,7 +58,7 @@ const UserList: React.FC = () => {
           <div className="flex items-center space-x-2">
             {/* Add Icon */}
             <div className="cursor-pointer hover:scale-110 transition-transform duration-200">
-              <Link href="/users">
+              <Link href="/admin/users">
                 <i className="ri-add-circle-fill text-[#88D64C] text-3xl"></i>
               </Link>
             </div>
@@ -71,31 +76,31 @@ const UserList: React.FC = () => {
                   <ul>
                     <li
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setFilter("")}
+                      onClick={() => handleRoleFilter("")}
                     >
                       All
                     </li>
                     <li
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setFilter("Admin")}
+                      onClick={() => handleRoleFilter("Admin")}
                     >
                       Admin
                     </li>
                     <li
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setFilter("Supervisor")}
+                      onClick={() => handleRoleFilter("Supervisor")}
                     >
                       Supervisor
                     </li>
                     <li
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setFilter("Dairy Worker")}
+                      onClick={() => handleRoleFilter("Dairy Worker")}
                     >
                       Dairy Worker
                     </li>
                     <li
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setFilter("Veterian")}
+                      onClick={() => handleRoleFilter("Veterian")}
                     >
                       Veterian
                     </li>
@@ -108,74 +113,85 @@ const UserList: React.FC = () => {
 
         {/* Table */}
         <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {users.map((user) => {
-            // สร้างลำดับตำแหน่งของ role จากที่สูงที่สุดไปหาต่ำสุด
-            const rolePriority = [
-              "admin",
-              "supervisor",
-              "dairyWorker",
-              "veterian",
-            ];
+          {users
+            .filter((user) => {
+              if (!filter) return true; // ถ้าไม่มีการกรอง จะโชว์ทุกคน
+              const rolePriority = [
+                "admin",
+                "supervisor",
+                "dairyWorker",
+                "veterian",
+              ];
 
-            // กรอง role ที่ไม่เป็น null และจัดลำดับตามลำดับตำแหน่ง
-            const filteredRoles = Object.entries(user.role)
-              .filter(([key, value]) => value !== null) // กรอง null
-              .sort(
-                ([keyA], [keyB]) =>
-                  rolePriority.indexOf(keyA) - rolePriority.indexOf(keyB)
-              ); // จัดลำดับตามตำแหน่ง
+              // หาบทบาทที่ไม่ได้เป็น null
+              const userRoles = Object.keys(user.role).filter(
+                (role) => user.role[role] !== null
+              );
 
-            // จำกัดแค่ 2 อันแรกแล้วแสดง "..." หากมีมากกว่า 2
-            const displayRoles =
-              filteredRoles.length > 2
-                ? filteredRoles.slice(0, 2)
-                : filteredRoles;
+              // ตรวจสอบว่ามีบทบาทตรงกับที่กรองไว้หรือไม่
+              return userRoles.some((role) => role.toLowerCase() === filter.toLowerCase());
+            })
+            .map((user) => {
+              const rolePriority = [
+                "admin",
+                "supervisor",
+                "dairyWorker",
+                "veterian",
+              ];
 
-            return (
-              <div
-                key={user.id}
-                className="border p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={user.profilePicture}
-                    alt="Profile"
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div className="flex flex-col items-start">
-                    <div className="flex items-center space-x-2">
-                      <h3 className="font-semibold">
-                        {user.firstName} {user.lastName}
-                      </h3>
-                      <Link href={`/editUser/${user.id}`}>
-                        <i className="ri-edit-circle-fill text-[#979797] text-xl cursor-pointer hover:scale-110 transition-transform duration-200"></i>
-                      </Link>
+              const filteredRoles = Object.entries(user.role)
+                .filter(([key, value]) => value !== null)
+                .sort(
+                  ([keyA], [keyB]) =>
+                    rolePriority.indexOf(keyA) - rolePriority.indexOf(keyB)
+                );
+
+              const displayRoles =
+                filteredRoles.length > 2 ? filteredRoles.slice(0, 2) : filteredRoles;
+
+              return (
+                <div
+                  key={user.id}
+                  className="border p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={user.profilePicture}
+                      alt="Profile"
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div className="flex flex-col items-start">
+                      <div className="flex items-center space-x-2">
+                        <h3 className="font-semibold">
+                          {user.firstName} {user.lastName}
+                        </h3>
+                        <Link href={`/editUser/${user.id}`}>
+                          <i className="ri-edit-circle-fill text-[#979797] text-xl cursor-pointer hover:scale-110 transition-transform duration-200"></i>
+                        </Link>
+                      </div>
+                      <p className="text-sm text-gray-500">
+                        {displayRoles.map(([role]) => (
+                          <span key={role} className="mr-2">
+                            {role}
+                          </span>
+                        ))}
+                        {filteredRoles.length > 2 && <span>...</span>}
+                      </p>
                     </div>
-                    {/* แสดง role */}
-                    <p className="text-sm text-gray-500">
-                      {displayRoles.map(([role]) => (
-                        <span key={role} className="mr-2">
-                          {role}
-                        </span>
-                      ))}
-                      {filteredRoles.length > 2 && <span>...</span>}{" "}
-                      {/* เพิ่ม ... ถ้ามีมากกว่า 2 */}
+                  </div>
+                  <div className="mt-3 ml-2 flex flex-col space-y-1">
+                    <p className="text-sm flex items-center space-x-2">
+                      <i className="ri-mail-line text-[#737791] text-xl"></i>
+                      <span className="text-[#737791]">{user.email}</span>
+                    </p>
+                    <p className="text-sm flex items-center space-x-2">
+                      <i className="ri-phone-line text-[#737791] text-xl"></i>
+                      <span className="text-[#737791]">{user.phoneNumber}</span>
                     </p>
                   </div>
                 </div>
-                <div className="mt-3 ml-2 flex flex-col space-y-1">
-                  <p className="text-sm flex items-center space-x-2">
-                    <i className="ri-mail-line text-[#737791] text-xl"></i>
-                    <span className="text-[#737791]">{user.email}</span>
-                  </p>
-                  <p className="text-sm flex items-center space-x-2">
-                    <i className="ri-phone-line text-[#737791] text-xl"></i>
-                    <span className="text-[#737791]">{user.phoneNumber}</span>
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </div>
     </div>

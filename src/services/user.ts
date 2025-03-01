@@ -1,6 +1,6 @@
 import { PrismaClient, Gender, User } from '@prisma/client';
 import { iUserService } from './adminServices/iUserService';
-import bcrypt from 'bcrypt' // ใช้ bcrypt ในการเข้ารหัสรหัสผ่าน
+import bcrypt from 'bcrypt'; // ใช้ bcrypt ในการเข้ารหัสรหัสผ่าน
 import next from 'next';
 
 const prisma = new PrismaClient();
@@ -19,7 +19,8 @@ export class UserService implements iUserService {
     address: string,
     birthdate: Date,
     email: string,
-    password: string
+    password: string,
+    roles: [] // เปลี่ยนเป็น array เพื่อรองรับหลาย role
   ): Promise<User | null> {
     try {
       // ตรวจสอบว่ามี email ซ้ำหรือไม่
@@ -29,6 +30,14 @@ export class UserService implements iUserService {
 
       if (existingUser) {
         throw new Error('Email is already in use.');
+      }
+      console.log(roles)
+      // ตรวจสอบว่า role ถูกต้องหรือไม่ (รองรับหลาย role)
+      const validRoles = ['Admin', 'Supervisor', 'DairyWorker', 'Veterian'];
+      for (let role of roles) {
+        if (!validRoles.includes(role)) {
+          throw new Error('Invalid role value');
+        }
       }
 
       // เข้ารหัสรหัสผ่านก่อนบันทึก
@@ -53,6 +62,35 @@ export class UserService implements iUserService {
         },
       });
 
+      // สร้าง role ที่เชื่อมโยงกับ User สำหรับแต่ละ role ใน array
+      for (let role of roles) {
+        if (role === 'Admin') {
+          await prisma.admin.create({
+            data: {
+              userId: newUser.id,
+            },
+          });
+        } else if (role === 'Supervisor') {
+          await prisma.supervisor.create({
+            data: {
+              userId: newUser.id,
+            },
+          });
+        } else if (role === 'DairyWorker') {
+          await prisma.dairyWorker.create({
+            data: {
+              userId: newUser.id,
+            },
+          });
+        } else if (role === 'Veterian') {
+          await prisma.veterian.create({
+            data: {
+              userId: newUser.id,
+            },
+          });
+        }
+      }
+
       return newUser;
     } catch (exception: any) {
       console.error('Error creating user: ', exception.message);
@@ -60,20 +98,20 @@ export class UserService implements iUserService {
     }
   }
 
-  async checkEmail(email:string):Promise<String | typeof next>{
+  async checkEmail(email: string): Promise<String | typeof next> {
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
     if (existingUser) {
-      return 'Email is already in use.'
+      return 'Email is already in use.';
     }
 
-    return next
+    return next;
   }
 
   async getAllUser(): Promise<User[] | null> {
-    try { 
+    try {
       const users = await prisma.user.findMany({
         include: {
           admin: true,
@@ -82,9 +120,9 @@ export class UserService implements iUserService {
           veterian: true,
         },
       });
-  
+
       // แปลงข้อมูลผู้ใช้เพื่อรวม role เข้าในฟิลด์เดียว
-      const usersWithRoles = users.map(user => {
+      const usersWithRoles = users.map((user) => {
         return {
           ...user,
           role: {
@@ -92,17 +130,14 @@ export class UserService implements iUserService {
             supervisor: user.supervisor ? user.supervisor.id : null,
             dairyWorker: user.dairyWorker ? user.dairyWorker.id : null,
             veterian: user.veterian ? user.veterian.id : null,
-          }
+          },
         };
       });
-  
-      console.log(usersWithRoles);
+
       return usersWithRoles;
     } catch (error) {
       console.log('Error fetching user: ', error.message);
       return null;
     }
   }
-  
 }
-
