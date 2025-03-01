@@ -55,7 +55,7 @@ export default function CowDetails() {
     }, [id]);
 
 
-    if (!cow) return <p className="text-center mt-10 text-gray-500">ยังไม่มีข้อมูลการรักษา...</p>;
+    if (!cow) return <p className="text-center mt-10 text-gray-500">กำลังโหลดข้อมูล...</p>;
 
     const deleteTreatment = async (treatmentId: string) => {
         try {
