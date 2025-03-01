@@ -71,4 +71,38 @@ export class UserService implements iUserService {
 
     return next
   }
+
+  async getAllUser(): Promise<User[] | null> {
+    try { 
+      const users = await prisma.user.findMany({
+        include: {
+          admin: true,
+          supervisor: true,
+          dairyWorker: true,
+          veterian: true,
+        },
+      });
+  
+      // แปลงข้อมูลผู้ใช้เพื่อรวม role เข้าในฟิลด์เดียว
+      const usersWithRoles = users.map(user => {
+        return {
+          ...user,
+          role: {
+            admin: user.admin ? user.admin.id : null,
+            supervisor: user.supervisor ? user.supervisor.id : null,
+            dairyWorker: user.dairyWorker ? user.dairyWorker.id : null,
+            veterian: user.veterian ? user.veterian.id : null,
+          }
+        };
+      });
+  
+      console.log(usersWithRoles);
+      return usersWithRoles;
+    } catch (error) {
+      console.log('Error fetching user: ', error.message);
+      return null;
+    }
+  }
+  
 }
+
