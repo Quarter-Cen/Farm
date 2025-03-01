@@ -7,7 +7,7 @@ const stockService = new StockService();
 export async function GET(request: Request) {
 
     try {
-        const stock = await stockService.getAllStock()
+        const stock = await stockService.getAllFoodImp()
         const jsonResponse = JSON.stringify(stock, (key, value) =>
           typeof value === "bigint" ? value.toString() : value
       );

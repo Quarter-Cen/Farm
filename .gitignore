@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Tig (SorceTree)
 tiglog.bat
+prisma/migrations/migration_lock.toml
+
+prisma/migrations
