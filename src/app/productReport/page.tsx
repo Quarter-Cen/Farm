@@ -7,10 +7,9 @@ const ProductReport = () => {
   const [cowID, setCowID] = useState("");
   const [milkDate, setMilkDate] = useState("");
   const [milkProduced, setMilkProduced] = useState("");
-  const [supervisorId, setSupervisorId] = useState(""); // เพิ่ม supervisorId
+  const [supervisorId, setSupervisorId] = useState(""); 
   const [isVisible, setIsVisible] = useState(true);
 
-  // ฟังก์ชันเลือกโซน
   const handleZoneChange = (selectedZone: string) => {
     setZone((prev) =>
       prev.includes(selectedZone)
@@ -19,7 +18,6 @@ const ProductReport = () => {
     );
   };
 
-  // ตรวจสอบข้อมูลก่อน submit
   const isFormComplete =
     zone.length > 0 &&
     cowID.trim() !== "" &&
@@ -27,7 +25,6 @@ const ProductReport = () => {
     milkProduced.trim() !== "" &&
     supervisorId.trim() !== "";
 
-  // ฟังก์ชันส่งข้อมูลไปที่ API
   const handleSubmit = async () => {
     if (!isFormComplete) return;
   

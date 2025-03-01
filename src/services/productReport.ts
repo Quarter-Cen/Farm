@@ -14,7 +14,7 @@ async function createProductReport(date: Date, quantityOfProduct: number, cowZon
         quantityOfProduct: quantityOfProduct,
         cowZone: cowZone, 
         supervisor: {
-          connect: { id: supervisorId } // เชื่อมโยง Supervisor ID ที่เป็น BigInt
+          connect: { id: supervisorId } 
         }
       }
     });
