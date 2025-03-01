@@ -7,8 +7,10 @@ let treatmentService = new TreatmentService()
 export async function GET(req: NextRequest) {
     try {
         const treatments = await treatmentService.getCowWithTreatment();
+
         
         const formattedTreatments = treatments.map((treatment) => ({
+
             id: treatment.id.toString(),
             nameDisease: treatment.nameDisease,
             events: treatment.events,
