@@ -7,7 +7,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
         <DefaultGuard>
             <div className="flex min-h-screen scrollbar-custom">
                 <Sidebar />
-                <main className="flex-1 p-6 ">{children}</main>
+                <main className="flex-1 p-6 overflow-hidden">{children}</main>
             </div>
         </DefaultGuard>
     </>

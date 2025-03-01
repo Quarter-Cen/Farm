@@ -13,7 +13,7 @@ const UserProfileForm = () => {
   const [address, setAddress] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [Role, setRole] = useState("");
-  const [StartDate, setStartDate] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [EmploymentDuration, setEmploymentDuration] = useState("");
   const [WorkLocation, setWorkLocation] = useState("");
   const [Salary, setSalary] = useState("");
@@ -58,7 +58,7 @@ const UserProfileForm = () => {
       address,
       birthdate,
       Role,
-      StartDate,
+      startDate,
       employmentDuration: parseInt(EmploymentDuration) || 0,
       WorkLocation,
       salary: parseFloat(Salary) || 0,
@@ -68,28 +68,36 @@ const UserProfileForm = () => {
     };
 
     try {
-      const response = await fetch("/api/user", {
+      const response = await fetch("/api/admin/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+    
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error response:", errorData); // แสดงข้อผิดพลาดที่ตอบกลับจาก API
-        throw new Error(errorData.message || "Failed to create user");
+        let errorMessage = "Failed to create user"; // ข้อความเริ่มต้น
+        const contentType = response.headers.get("content-type");
+    
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await response.json();
+          console.error("Error response:", errorData);
+          errorMessage = errorData.error || errorMessage;
+        }
+    
+        throw new Error(errorMessage);
       }
-
+    
       alert("User created successfully!");
-      router.push("/userList"); // เปลี่ยนเส้นทางไปที่หน้ารายชื่อผู้ใช้
-    } catch (error) {
+      router.push("/userList");
+    } catch (error:any) {
       console.error("Error:", error);
-      alert("There was an error creating the user. Please check the input data.");
+      alert(error.message);
     }
-  };
+  }
+    
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center bg-white overflow-hidden">
+    <div className=" h-screen flex justify-center items-center bg-white overflow-hidden">
       <div className="w-full h-full px-80 py-6 bg-white shadow-lg rounded-lg overflow-y-auto">
         <form onSubmit={handleSubmit}>
           <div className="flex items-center mb-6">
@@ -165,9 +173,9 @@ const UserProfileForm = () => {
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#88D64C]"
             >
               <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="OTHER">Other</option>
             </select>
           </div>
 
@@ -217,10 +225,10 @@ const UserProfileForm = () => {
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#88D64C]"
             >
               <option value="">Select Role</option>
-              <option value="admin">Admin</option>
-              <option value="supervisor">Supervisor</option>
-              <option value="dairyWorker">DairyWorker</option>
-              <option value="veterian">Veterian</option>
+              <option value="Admin">Admin</option>
+              <option value="Supervisor">Supervisor</option>
+              <option value="DairyWorker">DairyWorker</option>
+              <option value="Veterian">Veterian</option>
             </select>
           </div>
 
@@ -229,7 +237,7 @@ const UserProfileForm = () => {
             <label className="block font-semibold mb-2">Start Date</label>
             <input
               type="date"
-              value={StartDate}
+              value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#88D64C]"
             />
@@ -341,7 +349,7 @@ const UserProfileForm = () => {
           <div className="flex space-x-2 justify-between">
             <button
               type="button"
-              onClick={() => router.push("/userList")}
+              onClick={() => router.push("/admin/userList")}
               className="w-1/3 py-2 rounded-lg bg-[#CECECE] text-white hover:scale-110 transition-transform duration-200"
             >
               Cancel

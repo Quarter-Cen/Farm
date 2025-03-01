@@ -1,65 +1,74 @@
-import { PrismaClient, Gender } from '@prisma/client';
+import { PrismaClient, Gender, User } from '@prisma/client';
+import { iUserService } from './adminServices/iUserService';
+import bcrypt from 'bcrypt' // ใช้ bcrypt ในการเข้ารหัสรหัสผ่าน
+import next from 'next';
 
 const prisma = new PrismaClient();
 
-// ฟังก์ชันในการสร้างผู้ใช้
-async function createUser(data: {
-  firstName: string;
-  lastName: string;
-  gender: Gender; 
-  employmentDurationHours: number;
-  workLocation: string;
-  salary: number;
-  startDate: Date;
-  workHour: number;
-  phoneNumber: string;
-  address: string;
-  birthdate: Date;
-  email: string;
-  password: string;
-}) {
-  const user = await prisma.user.create({
-    data: {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      gender: data.gender,  
-      employmentDurationHours: data.employmentDurationHours,
-      workLocation: data.workLocation,
-      salary: data.salary,
-      startDate: data.startDate,
-      workHour: data.workHour,
-      phoneNumber: data.phoneNumber,
-      address: data.address,
-      birthdate: data.birthdate,
-      email: data.email,
-      password: data.password,
-    },
-  });
-  return user;
-}
+export class UserService implements iUserService {
+  async createUser(
+    firstName: string,
+    lastName: string,
+    gender: Gender,
+    employmentDurationHours: number,
+    workLocation: string,
+    salary: number,
+    startDate: Date,
+    workHour: number,
+    phoneNumber: string,
+    address: string,
+    birthdate: Date,
+    email: string,
+    password: string
+  ): Promise<User | null> {
+    try {
+      // ตรวจสอบว่ามี email ซ้ำหรือไม่
+      const existingUser = await prisma.user.findUnique({
+        where: { email },
+      });
 
-// ฟังก์ชันในการอัปเดตข้อมูลผู้ใช้
-async function updateUser(id: bigint, data: {
-  firstName?: string;
-  lastName?: string;
-  gender?: Gender;  
-  employmentDurationHours?: number;
-  workLocation?: string;
-  salary?: number;
-  startDate?: Date;
-  workHour?: number;
-  phoneNumber?: string;
-  address?: string;
-  birthdate?: Date;
-  email?: string;
-  password?: string;
-}) {
-  const user = await prisma.user.update({
-    where: { id },
-    data: {
-      ...data,
-    },
-  });
-  return user;
-}
+      if (existingUser) {
+        throw new Error('Email is already in use.');
+      }
 
+      // เข้ารหัสรหัสผ่านก่อนบันทึก
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // สร้างผู้ใช้ใหม่
+      const newUser = await prisma.user.create({
+        data: {
+          firstName,
+          lastName,
+          gender,
+          employmentDurationHours,
+          workLocation,
+          salary,
+          startDate,
+          workHour,
+          phoneNumber,
+          address,
+          birthdate,
+          email,
+          password: hashedPassword, // ใช้รหัสผ่านที่เข้ารหัสแล้ว
+        },
+      });
+
+      return newUser;
+    } catch (exception: any) {
+      console.error('Error creating user: ', exception.message);
+      return null;
+    }
+  }
+
+  async checkEmail(email:string):Promise<String | typeof next>{
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      return 'Email is already in use.'
+    }
+
+    return next
+  }
+}
