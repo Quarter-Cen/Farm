@@ -135,7 +135,7 @@ export class UserService implements iUserService {
       });
 
       return usersWithRoles;
-    } catch (error) {
+    } catch (error:any) {
       console.log('Error fetching user: ', error.message);
       return null;
     }

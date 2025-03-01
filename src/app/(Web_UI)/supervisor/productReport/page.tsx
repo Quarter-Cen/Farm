@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ProductReport = () => {
   const [zone, setZone] = useState<string[]>([]);
-  const [cowID, setCowID] = useState("");
   const [milkDate, setMilkDate] = useState("");
   const [milkProduced, setMilkProduced] = useState("");
   const [supervisorId, setSupervisorId] = useState(""); 
   const [isVisible, setIsVisible] = useState(true);
 
+  // Handle zone change (for checkboxes)
   const handleZoneChange = (selectedZone: string) => {
     setZone((prev) =>
       prev.includes(selectedZone)
@@ -18,18 +18,31 @@ const ProductReport = () => {
     );
   };
 
+  useEffect(() => {
+    // Fetch roles and set supervisorId
+    fetch("/api/auth/me/rolesId")
+        .then((res) => res.json())
+        .then((data) => {
+            // Find the Supervisor role from the response
+            const supervisor = data.find((item: any) => item.role.name === "Supervisor");
+            if (supervisor) {
+                setSupervisorId(supervisor.id);
+            }
+        })
+        .catch((error) => console.log("Error fetching roles:", error));
+  }, []); 
+
+  // Ensure the supervisorId is available for form submission
   const isFormComplete =
     zone.length > 0 &&
-    cowID.trim() !== "" &&
     milkDate.trim() !== "" &&
-    milkProduced.trim() !== "" &&
-    supervisorId.trim() !== "";
+    milkProduced.trim() !== "";
 
   const handleSubmit = async () => {
     if (!isFormComplete) return;
   
     try {
-      const response = await fetch("/api/productReport", {
+      const response = await fetch("/api/supervisor/productReport", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,9 +64,8 @@ const ProductReport = () => {
   
       const data = await response.json(); 
       alert("Product Report Created Successfully!");
-      // รีเซ็ตฟอร์ม
+      // Reset form
       setZone([]);
-      setCowID("");
       setMilkDate("");
       setMilkProduced("");
       setSupervisorId("");
@@ -62,18 +74,12 @@ const ProductReport = () => {
       alert("Something went wrong!");
     }
   };
-  
+
   return (
     isVisible && (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="max-w-lg w-full p-6 bg-white shadow-lg rounded-lg border border-gray-300 relative">
-          {/* Close Button */}
-          <button
-            onClick={() => setIsVisible(false)}
-            className="absolute top-2 right-2 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xl font-bold text-gray-500 hover:text-gray-700"
-          >
-            <span>&times;</span>
-          </button>
+        
 
           <h1 className="text-2xl font-bold mb-6 text-center">Product Report</h1>
 
@@ -96,21 +102,9 @@ const ProductReport = () => {
             </div>
           </div>
 
-          {/* Cow ID */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">2. Cow ID</label>
-            <input
-              type="text"
-              placeholder="Enter cow ID"
-              value={cowID}
-              onChange={(e) => setCowID(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#88D64C]"
-            />
-          </div>
-
           {/* Milk Production Date */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">3. Milk Production Date</label>
+            <label className="block font-semibold mb-2">2. Milk Production Date</label>
             <input
               type="date"
               value={milkDate}
@@ -121,24 +115,12 @@ const ProductReport = () => {
 
           {/* Milk Produced */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">4. Milk Produced (liters)</label>
+            <label className="block font-semibold mb-2">3. Milk Produced (liters)</label>
             <input
               type="number"
               placeholder="Enter milk produced (liters)"
               value={milkProduced}
               onChange={(e) => setMilkProduced(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#88D64C]"
-            />
-          </div>
-
-          {/* Supervisor ID */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">5. Supervisor ID</label>
-            <input
-              type="number"
-              placeholder="Enter supervisor ID"
-              value={supervisorId}
-              onChange={(e) => setSupervisorId(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#88D64C]"
             />
           </div>
