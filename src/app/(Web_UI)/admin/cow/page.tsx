@@ -16,16 +16,14 @@ export default function VeterianCowInfo() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isVeterian, setIsVeterian] = useState(false);
   const [vetId, setVetId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true); // เพิ่ม state สำหรับโหลดข้อมูล
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/auth/me/rolesId")
       .then((res) => res.json())
       .then((data) => {
         const admin = data.find((item: any) => item.role.name === "Admin");
-        const veterian = data.find(
-          (item: any) => item.role.name === "Veterian"
-        );
+        const veterian = data.find((item: any) => item.role.name === "Veterian");
 
         if (admin) {
           setIsAdmin(true);
@@ -40,9 +38,7 @@ export default function VeterianCowInfo() {
   }, []);
 
   useEffect(() => {
-    // Start loading
     setLoading(true);
-
     if (isAdmin) {
       fetch("/api/admin/cow-info")
         .then((res) => res.json())
@@ -58,7 +54,6 @@ export default function VeterianCowInfo() {
       fetch(`/api/veterian/assigned-cows?vetId=${vetId}`)
         .then((res) => res.json())
         .then((data: Cow[]) => {
-          console.log(data);
           setCowData(data);
           setLoading(false);
         })
@@ -69,86 +64,71 @@ export default function VeterianCowInfo() {
     }
   }, [isAdmin, isVeterian, vetId]);
 
-  // Log cowData length after fetching and state update
-  useEffect(() => {
-    console.log("cc", cowData.length);
-  }, [cowData]);
-
   return (
-    <div className="flex-col">
-      <div className="flex justify-between p-4">
-        <h1>Cow Information</h1>
+    <div className="flex flex-col p-4 bg-gray-100 min-h-screen">
+      {/* Header */}
+      <div className="flex justify-between items-center p-2">
+        <h1 className="text-xl font-semibold ml-20 text-gray-800">Cow Information</h1>
+    
         <Link href={`/admin/resorce/add`}>
-          <button className="bg-[#88D64C] hover:bg-[#76b942] px-3 py-1 rounded-md">
-            เพิ่มข้อมูล
+          <button className="w-28 h-8 text-white mr-20 bg-[#CECECE]  hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
+            Add cow
           </button>
         </Link>
       </div>
-      <div className="flex items-center justify-center ml-[2%]">
+
+      {/* Table */}
+      <div className="w-full max-w-5xl mx-auto mt-2">
         {loading ? (
-          <p className="text-center text-gray-500 text-lg">
-            กำลังโหลดข้อมูล...
-          </p>
+          <p className="text-center text-gray-500 text-sm">กำลังโหลดข้อมูล...</p>
         ) : cowData.length === 0 ? (
-          <div className="text-center">
-            <p className="text-gray-600 text-lg font-semibold">
-              ไม่มีข้อมูลวัว
-            </p>
+          <div className="text-center bg-white p-4 rounded-lg shadow-md">
+            <p className="text-gray-600 text-sm font-semibold">ไม่มีข้อมูลวัว</p>
             <Link href="/admin/add-cow">
-              <button className="mt-3 bg-[#4c83d6] hover:bg-[#37609c] px-4 py-2 rounded-md text-white">
+              <button className="mt-2 bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded-md text-white shadow-md text-sm">
                 เพิ่มข้อมูลวัว
               </button>
             </Link>
           </div>
         ) : (
-          <table className="min-w-full table-auto border border-gray-300">
-            <thead>
-              <tr className="bg-[#DBDBDB]">
-                <th className="px-14 py-2 border text-[#8A8A8A]">ลำดับ</th>
-                <th className="px-14 py-2 border text-[#8A8A8A]">ชื่อ</th>
-                <th className="px-14 py-2 border text-[#8A8A8A]">เพศ</th>
-                <th className="px-14 py-2 border text-[#8A8A8A]">อายุ</th>
-                <th className="px-14 py-2 border text-[#8A8A8A]">สายพันธ์ุ</th>
-                <th className="px-14 py-2 border text-[#8A8A8A]">
-                  สถานะสุขภาพ
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-[#F4F4F4]">
-              {cowData.map((cow, index) => (
-                <tr key={cow.id}>
-                  <td className="px-12 py-2 text-center border">{index + 1}</td>
-                  <td className="px-12 py-2 text-center border">{cow.name}</td>
-                  <td className="px-12 py-2 text-center border">
-                    {cow.gender}
-                  </td>
-                  <td className="px-12 py-2 text-center border">{cow.age}</td>
-                  <td className="px-12 py-2 text-center border">{cow.breed}</td>
-                  <td className="px-12 py-2 text-center border">
-                    <span
-                      className={`px-5 py-1 rounded-full text-white ${
-                        cow.healthStatus === "HEALTHY"
-                          ? "bg-[#28A745]"
-                          : cow.healthStatus === "SICK"
-                          ? "bg-[#FFC107]"
-                          : cow.healthStatus === "INJURED"
-                          ? "bg-[#DC3545]"
-                          : "bg-[#6C757D]"
-                      }`}
-                    >
-                      {cow.healthStatus === "HEALTHY"
-                        ? "HEALTHY"
-                        : cow.healthStatus === "SICK"
-                        ? "SICK"
-                        : cow.healthStatus === "INJURED"
-                        ? "INJURED"
-                        : "DEAD"}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="space-y-2">
+            {/* Table Header */}
+            <div className="grid grid-cols-6 bg-gray-200 text-gray-900 font-medium p-2 rounded-lg">
+              <span className="text-center text-xs">Cow ID</span>
+              <span className="text-center text-xs">Name</span>
+              <span className="text-center text-xs">Gender</span>
+              <span className="text-center text-xs">Age</span>
+              <span className="text-center text-xs">Breed</span>
+              <span className="text-center text-xs">Health Status</span>
+            </div>
+
+            {/* Cow Data Rows */}
+            {cowData.map((cow, index) => (
+              <div
+                key={cow.id}
+                className="grid grid-cols-6 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition"
+              >
+                <span className="text-center text-xs">{index + 1}</span>
+                <span className="text-center text-xs">{cow.name}</span>
+                <span className="text-center text-xs">{cow.gender}</span>
+                <span className="text-center text-xs">{cow.age}</span>
+                <span className="text-center text-xs">{cow.breed}</span>
+                <span
+                  className={`text-center px-3 py-0.5 rounded-full border font-light font-semibold text-xs ${
+                    cow.healthStatus === "HEALTHY"
+                      ? "text-green-600 border-green-600"
+                      : cow.healthStatus === "SICK"
+                      ? "text-yellow-600 border-yellow-600"
+                      : cow.healthStatus === "INJURED"
+                      ? "text-red-600 border-red-600"
+                      : "text-gray-600 border-gray-600"
+                  }`}
+                >
+                  {cow.healthStatus}
+                </span>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
