@@ -15,6 +15,6 @@ export interface ITreatmentData {
     ): Promise<Treatment | null>
     editTreatmentData(id: bigint, updatedData: Partial<Treatment>): Promise<Treatment | null>
     deleteTreatmentData(id: bigint):Promise<String>
-    getCowWithTreatment(): Promise<Treatment[]>
+    getCowWithTreatment(): Promise<Treatment[] | null>
     getTreatmentByID(id: bigint): Promise<Treatment | null>
 }

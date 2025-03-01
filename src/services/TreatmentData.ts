@@ -33,8 +33,8 @@ export class TreatmentService implements ITreatmentData {
                     status: status,
                     notation: notation,
                     cowWeight: Number(cowWeight),
-                    veterianId: Number(veterianId),
-                    cowId: Number(cowId)
+                    veterianId: BigInt(veterianId),
+                    cowId: BigInt(cowId)
                 }
             })
         } catch (exception:any) {
@@ -69,15 +69,22 @@ export class TreatmentService implements ITreatmentData {
         }
     }
 
-    async getCowWithTreatment(): Promise<(Treatment & { cow: any, veterian: any })[]> {
+    async getCowWithTreatment(): Promise<(Treatment & { cow: any, veterian: any })[] | null> {
+        
+        try {
         const treatments = await prisma.treatment.findMany({
             include: {
                 cow: true,       // ดึงข้อมูลจากตาราง Cow ที่เชื่อมโยงกับ Treatment
                 veterian: true,  // ดึงข้อมูลจากตาราง Veterian ที่ดูแลการรักษานี้
             },
         });
-
+        console.log(treatments)
         return treatments;
+
+        } catch (error:any) {
+            console.error("Error fetching treatment by ID:", error.stack)
+        return null
+        }
     }
 
     async getTreatmentByID(id: bigint): Promise<Treatment | null> {

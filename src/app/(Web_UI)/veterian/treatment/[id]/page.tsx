@@ -43,7 +43,7 @@ export default function CowDetails() {
 
     useEffect(() => {
         if (!id) return;
-        fetch("api/veterian/treatment")
+        fetch("/api/veterian/treatment")
             .then((res) => res.json())
             .then((data: Treatment[]) => {
                 const cowTreatment = data.find((treatment) => treatment.cowId === id);
