@@ -8,6 +8,7 @@ export async function POST(request: Request) {
     const { name, date, importFrom, type, quantity, pricePerUnit, adminId} = await request.json();
 
     try {
+        console.log(name, date, importFrom, type, quantity, pricePerUnit, adminId)
         const stock = await stockService.addStock(
             name, 
             new Date(date), 
