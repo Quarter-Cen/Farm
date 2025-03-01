@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function createUser(data: {
   firstName: string;
   lastName: string;
-  gender: Gender;  // ใช้ Gender แทน string
+  gender: Gender; 
   employmentDurationHours: number;
   workLocation: string;
   salary: number;
@@ -22,7 +22,7 @@ async function createUser(data: {
     data: {
       firstName: data.firstName,
       lastName: data.lastName,
-      gender: data.gender,  // ใช้ Gender แทน string
+      gender: data.gender,  
       employmentDurationHours: data.employmentDurationHours,
       workLocation: data.workLocation,
       salary: data.salary,
@@ -42,7 +42,7 @@ async function createUser(data: {
 async function updateUser(id: bigint, data: {
   firstName?: string;
   lastName?: string;
-  gender?: Gender;  // ใช้ Gender แทน string
+  gender?: Gender;  
   employmentDurationHours?: number;
   workLocation?: string;
   salary?: number;
