@@ -104,7 +104,7 @@ export default function Sidebar() {
         <li className="mb-2">
           <button
             onClick={handleLogout}
-            className="block px-4 py-2 hover:bg-gray-600 rounded w-full text-left"
+            className="block font-bold mt-4 pl-1 py-2 hover:bg-gray-600 rounded w-full text-left"
           >
             Sign Out
           </button>

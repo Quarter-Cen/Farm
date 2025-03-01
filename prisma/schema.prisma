@@ -83,31 +83,36 @@ model FoodImp {
 
   adminId               BigInt
   admin                 Admin   @relation(fields: [adminId], references: [id])
-
-  @@map("food_imps")
+  @@map("food_imps")  
 }
 
 model Stock {
-  id                  BigInt   @id @default(autoincrement())
-  type                FoodType @unique  // เชื่อมกับ FoodType แทน id ของ FoodImp
-  quantity            Int
-  unit                Int
-  status              StockStatus @default(AVAILABLE)
-  updatedAt           DateTime @updatedAt
+  id           BigInt   @id @default(autoincrement())
+
+  type         FoodType
+  quantity     Int
+  unit         Int
+  status       StockStatus @default(AVAILABLE)
+  updatedAt    DateTime @updatedAt
+  stockUsage        StockUsage[]
 
   @@map("stocks")
 }
 
+
 model StockUsage {
   id          BigInt   @id @default(autoincrement())
-  stockType   FoodType
+  stockId     BigInt
+  stock       Stock @relation(fields: [stockId], references: [id]) // ใช้ Stock จริง ๆ
+
   quantity    Int
   usedById    BigInt
-  usedBy      DairyWorker   @relation(fields: [usedById], references: [id])
+  usedBy      DairyWorker @relation(fields: [usedById], references: [id])
   usedAt      DateTime @default(now())
 
   @@map("stock_usages")
 }
+
 
 model ProductReport {
   id                    BigInt   @id @default(autoincrement())
