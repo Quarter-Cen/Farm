@@ -49,12 +49,12 @@ export default function HealthStatusChart() {
     }, []);
 
     return (
-        <div className="w-full h-full flex items-center justify-center bg-gray-100">
-            <div className="w-full max-w-3xl bg-white p-6 rounded-2xl shadow-md">
+        <div className=" flex items-center justify-center bg-white">
+            <div className=" bg-white p-6 rounded-2xl shadow-md">
                 <h2 className="text-xl font-semibold text-gray-700 text-center mb-4">
                     Cow Health Status (January - June)
                 </h2>
-                <ResponsiveContainer width="100%" height={350}>
+                <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="2 2" stroke="#EAEAEA" />
                         <XAxis dataKey="month" tick={{ fill: "#666", fontSize: 12 }} />

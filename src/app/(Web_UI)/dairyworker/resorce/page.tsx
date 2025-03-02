@@ -33,11 +33,6 @@ export default function Resorce() {
       {/* Header */}
       <div className="flex justify-between items-center p-2 mb-3">
         <h1 className="text-2xl font-semibold ml-20 text-gray-800">Resorce</h1>
-        <Link href={`/admin/resorce/add`}>
-          <button className="w-28 h-10 text-white mr-20 bg-[#74B845]  hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
-            Add Resorce
-          </button>
-        </Link>
       </div>
 
       {/* Table */}
@@ -53,19 +48,18 @@ export default function Resorce() {
         ) : (
           <div className="space-y-2">
             {/* Table Header */}
-            <div className="grid grid-cols-5 bg-gray-200 text-gray-900 font-medium p-2 rounded-lg">
+            <div className="grid grid-cols-4 bg-gray-200 text-gray-900 font-medium p-2 rounded-lg">
               <span className="text-center text-sm">Date</span>
               <span className="text-center text-sm">Type</span>
               <span className="text-center text-sm">Unit</span>
               <span className="text-center text-sm">Status</span>
-              <span className="text-center text-sm">Operation</span>
             </div>
 
             {/* Stock Data Rows */}
             {stockData.map((stock) => (
               <div
                 key={stock.id}
-                className="grid grid-cols-5 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition"
+                className="grid grid-cols-4 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition"
               >
                 <span className="text-center text-sm">{new Date(stock.updatedAt).toLocaleDateString("th-TH")}</span>
                 <span className="text-center text-sm">{stock.type}</span>
@@ -85,23 +79,6 @@ export default function Resorce() {
                     ? "Reserved"
                     : "Out of Stock"}
                 </span>
-                <div className="flex self-center justify-center  ">
-                  <div className="flex justify-center space-x-4 mr-4">
-                      <Link href={`/admin/resorce/${stock.id}`}>
-                        <button className="text-[#CECECE] hover:text-[#74B845] hover:scale-105 transition-transform duration-200">
-                          <i className="ri-pie-chart-2-fill text-2xl"></i>
-                        </button>
-                      </Link>
-                    </div>
-
-                    <div className="flex justify-center space-x-4">
-                      <Link href={`/admin/resorce/edit/${stock.id}`}>
-                        <button className="text-[#CECECE] hover:text-[#74B845] hover:scale-105 transition-transform duration-200">
-                          <i className="ri-edit-line text-2xl"></i>
-                        </button>
-                      </Link>
-                    </div>
-                </div> 
               </div>
             ))}
           </div>

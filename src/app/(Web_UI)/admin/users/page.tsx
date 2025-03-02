@@ -106,6 +106,9 @@ const UserProfileForm = () => {
     }
   };
 
+  const handleCancel = () => {
+    router.push('/admin/userList'); 
+  };
   
 
   return (
@@ -389,8 +392,8 @@ const UserProfileForm = () => {
           {/* Submit and Cancel Buttons */}
           <div className="flex space-x-2 justify-between">
             <button
-              type="button"
-              onClick={() => router.push("/admin/userList")}
+              
+              onClick={handleCancel}
               className="w-1/3 py-2 rounded-lg bg-[#CECECE] text-white hover:scale-110 transition-transform duration-200"
             >
               Cancel

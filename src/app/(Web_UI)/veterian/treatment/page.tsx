@@ -127,12 +127,12 @@ export default function VeterianTreatment() {
                                                 }`}
                                         >
                                             {treatment.status === "HEALTHY"
-                                                ? "สุขภาพดี"
+                                                ? "Healthy"
                                                 : treatment.status === "SICK"
-                                                    ? "ป่วย"
+                                                    ? "Sick"
                                                     : treatment.status === "INJURED"
-                                                        ? "ได้รับบาดเจ็บ"
-                                                        : "ตาย"
+                                                        ? "Injured"
+                                                        : "Dead"
                                             }
                                         </span>
                                     </td>

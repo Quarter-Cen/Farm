@@ -23,6 +23,7 @@ const roleLinks: Record<Role, { href: string; label: string; icon: string }[]> =
       { href: "/supervisor/productReport", label: "Product Report", icon: "ri-file-list-3-fill" },
     ],
     DairyWorker: [
+      { href: "/dairyworker/resorce", label: "Resorce", icon: "ri-database-2-fill" },
       { href: "/dairyworker/useResorce", label: "Resorce Usage", icon: "ri-line-chart-line" },
     ],
   };

@@ -58,7 +58,7 @@ export default function UseFoodPage() {
       if (response.ok) {
         setMessage("ใช้งาน Food Type สำเร็จ!");
         // ใช้ window.location.href สำหรับการเปลี่ยนหน้า
-        window.location.href = '/dairyworker/dashboard';
+        window.location.href = '/dairyworker/useResorce';
       } else {
         setMessage(data.message || "เกิดข้อผิดพลาด");
       }

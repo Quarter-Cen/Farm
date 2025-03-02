@@ -1,5 +1,5 @@
 "use client";
-
+import CowCare from '@/components/CowCare'
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
   return (
     <>
       <div className="h-screen grid grid-cols-3 grid-rows-2">
-        <div className="bg-blue-50 col-span-2">
+        <div className="col-span-2">
           <div className="p-6">
             <h1 className="text-2xl font-bold mb-4">Dashboard Overview</h1>
 
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-        <div className="bg-red-50 ">
+        <div className="">
           <div className="p-6">
             <h1 className="text-2xl font-bold mb-4">Resorce Consumtion</h1>
             <div>
@@ -115,8 +115,10 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-        <div className="bg-red-50 col-span-2">Ho</div>
-        <div className="bg-red-50">Ho</div>
+        <div className=" col-span-2">Ho</div>
+        <div className='p-4'>
+            <CowCare/>
+        </div>
       </div>
     </>
   );
