@@ -5,16 +5,13 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 interface Treatment {
     date: string;
     status: "HEALTHY" | "SICK" | "INJURED" | "DEAD";
-    cow: {
-        healthStatus: "HEALTHY" | "SICK" | "INJURED" | "DEAD";
-    } | null;
 }
 
 const STATUS_COLORS = {
-    HEALTHY: "#28A745",
-    SICK: "#FFC107",
-    INJURED: "#FD7E14",
-    DEAD: "#DC3545"
+    HEALTHY: "#5EC28D",
+    SICK: "#F4C95D",
+    INJURED: "#E88F67",
+    DEAD: "#6C757D"
 } as const;
 
 const MONTHS = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน"];
@@ -26,7 +23,6 @@ export default function HealthStatusChart() {
         fetch("/api/veterian/treatment")
             .then((res) => res.json())
             .then((treatments: Treatment[]) => {
-                // สร้างโครงสร้างข้อมูลเริ่มต้น
                 const initialData = MONTHS.map((month) => ({
                     month,
                     HEALTHY: 0,
@@ -35,14 +31,12 @@ export default function HealthStatusChart() {
                     DEAD: 0
                 }));
 
-                // นับจำนวนวัวตามสถานะสุขภาพในแต่ละเดือน
                 treatments.forEach((treatment) => {
                     const treatmentDate = new Date(treatment.date);
                     const monthIndex = treatmentDate.getMonth(); // 0-11
-                    const healthStatus = treatment.status
+                    const healthStatus = treatment.status;
 
-                    if (monthIndex >= 0 && monthIndex < 6 && healthStatus && healthStatus in STATUS_COLORS) {
-                        // ใช้ Type Assertion เพื่อให้ TypeScript ยอมรับ
+                    if (monthIndex >= 0 && monthIndex < 6 && healthStatus in STATUS_COLORS) {
                         initialData[monthIndex][healthStatus as keyof typeof STATUS_COLORS] += 1;
                     }
                 });
@@ -55,21 +49,25 @@ export default function HealthStatusChart() {
     }, []);
 
     return (
-        <div className="w-full h-96 flex flex-col items-center">
-            <h2 className="text-lg font-bold mb-4">สถานะสุขภาพวัว (มกราคม - มิถุนายน)</h2>
-            <ResponsiveContainer width="80%" height="100%">
-                <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="HEALTHY" fill={STATUS_COLORS.HEALTHY} name="สุขภาพดี" />
-                    <Bar dataKey="SICK" fill={STATUS_COLORS.SICK} name="ป่วย" />
-                    <Bar dataKey="INJURED" fill={STATUS_COLORS.INJURED} name="บาดเจ็บ" />
-                    <Bar dataKey="DEAD" fill={STATUS_COLORS.DEAD} name="เสียชีวิต" />
-                </BarChart>
-            </ResponsiveContainer>
+        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+            <div className="w-full max-w-3xl bg-white p-6 rounded-2xl shadow-md">
+                <h2 className="text-xl font-semibold text-gray-700 text-center mb-4">
+                    สถานะสุขภาพวัว (มกราคม - มิถุนายน)
+                </h2>
+                <ResponsiveContainer width="100%" height={350}>
+                    <BarChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="2 2" stroke="#EAEAEA" />
+                        <XAxis dataKey="month" tick={{ fill: "#666", fontSize: 12 }} />
+                        <YAxis tick={{ fill: "#666", fontSize: 12 }} />
+                        <Tooltip contentStyle={{ backgroundColor: "#FFF", borderRadius: "8px", border: "none", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }} />
+                        <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+                        <Bar dataKey="HEALTHY" fill={STATUS_COLORS.HEALTHY} name="สุขภาพดี" radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="SICK" fill={STATUS_COLORS.SICK} name="ป่วย" radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="INJURED" fill={STATUS_COLORS.INJURED} name="บาดเจ็บ" radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="DEAD" fill={STATUS_COLORS.DEAD} name="เสียชีวิต" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 }
