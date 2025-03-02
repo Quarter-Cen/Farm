@@ -232,9 +232,9 @@ const UserProfileForm = () => {
           </div>
           {/* Role (Checkboxes) */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Role</label>    
+            <label className="block font-semibold mb-2">Role</label>
             <div className="space-y-2">
-              {["admin", "supervisor", "dairyWorker", "veterian"].map(
+              {["Admin", "Supervisor", "DairyWorker", "Veterian"].map(
                 (roleName) => (
                   <div key={roleName} className="flex items-center">
                     <input

@@ -71,7 +71,7 @@ export default function AddCowPage() {
     }, [formData]);
 
     const handleCancel = () => {
-        window.location.href = "http://localhost:3000/admin/cow";
+        window.location.href = "/admin/cow";
     };
 
     return (
