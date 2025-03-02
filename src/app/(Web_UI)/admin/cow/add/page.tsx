@@ -64,10 +64,6 @@ export default function AddCowPage() {
         }
     };
 
-<<<<<<< HEAD
-    
-=======
->>>>>>> 59e97a58d474712fbf5b8d0d26ac0b1ffa809fd2
     useEffect(() => {
         const isValid = Object.values(formData).every(value => value !== "" && value !== undefined);
         setIsFormValid(isValid);
