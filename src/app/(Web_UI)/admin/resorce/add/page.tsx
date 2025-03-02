@@ -1,6 +1,10 @@
 'use client'
 
+
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+const router = useRouter()
+
 
 const AddStock = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +16,7 @@ const AddStock = () => {
     pricePerUnit: 0,
     adminId: '', 
   });
-
+  
   const [isFormValid, setIsFormValid] = useState(false); // State to track if form is valid
 
   useEffect(() => {
@@ -63,6 +67,7 @@ const AddStock = () => {
         alert(data.message);
       } else {
         alert('Stock added successfully!');
+        router.push("/admin/resorce")
       }
     } catch (error) {
       console.error('Failed to add stock:', error);
