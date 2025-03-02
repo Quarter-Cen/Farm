@@ -82,33 +82,33 @@ export default function VeterianTreatment() {
 
     return (
         <div className="w-full max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-xl">
-            <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">ข้อมูลการรักษา</h2>
+            <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">Treatmentation Data</h2>
 
             {loading ? (
-                <p className="text-center text-gray-500 text-lg">กำลังโหลดข้อมูล...</p>
+                <p className="text-center text-gray-500 text-lg">Loading...</p>
             ) : treatmentData.length === 0 ? (
                 <div className="text-center">
-                    <span className="text-center text-gray-600 text-lg font-semibold">ไม่มีข้อมูลการรักษา</span>
+                    <span className="text-center text-gray-600 text-lg font-semibold">No treatmentation data</span>
                 </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full border-collapse">
                         <thead>
                             <tr className="text-gray-600 text-center border-b">
-                                <th className="px-5 py-3">วันที่</th>
-                                <th className="px-5 py-3">ชื่อ</th>
-                                <th className="px-5 py-3">ชื่อโรค</th>
-                                <th className="px-5 py-3">เหตุการณ์</th>
-                                <th className="px-5 py-3">รายละเอียดอาการ</th>
-                                <th className="px-5 py-3">ยารักษา</th>
-                                <th className="px-5 py-3">สถานะ</th>
-                                <th className="px-5 py-3">หมายเหตุ</th>
+                                <th className="px-5 py-3">Date</th>
+                                <th className="px-5 py-3">Cow name</th>
+                                <th className="px-5 py-3">Name of disease</th>
+                                <th className="px-5 py-3">Events</th>
+                                <th className="px-5 py-3">Details</th>
+                                <th className="px-5 py-3">Drug name</th>
+                                <th className="px-5 py-3">Status</th>
+                                <th className="px-5 py-3">Notaion</th>
                             </tr>
                         </thead>
                         <tbody className="text-center text-gray-600 border-b">
                             {treatmentData.map((treatment) => (
                                 <tr key={treatment.id} className="border-b hover:bg-gray-100 transition">
-                                    <td className="px-5 py-3 border-b">{new Date(treatment.date).toLocaleDateString("th-TH")}</td>
+                                    <td className="px-5 py-3 border-b">{new Date(treatment.date).toLocaleDateString("en-EN")}</td>
                                     <td className="px-5 py-3 border-b">{treatment.cow?.name || "ไม่ระบุ"}</td>
                                     <td className="px-5 py-3 border-b">{treatment.nameDisease}</td>
                                     <td className="px-5 py-3 border-b">{treatment.events}</td>

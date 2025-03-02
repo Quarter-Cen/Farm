@@ -1,4 +1,5 @@
 import { Treatment } from "@prisma/client";
+import { HealthStatus } from '@prisma/client';
 
 export interface ITreatmentData {
     AddTreatmentData(
@@ -7,7 +8,7 @@ export interface ITreatmentData {
         details: string,
         date: Date,
         drugName: string,
-        status: string,
+        status: HealthStatus,
         notation: string,
         veterianId: bigint,
         cowId: bigint,

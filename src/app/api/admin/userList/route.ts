@@ -1,3 +1,4 @@
+import AdminApiGuard from "@/components/AdminApiGuard";
 import { UserService } from "@/services/user";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -5,7 +6,11 @@ import { NextRequest, NextResponse } from "next/server";
 let exportService = new UserService()
 
 export async function GET(req: NextRequest) {
+
+        const guard = await AdminApiGuard(req);
+        if (guard) return guard;
     try {
+        
         const exp = await exportService.getAllUser();
 
         if (!exp || exp.length === 0) {

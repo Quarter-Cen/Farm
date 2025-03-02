@@ -22,11 +22,11 @@ interface Treatment {
     details: string;
     date: string;
     drugName: string;
-    status: string;
+    status: "HEALTHY" | "SICK" | "INJURED" | "DEAD";
     notation: string;
     veterianId: string;
     cowId: string;
-    cow?: Cow;
+    // cow?: Cow;
 }
 
 export default function CowDetails() {
@@ -46,9 +46,19 @@ export default function CowDetails() {
         fetch("/api/veterian/treatment")
             .then((res) => res.json())
             .then((data: Treatment[]) => {
-                const cowTreatment = data.find((treatment) => treatment.cowId === id);
-                if (cowTreatment?.cow) {
-                    setTreatments(data.filter((t) => t.cowId === id));
+                const cowTreatment = data.filter((treatment) => treatment.cowId === id);
+                setTreatments(cowTreatment)
+                // if (cowTreatment?.cow) {
+                //     setTreatments(data.filter((t) => t.cowId === id));
+                // }
+
+                // หาสถานะล่าสุดจาก treatment ล่าสุด
+                if (cowTreatment.length > 0) {
+                    const latestTreatment = cowTreatment.reduce((latest, current) =>
+                        new Date(current.date) > new Date(latest.date) ? current : latest
+                    );
+                    console.log("latestTreatment: ",latestTreatment.status)
+                    setCow((prevCow) => prevCow ? { ...prevCow, healthStatus: latestTreatment.status } : null);
                 }
             })
             .catch((error) => console.log("Error fetching treatments:", error));
@@ -78,24 +88,24 @@ export default function CowDetails() {
     }
 
     if (!cow) {
-        return <p className="text-center mt-10 text-gray-500">ไม่มีข้อมูลวัวและการรักษา</p>;
+        return <p className="text-center mt-10 text-gray-500">No cow information and treatment</p>;
     }
 
     return (
         <div className="flex flex-col items-center justify-center mt-10 mx-auto">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">🐄 รายละเอียดวัวและการรักษา</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">🐄 Cow details and treatment</h1>
 
             {/* 🐄 ข้อมูลวัว */}
             <div className="border border-gray-200 p-6 rounded-lg shadow-md bg-white w-full max-w-3xl mb-6">
-                <h2 className="text-xl font-bold text-gray-700 mb-4">🐄 ข้อมูลวัว</h2>
+                <h2 className="text-xl font-bold text-gray-700 mb-4">🐄 Cow information</h2>
                 <div className="grid grid-cols-2 gap-y-3 text-gray-700 text-lg tracking-wide">
-                    <p><strong>ชื่อ:</strong> {cow.name}</p>
-                    <p><strong>เพศ:</strong> {cow.gender}</p>
-                    <p><strong>อายุ:</strong> {cow.age} ปี</p>
-                    <p><strong>น้ำหนัก:</strong> {cow.weight} กก.</p>
-                    <p><strong>วันเกิด:</strong> {new Date(cow.birthDate).toLocaleDateString("th-TH")}</p>
-                    <p><strong>สายพันธุ์:</strong> {cow.breed}</p>
-                    <p className="col-span-2"><strong>สถานะสุขภาพ:</strong>
+                    <p><strong>Name:</strong> {cow.name}</p>
+                    <p><strong>Gender:</strong> {cow.gender}</p>
+                    <p><strong>Age:</strong> {cow.age} year old</p>
+                    <p><strong>Weight:</strong> {cow.weight} Kg.</p>
+                    <p><strong>Birthdate:</strong> {new Date(cow.birthDate).toLocaleDateString("en-EN")}</p>
+                    <p><strong>Breed:</strong> {cow.breed}</p>
+                    <p className="col-span-2"><strong>HealthStatus:</strong>
                         <span className={`px-1 ${cow.healthStatus === "HEALTHY"
                             ? "text-[#5EC28D]"
                             : cow.healthStatus === "SICK"
@@ -104,7 +114,7 @@ export default function CowDetails() {
                                     ? "text-[#E88F67]"
                                     : "text-[#6C757D]"
                             }`}>
-
+                            {/* {cow.healthStatus} */}
                             {cow.healthStatus === "HEALTHY"
                                 ? "HEALTHY"
                                 : cow.healthStatus === "SICK"
@@ -120,23 +130,23 @@ export default function CowDetails() {
 
             {/* 💉 ข้อมูลการรักษา */}
             <div className="border p-6 rounded-lg shadow-lg bg-white w-full">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">💉 ข้อมูลการรักษา</h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">💉 Treatmentation</h2>
                 {treatments.length === 0 ? (
-                    <p className="text-center py-4 text-gray-500">ยังไม่มีข้อมูลการรักษา</p>
+                    <p className="text-center py-4 text-gray-500">No treatmentation</p>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-full table-auto border border-gray-300">
                             <thead>
                                 <tr className="bg-gray-200 text-gray-700">
-                                    <th className="px-4 py-2 border">#</th>
-                                    <th className="px-4 py-2 border">วันที่</th>
-                                    <th className="px-4 py-2 border">ชื่อโรค</th>
-                                    <th className="px-4 py-2 border">เหตุการณ์</th>
-                                    <th className="px-4 py-2 border">รายละเอียด</th>
-                                    <th className="px-4 py-2 border">ยาที่ใช้</th>
-                                    <th className="px-4 py-2 border">สถานะ</th>
-                                    <th className="px-4 py-2 border">หมายเหตุ</th>
-                                    <th className="px-4 py-2 border">การดำเนินการ</th>
+                                    <th className="px-4 py-2 border">ID</th>
+                                    <th className="px-4 py-2 border">Date</th>
+                                    <th className="px-4 py-2 border">Name disease</th>
+                                    <th className="px-4 py-2 border">Events</th>
+                                    <th className="px-4 py-2 border">Details</th>
+                                    <th className="px-4 py-2 border">Drug name</th>
+                                    <th className="px-4 py-2 border">Status</th>
+                                    <th className="px-4 py-2 border">Notation</th>
+                                    <th className="px-4 py-2 border">Oparetion</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-gray-50 text-gray-700">
@@ -161,12 +171,12 @@ export default function CowDetails() {
                                                             : "bg-[#6C757D]"
                                                     }`}>
                                                     {treatment.status === "HEALTHY"
-                                                        ? "สุขภาพดี"
+                                                        ? "HEALTHY"
                                                         : treatment.status === "SICK"
-                                                            ? "ป่วย"
+                                                            ? "SICK"
                                                             : treatment.status === "INJURED"
-                                                                ? "ได้รับบาดเจ็บ"
-                                                                : "ตาย"
+                                                                ? "INJURED"
+                                                                : "DEAD"
                                                     }
                                                 </span>
                                             </td>
@@ -175,14 +185,14 @@ export default function CowDetails() {
                                                 <div className="flex justify-center gap-2">
                                                     <Link href={`/veterian/treatment/edittreatment/${treatment.id}`}>
                                                         <button className="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded-md">
-                                                            แก้ไข
+                                                            Edit
                                                         </button>
                                                     </Link>
                                                     <button
                                                         className="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded-md"
                                                         onClick={() => deleteTreatment(treatment.id)}
                                                     >
-                                                        ลบ
+                                                        Delete
                                                     </button>
                                                 </div>
                                             </td>
@@ -190,7 +200,7 @@ export default function CowDetails() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={9} className="text-center py-4 text-gray-500">ไม่มีข้อมูลการรักษา</td>
+                                        <td colSpan={9} className="text-center py-4 text-gray-500">No treatmentation data</td>
                                     </tr>
                                 )}
                             </tbody>
@@ -202,7 +212,7 @@ export default function CowDetails() {
             {/* ปุ่มกลับ */}
             <Link href="/veterian/cow">
                 <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition duration-300">
-                    🔙 กลับไปหน้าวัว
+                    🔙 Back to cow page
                 </button>
             </Link>
         </div>
