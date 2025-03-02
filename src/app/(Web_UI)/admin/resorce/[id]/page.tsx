@@ -174,4 +174,8 @@ export default function CowDetails() {
       </Link>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 59e97a58d474712fbf5b8d0d26ac0b1ffa809fd2

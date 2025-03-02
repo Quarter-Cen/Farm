@@ -85,6 +85,17 @@ export default function Resorce() {
                     ? "Reserved"
                     : "Out of Stock"}
                 </span>
+<<<<<<< HEAD
+=======
+                <div className="flex justify-center space-x-4">
+                  <Link href={`/admin/resorce/edit/${stock.id}`}>
+                    <button className="text-[#CECECE] hover:text-[#74B845] hover:scale-105 transition-transform duration-200">
+                      <i className="ri-edit-circle-fill text-2xl"></i>
+                    </button>
+                  </Link>
+                </div>
+              </div>
+>>>>>>> 59e97a58d474712fbf5b8d0d26ac0b1ffa809fd2
 
                 <div className="flex self-center justify-center  ">
                   <div className="flex justify-center space-x-4 mr-4">
