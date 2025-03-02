@@ -179,7 +179,7 @@ model Treatment {
   details               String
   date                  DateTime
   drugName              String
-  status                String
+  status                HealthStatus
   notation              String
   cowWeight             Float
   veterianId            BigInt
