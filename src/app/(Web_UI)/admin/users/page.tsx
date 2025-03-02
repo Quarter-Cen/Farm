@@ -109,7 +109,7 @@ const UserProfileForm = () => {
   
 
   return (
-    <div className=" h-screen flex justify-center items-center bg-white overflow-hidden">
+    <div className=" xh-screen fle justify-center items-center bg-white overflow-hidden">
       <div className="w-full h-full px-80 py-6 bg-white shadow-lg rounded-lg overflow-y-auto">
         <form onSubmit={handleSubmit}>
           <div className="flex items-center mb-6">
