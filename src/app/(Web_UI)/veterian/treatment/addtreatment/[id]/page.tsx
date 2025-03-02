@@ -71,11 +71,11 @@ export default function AddTreatmentPage() {
                 return;
             }
 
-            alert("บันทึกข้อมูลสำเร็จ");
+            alert("Add treatmentation successfully");
             router.push("/veterian/cow"); // กลับไปหน้าวัว
         } catch (error) {
             console.error("Failed to submit:", error);
-            alert("เกิดข้อผิดพลาด");
+            alert("Have problems");
         }
     };
 
@@ -87,13 +87,13 @@ export default function AddTreatmentPage() {
             >
                 {/* หัวข้อ */}
                 <h2 className="text-xl font-bold text-center text-gray-700">
-                    ข้อมูลการรักษาวัว ID {id}
+                    Cow treatment information ID {id}
                 </h2>
 
                 {/* Input Fields */}
                 <div className="space-y-3">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">ชื่อโรค</label>
+                        <label className="block text-sm font-medium text-gray-700">Name disease</label>
                         <input
                             type="text" name="nameDisease" value={formData.nameDisease} onChange={handleChange}
                             className="border border-gray-300 w-full p-2 rounded-md focus:ring-2 focus:ring-green-400"
@@ -102,7 +102,7 @@ export default function AddTreatmentPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">น้ำหนัก</label>
+                        <label className="block text-sm font-medium text-gray-700">Weight</label>
                         <input
                             type="text" name="cowWeight" value={formData.cowWeight} onChange={handleChange}
                             className="border border-gray-300 w-full p-2 rounded-md focus:ring-2 focus:ring-green-400"
@@ -110,7 +110,7 @@ export default function AddTreatmentPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">เหตุการณ์</label>
+                        <label className="block text-sm font-medium text-gray-700">Events</label>
                         <input
                             type="text" name="events" value={formData.events} onChange={handleChange}
                             className="border border-gray-300 w-full p-2 rounded-md focus:ring-2 focus:ring-green-400"
@@ -118,7 +118,7 @@ export default function AddTreatmentPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">รายละเอียดอาการ</label>
+                        <label className="block text-sm font-medium text-gray-700">Details</label>
                         <textarea
                             name="details" value={formData.details} onChange={handleChange}
                             className="border border-gray-300 w-full p-2 rounded-md focus:ring-2 focus:ring-green-400 h-20 resize-none"
@@ -126,7 +126,7 @@ export default function AddTreatmentPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">ยารักษา</label>
+                        <label className="block text-sm font-medium text-gray-700">Drug name</label>
                         <input
                             type="text" name="drugName" value={formData.drugName} onChange={handleChange}
                             className="border border-gray-300 w-full p-2 rounded-md focus:ring-2 focus:ring-green-400"
@@ -136,30 +136,30 @@ export default function AddTreatmentPage() {
 
                 {/* สถานะสุขภาพ */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">สถานะสุขภาพ</label>
+                    <label className="block text-sm font-medium text-gray-700">HealthStatus</label>
                     <div className="flex gap-4 mt-2">
                         <div className="py-1">
                             <input type="radio" value="HEALTHY" id="HEALTHY" name="status" onChange={handleChange} checked={formData.status === "HEALTHY"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#5EC28D] checked:border-[#5EC28D] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
-                            <label>สุขภาพดี</label>
+                            <label>Healthy</label>
                         </div>
                         <div className="py-1">
                             <input type="radio" value="SICK" id="SICK" name="status" onChange={handleChange} checked={formData.status === "SICK"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#F4C95D] checked:border-[#F4C95D] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
-                            <label>ป่วย</label>
+                            <label>Sick</label>
                         </div>
                         <div className="py-1">
                             <input type="radio" value="INJURED" id="INJURED" name="status" onChange={handleChange} checked={formData.status === "INJURED"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#E88F67] checked:border-[#E88F67] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
-                            <label>ได้รับบาดเจ็บ</label>
+                            <label>Injured</label>
                         </div>
                         <div className="py-1">
                             <input type="radio" value="DEAD" id="DEAD" name="status" onChange={handleChange} checked={formData.status === "DEAD"} className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#6C757D] checked:border-[#6C757D] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" />
-                            <label>ตาย</label>
+                            <label>Dead</label>
                         </div>
                     </div>
                 </div>
 
                 {/* หมายเหตุ */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">หมายเหตุ</label>
+                    <label className="block text-sm font-medium text-gray-700">Notation</label>
                     <input
                         type="text" name="notation" value={formData.notation} onChange={handleChange}
                         className="border border-gray-300 w-full p-2 rounded-md focus:ring-2 focus:ring-green-400"
@@ -168,9 +168,9 @@ export default function AddTreatmentPage() {
 
                 {/* วันที่บันทึก */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">วันที่บันทึก</label>
+                    <label className="block text-sm font-medium text-gray-700">Record date</label>
                     <input
-                        type="date" name="date" value={formData.date} onChange={handleChange}
+                        type="date" lang="en" inputMode="none" name="date" value={formData.date} onChange={handleChange}
                         className="border border-gray-300 w-full p-2 rounded-md focus:ring-2 focus:ring-green-400"
                     />
                 </div>
@@ -181,14 +181,14 @@ export default function AddTreatmentPage() {
                         type="submit"
                         className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition mx-6"
                     >
-                        ยืนยัน
+                        Apply
                     </button>
                     <button
                         type="button"
-                        onClick={() => router.push("/veterian/cow")} 
+                        onClick={() => router.push("/veterian/cow")}
                         className="border border-gray-400 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition mx-6"
                     >
-                        ยกเลิก
+                        Cancel
                     </button>
                 </div>
             </form>
