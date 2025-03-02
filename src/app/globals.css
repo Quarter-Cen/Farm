@@ -11,13 +11,13 @@
   }
   
   ::-webkit-scrollbar-thumb {
-    background-color: #38e852; /* สีของตัวเลื่อน (thumb) */
+    background-color: #eaeaea84; /* สีของตัวเลื่อน (thumb) */
   
   }
   
   /* เมื่อ hover ที่ scrollbar */
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #269c38; /* สีของตัวเลื่อนเมื่อ hover */
+    background-color: #898989; /* สีของตัวเลื่อนเมื่อ hover */
   }
   
   /* ซ่อนลูกศรของ scrollbar */
