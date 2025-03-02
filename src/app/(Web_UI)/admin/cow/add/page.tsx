@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function AddCowPage() {
     const [formData, setFormData] = useState({
@@ -15,6 +15,7 @@ export default function AddCowPage() {
     });
 
     const [message, setMessage] = useState("");
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -60,9 +61,19 @@ export default function AddCowPage() {
         }
     };
 
+    // เช็คว่าเมื่อข้อมูลครบแล้วปุ่มจะเปลี่ยนสี
+    useEffect(() => {
+        const isValid = Object.values(formData).every(value => value !== "" && value !== undefined);
+        setIsFormValid(isValid);
+    }, [formData]);
+
+    const handleCancel = () => {
+        window.location.href = "http://localhost:3000/admin/cow";
+    };
+
     return (
         <div className="max-w-lg mx-auto mt-10 p-6 border rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Add Cow</h2>
+            <h2 className="text-2xl text-center font-bold mb-4">Add Cow</h2>
             {message && <p className="mb-4 text-red-500">{message}</p>}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" required className="border p-2 w-full" />
@@ -76,12 +87,28 @@ export default function AddCowPage() {
                 <select name="healthStatus" value={formData.healthStatus} onChange={handleChange} required className="border p-2 w-full">
                     <option value="HEALTHY">Healthy</option>
                     <option value="SICK">Sick</option>
-                    <option value="INJURED">injured</option>
+                    <option value="INJURED">Injured</option>
                     <option value="DEAD">Dead</option>
                 </select>
                 <input type="number" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" required className="border p-2 w-full" />
                 <input type="number" name="veterianId" value={formData.veterianId} onChange={handleChange} placeholder="Veterinarian ID (optional)" className="border p-2 w-full" />
-                <button type="submit" className="bg-blue-500 text-white p-2 rounded-lg w-full">Add Cow</button>
+                
+                <div className="flex space-x-4 mt-4">
+                    <button
+                        onClick={handleCancel}
+                        className="w-full p-2 rounded-lg bg-[#CECECE] text-white"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        type="submit" 
+                        className={`w-full p-2 rounded-lg ${isFormValid ? 'bg-[#74B845]' : 'bg-[#CECECE]'} text-white transition duration-300`}
+                        disabled={!isFormValid}
+                    >
+                        Add Cow
+                    </button>
+
+                </div>
             </form>
         </div>
     );
