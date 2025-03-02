@@ -6,50 +6,62 @@ import Link from "next/link";
 import { FoodImp, Stock } from "@prisma/client";
 
 export default function CowDetails() {
-    const { id } = useParams();
-    const [stock, setStock] = useState<Stock | null>(null);
-    const [order, setOrder] = useState<FoodImp[]>([]);
-    const [loading, setLoading] = useState(true); // state สำหรับ loading
-    const [error, setError] = useState<string | null>(null); // state สำหรับ error
+  const { id } = useParams();
+  const [stock, setStock] = useState<Stock | null>(null);
+  const [order, setOrder] = useState<FoodImp[]>([]);
+  const [usage, setUsage] = useState<[]>([]); // เพิ่ม state สำหรับข้อมูล Usage
+  const [loading, setLoading] = useState(true); // state สำหรับ loading
+  const [error, setError] = useState<string | null>(null); // state สำหรับ error
 
-    useEffect(() => {
-        fetch(`/api/admin/stock/${id}`)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error("Failed to fetch stock data");
-                }
-                return res.json();
-            })
-            .then((data: Stock) => {
-                setStock(data);
-                setLoading(false); // set loading false หลังจากโหลดข้อมูลเสร็จ
-            })
-            .catch((error) => {
-                setError(error.message); // แสดงข้อความ error
-                setLoading(false);
-            });
-    }, [id]);
-
-    useEffect(() => {
-        if (stock) {
-            fetch("/api/admin/stock/getOrder")
-                .then((res) => res.json())
-                .then((data: FoodImp[]) => {
-                    const stockOrder = data.filter((order) => order.type === stock?.type);
-                    setOrder(stockOrder);
-                })
-                .catch((error) => {
-                    console.error("Error fetching orders:", error);
-                });
+  useEffect(() => {
+    fetch(`/api/admin/stock/${id}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch stock data");
         }
-    }, [stock]);
+        return res.json();
+      })
+      .then((data: Stock) => {
+        setStock(data);
+        setLoading(false); // set loading false หลังจากโหลดข้อมูลเสร็จ
+      })
+      .catch((error) => {
+        setError(error.message); // แสดงข้อความ error
+        setLoading(false);
+      });
+  }, [id]);
 
-    if (loading) return <p className="text-center mt-10 text-gray-500">Loading data...</p>;
+  useEffect(() => {
+    if (stock) {
+      fetch("/api/admin/stock/getOrder")
+        .then((res) => res.json())
+        .then((data: FoodImp[]) => {
+          const stockOrder = data.filter((order) => order.type === stock?.type);
+          setOrder(stockOrder);
+        })
+        .catch((error) => {
+          console.error("Error fetching orders:", error);
+        });
+    }
+  }, [stock]);
 
-    if (error) return <p className="text-center mt-10 text-red-500">An error occurred: {error}</p>;
+  // ดึงข้อมูล Usage
+  useEffect(() => {
+    fetch(`/api/admin/stock/use`)
+      .then((res) => res.json())
+      .then((data: []) => {
+        const stockUsage = data.filter((usage) => usage.stockId === stock?.id);
+        setUsage(stockUsage);
+      })
+      .catch((error) => {
+        console.error("Error fetching usage:", error);
+      });
+  }, [stock]);
 
-    if (!stock) return <p className="text-center mt-10 text-gray-500">This archive was not found.</p>;
+  if (loading)
+    return <p className="text-center mt-10 text-gray-500">Loading data...</p>;
 
+  if (error)
     return (
         <div className="flex flex-col items-center justify-center mt-10 mx-24">
             <h1 className="text-2xl  text-gray-800 font-bold mb-6">Inventory and ordering details</h1>
@@ -106,6 +118,109 @@ export default function CowDetails() {
                 Back to Resorce page
                 </button>
             </Link>
+
         </div>
-    );
+      </div>
+
+      {/* แสดงข้อมูล Usage */}
+      <div className="border p-6 rounded-lg shadow-lg bg-white w-full mb-6">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+          Usage Information
+        </h2>
+        {usage.length === 0 ? (
+          <p className="text-center py-4 text-gray-500">
+            No usage data available.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200 text-gray-700">
+                  <th className="px-4 py-2 border">#</th>
+                  <th className="px-4 py-2 border">วันที่</th>
+                  <th className="px-4 py-2 border">จำนวน</th>
+                  <th className="px-4 py-2 border">ใช้โดย</th>
+                </tr>
+              </thead>
+              <tbody className="bg-gray-50 text-gray-700">
+                {usage.map((usageItem, index) => (
+                  <tr key={usageItem.id} className="hover:bg-gray-100">
+                    <td className="px-4 py-2 text-center border">
+                      {index + 1}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {new Date(usageItem.usedAt).toLocaleDateString("th-TH")}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {usageItem.quantity}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {usageItem.usedBy?.user?.firstName}{" "}
+                      {usageItem.usedBy?.user?.lastName}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className="border p-6 rounded-lg shadow-lg bg-white w-full">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+          Ordering information
+        </h2>
+        {order.length === 0 ? (
+          <p className="text-center py-4 text-gray-500">
+            There is no ordering information yet.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full table-auto border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200 text-gray-700">
+                  <th className="px-4 py-2 border">#</th>
+                  <th className="px-4 py-2 border">วันที่</th>
+                  <th className="px-4 py-2 border">ชื่อ</th>
+                  <th className="px-4 py-2 border">ประเภท</th>
+                  <th className="px-4 py-2 border">แหล่งที่มา</th>
+                  <th className="px-4 py-2 border">จำนวน</th>
+                </tr>
+              </thead>
+              <tbody className="bg-gray-50 text-gray-700">
+                {order.map((order, index) => (
+                  <tr key={order.id} className="hover:bg-gray-100">
+                    <td className="px-4 py-2 text-center border">
+                      {index + 1}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {new Date(order.date).toLocaleDateString("th-TH")}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {order.name}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {order.type}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {order.importFrom}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {order.quantity}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <Link href="/admin/resorce">
+        <button className="mt-6 bg-[#CECECE]  text-white px-6 py-3 rounded-lg hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg">
+          Back to Resource page
+        </button>
+      </Link>
+    </div>
+  );
 }

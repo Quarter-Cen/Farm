@@ -1,6 +1,8 @@
 "use client";
 
+
 import { useState, useEffect } from "react";
+
 
 export default function AddCowPage() {
     const [formData, setFormData] = useState({
@@ -53,6 +55,7 @@ export default function AddCowPage() {
                     weight: "",
                     veterianId: "",
                 });
+                window.location.href = '/admin/cow';
             } else {
                 setMessage(`Error: ${data.error}`);
             }

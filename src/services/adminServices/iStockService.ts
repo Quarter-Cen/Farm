@@ -6,5 +6,5 @@ export interface iStockService {
     deleteStock(stockId: bigint): Promise<void>;
     getStockById(stockId: bigint): Promise<Stock | null>;
     getAllStock(): Promise<Stock[]>;
-    useStock(stockId: bigint, quantity: number, usedById: bigint): Promise<StockUsage | null>;
+    useStock(foodType: FoodType, quantity: number, usedById: bigint): Promise<StockUsage | null>;
 }

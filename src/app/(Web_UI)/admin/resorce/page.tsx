@@ -48,11 +48,6 @@ export default function VeterianTreatment() {
         ) : stockData.length === 0 ? (
           <div className="text-center bg-white p-4 rounded-lg shadow-md">
             <p className="text-gray-600 text-sm font-semibold">ไม่มีข้อมูลสต็อก</p>
-            <Link href="/admin/resorce/add">
-              <button className="mt-2 bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded-md text-white shadow-md text-sm">
-                เพิ่ม Resorce
-              </button>
-            </Link>
           </div>
         ) : (
           <div className="space-y-2">
