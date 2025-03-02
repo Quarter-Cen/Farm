@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
+import "remixicon/fonts/remixicon.css";
 
 type Role = "Admin" | "Veterian" | "Supervisor" | "DairyWorker";
 
@@ -70,8 +71,10 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-64 bg-gray-800 text-white h-screen p-4 overflow-y-scroll">
-      <h2 className="text-xl font-bold mb-6">{name}</h2>
+    <div className="w-64 mt-5 text-[#151D48] h-screen p-4 overflow-y-scroll">
+    <h2 className="text-3xl font-bold mb-6">
+        <i className="ri-seedling-line border rounded-lg p-2 mr-4 ml-3 text-white bg-[#88D64C]"></i>{name}
+    </h2>
 
       <ul>
         {roles.map((role) => {
@@ -79,16 +82,16 @@ export default function Sidebar() {
 
           return (
             <div key={role}>
-              <h3 className="font-bold mt-4">{role} Dashboard</h3>
+              <h3 className=" font-bold mb-4 mt-4">{role} Dashboard</h3>
               {roleLinks[role].map(({ href, label }) => {
                 const isActive = pathname.match(new RegExp(`^${href}(/|$)`));
 
                 return (
-                  <li key={href} className="mb-2 ">
+                  <li key={href} className="text-[#737791] mb-2 ">
                     <Link
                       href={href}
-                      className={`block px-4 py-2 rounded transition ${
-                        isActive ? "bg-gray-600 text-white font-bold" : "hover:bg-gray-600"
+                      className={`block px-4 py-2 rounded-xl transition ${
+                        isActive ? "bg-[#88D64C] text-white " : "hover:bg-[#bdbdbd]"
                       }`}
                     >
                       {label}
@@ -103,7 +106,7 @@ export default function Sidebar() {
         <li className="mb-2">
           <button
             onClick={handleLogout}
-            className="block font-bold mt-4 pl-1 py-2 hover:bg-gray-600 rounded w-full text-left"
+            className="block font-bold mt-4 pl-1 py-2 hover:bg-[#bdbdbd] rounded w-full text-left"
           >
             Sign Out
           </button>

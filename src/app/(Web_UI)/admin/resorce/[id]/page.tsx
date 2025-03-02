@@ -74,12 +74,12 @@ export default function CowDetails() {
                         <table className="min-w-full table-auto border border-gray-300">
                             <thead>
                                 <tr className="bg-gray-200 text-gray-700">
-                                    <th className="px-4 py-2 border">#</th>
-                                    <th className="px-4 py-2 border">วันที่</th>
-                                    <th className="px-4 py-2 border">ชื่อ</th>
-                                    <th className="px-4 py-2 border">ประเภท</th>
-                                    <th className="px-4 py-2 border">แหล่งที่มา</th>
-                                    <th className="px-4 py-2 border">จำนวน</th>
+                                    <th className="px-4 py-2 border">ID</th>
+                                    <th className="px-4 py-2 border">Date</th>
+                                    <th className="px-4 py-2 border">Name</th>
+                                    <th className="px-4 py-2 border">Type</th>
+                                    <th className="px-4 py-2 border">Source</th>
+                                    <th className="px-4 py-2 border">Unit</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-gray-50 text-gray-700">
