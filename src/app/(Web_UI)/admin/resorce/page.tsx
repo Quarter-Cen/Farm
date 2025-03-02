@@ -33,7 +33,7 @@ export default function VeterianTreatment() {
       <div className="flex justify-between items-center p-2 mb-3">
         <h1 className="text-2xl font-semibold ml-20 text-gray-800">Resorce</h1>
         <Link href={`/admin/resorce/add`}>
-          <button className="w-28 h-10 text-white mr-20 bg-[#CECECE] hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
+          <button className="w-28 h-10 text-white mr-20 bg-[#74B845]  hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
             Add Resorce
           </button>
         </Link>
