@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
         const { searchParams } = new URL(req.url);
         const vetId = searchParams.get("vetId");
 
-        console.log(vetId)
         // เช็คว่า vetId มีอยู่และเป็นตัวเลขที่ถูกต้องหรือไม่
         if (!vetId || isNaN(Number(vetId))) {
             return NextResponse.json({ error: "Invalid vetId" }, { status: 400 });

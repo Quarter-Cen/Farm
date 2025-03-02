@@ -98,6 +98,7 @@ export default function VeterianTreatment() {
                   </Link>
                 </div>
               </div>
+
             ))}
           </div>
         )}
