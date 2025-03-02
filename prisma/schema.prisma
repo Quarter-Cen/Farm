@@ -34,7 +34,7 @@ model User {
 model Admin {
   id                    BigInt @id @default(autoincrement())
   userId                BigInt @unique
-  user                  User   @relation(fields: [userId], references: [id])
+  user                  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   foodImports           FoodImp[]
   exports               Export[]
@@ -45,7 +45,7 @@ model Admin {
 model Supervisor {
   id                    BigInt @id @default(autoincrement())
   userId                BigInt @unique
-  user                  User   @relation(fields: [userId], references: [id])
+  user                  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   productReports        ProductReport[]
 
@@ -55,7 +55,7 @@ model Supervisor {
 model DairyWorker {
   id                    BigInt @id @default(autoincrement())
   userId                BigInt @unique
-  user                  User   @relation(fields: [userId], references: [id])
+  user                  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   stockUsage            StockUsage[]
   @@map("dairy_workers")
@@ -64,7 +64,7 @@ model DairyWorker {
 model Veterian {
   id                    BigInt @id @default(autoincrement())
   userId                BigInt @unique
-  user                  User   @relation(fields: [userId], references: [id])
+  user                  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   treatments            Treatment[]
   cows                  Cow[]
@@ -82,7 +82,7 @@ model FoodImp {
   pricePerUnit          Float
 
   adminId               BigInt
-  admin                 Admin   @relation(fields: [adminId], references: [id])
+  admin                 Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
   @@map("food_imps")  
 }
 
@@ -103,11 +103,11 @@ model Stock {
 model StockUsage {
   id          BigInt   @id @default(autoincrement())
   stockId     BigInt
-  stock       Stock @relation(fields: [stockId], references: [id]) // ใช้ Stock จริง ๆ
+  stock       Stock @relation(fields: [stockId], references: [id], onDelete: Cascade) // ใช้ Stock จริง ๆ
 
   quantity    Int
   usedById    BigInt
-  usedBy      DairyWorker @relation(fields: [usedById], references: [id])
+  usedBy      DairyWorker @relation(fields: [usedById], references: [id], onDelete: Cascade)
   usedAt      DateTime @default(now())
 
   @@map("stock_usages")
@@ -121,7 +121,7 @@ model ProductReport {
   cowZone               String
 
   supervisorId          BigInt
-  supervisor            Supervisor @relation(fields: [supervisorId], references: [id])
+  supervisor            Supervisor @relation(fields: [supervisorId], references: [id], onDelete: Cascade)
 
   @@map("product_reports")
 }
@@ -136,10 +136,10 @@ model Export {
   pricePerQuantity      Float
 
   adminId               BigInt
-  admin                 Admin   @relation(fields: [adminId], references: [id])
+  admin                 Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
   methodId              BigInt
-  paymentMethod         PaymentMethod @relation(fields: [methodId], references: [id])
+  paymentMethod         PaymentMethod @relation(fields: [methodId], references: [id], onDelete: Cascade)
   createdAt             DateTime     @default(now()) 
   @@map("exports")
 }
@@ -164,7 +164,7 @@ model PaymentMethod {
     breed                 String
     healthStatus          HealthStatus
     veterianId            BigInt?
-    veterian              Veterian? @relation(fields: [veterianId], references: [id])
+    veterian              Veterian? @relation(fields: [veterianId], references: [id], onDelete: SetNull)
 
     treatments            Treatment[]
 
@@ -179,15 +179,15 @@ model Treatment {
   details               String
   date                  DateTime
   drugName              String
-  status                String
+  status                HealthStatus
   notation              String
   cowWeight             Float
   veterianId            BigInt
-  veterian              Veterian @relation(fields: [veterianId], references: [id])
+  veterian              Veterian @relation(fields: [veterianId], references: [id], onDelete: Cascade)
 
 
     cowId                 BigInt
-    cow                   Cow      @relation(fields: [cowId], references: [id])
+    cow                   Cow      @relation(fields: [cowId], references: [id], onDelete: Cascade)
 
     @@map("treatments")
   }
