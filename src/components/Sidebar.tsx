@@ -72,7 +72,7 @@ export default function Sidebar() {
 
   return (
     <div className="w-64 mt-5 text-[#151D48] h-screen p-4 overflow-y-scroll">
-      <h2 className="text-3xl font-bold mb-6">
+      <h2 className="text-2xl font-bold mb-6">
         <i className="ri-seedling-line border rounded-lg p-2 mr-4 ml-3 text-white bg-[#88D64C]"></i>{name}
       </h2>
 

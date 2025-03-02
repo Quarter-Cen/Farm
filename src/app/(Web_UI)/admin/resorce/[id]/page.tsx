@@ -102,7 +102,7 @@ export default function CowDetails() {
             </div>
 
             <Link href="/admin/resorce">
-                <button className="mt-6 bg-[#CECECE]  text-white px-6 py-3 rounded-lg hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg">
+                <button className="mt-6 bg-[#74B845]  text-white px-6 py-3 rounded-lg  hover:scale-105 transition-transform duration-200">
                 Back to Resorce page
                 </button>
             </Link>
