@@ -2,17 +2,17 @@ import UserPageIdGuard from "@/components/UserPageIdGuard";
 
 export default async function DefaultLayout({
   children,
-  params,  // ✅ ดึง params จาก Props ของ App Router
+  params,  // props coming from App Router
 }: {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>; // Make params a Promise
 }) {
-  // Ensure params is resolved before passing it
+  // Wait for the params to resolve if it's a Promise
   const resolvedParams = await params;
 
   return (
     <>  
-      <UserPageIdGuard params={{ id: resolvedParams.id }}> {/* ✅ ใช้ params จาก Props */}
+      <UserPageIdGuard params={{ id: resolvedParams.id }}> {/* Use the resolved params */}
         {children}
       </UserPageIdGuard>
     </>
