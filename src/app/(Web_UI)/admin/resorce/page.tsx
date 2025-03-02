@@ -1,10 +1,12 @@
-"use client";
+'use client'
+
+
 import { Stock } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import "remixicon/fonts/remixicon.css";
 
-export default function VeterianTreatment() {
+export default function Resorce() {
   const [stockData, setStockData] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

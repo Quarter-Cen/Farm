@@ -1,15 +1,14 @@
 'use client'
 
 
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
 
+import { useState, useEffect } from 'react';
+import { useRouter } from "next/navigation";
 
 
 
 const AddStock = () => {
-  const router = useRouter(); // ✅ สร้างตัวแปร router
-
+  const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
     date: '',
