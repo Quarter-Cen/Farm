@@ -2,11 +2,12 @@
 import { Stock } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import "remixicon/fonts/remixicon.css";
 
 export default function VeterianTreatment() {
   const [stockData, setStockData] = useState<Stock[]>([]);
-  const [loading, setLoading] = useState(true); // state สำหรับ loading
-  const [error, setError] = useState<string | null>(null); // state สำหรับ error
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/stock")
@@ -18,95 +19,88 @@ export default function VeterianTreatment() {
       })
       .then((data: Stock[]) => {
         setStockData(data);
-        setLoading(false); // set loading เป็น false หลังจากโหลดข้อมูลเสร็จ
+        setLoading(false);
       })
       .catch((error) => {
-        setError(error.message); // แสดงข้อความ error ถ้าเกิดข้อผิดพลาด
-        setLoading(false); // set loading เป็น false แม้เกิดข้อผิดพลาด
+        setError(error.message);
+        setLoading(false);
       });
   }, []);
 
-  if (loading) {
-    return <p className="text-center text-gray-500">กำลังโหลดข้อมูล...</p>; // แสดงข้อความระหว่างโหลดข้อมูล
-  }
-
-  if (error) {
-    return <p className="text-center text-red-500">เกิดข้อผิดพลาด: {error}</p>; // แสดงข้อความ error ถ้าเกิดข้อผิดพลาด
-  }
-
-  if (stockData.length === 0) {
-    return (
-      <p className="text-center text-gray-500">ไม่มีข้อมูล stock ที่จะแสดง</p>
-    ); // แสดงข้อความหากไม่มีข้อมูล
-  }
-
   return (
-    <div className="flex-col">
-      <div className="flex justify-between p-4">
-        <h1>Resorce</h1>
+    <div className="flex flex-col p-4 bg-gray-100 min-h-screen">
+      {/* Header */}
+      <div className="flex justify-between items-center p-2 mb-3">
+        <h1 className="text-2xl font-semibold ml-20 text-gray-800">Resorce</h1>
         <Link href={`/admin/resorce/add`}>
-          <button className="bg-[#88D64C] hover:bg-[#76b942] px-3 py-1 rounded-md">
-            เพิ่มข้อมูล
+          <button className="w-28 h-10 text-white mr-20 bg-[#CECECE] hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
+            Add Resorce
           </button>
         </Link>
       </div>
 
-      <div className="flex items-center justify-center ml-[2%]">
-        <table className="min-w-full table-auto border border-gray-300">
-          <thead>
-            <tr className="bg-[#DBDBDB] text-gray-700">
-              <th className="px-6 py-2 border">วันที่</th>
-              <th className="px-6 py-2 border">ชนิด</th>
-              <th className="px-6 py-2 border">จำนวน</th>
-              <th className="px-6 py-2 border">สถานะ</th>
-              <th className="px-6 py-2 border">การดำเนินการ</th>
-            </tr>
-          </thead>
-          <tbody className="bg-[#F4F4F4] text-center">
+      {/* Table */}
+      <div className="w-full max-w-5xl mx-auto mt-2">
+        {loading ? (
+          <p className="text-center text-gray-500 text-sm">กำลังโหลดข้อมูล...</p>
+        ) : error ? (
+          <p className="text-center text-red-500 text-sm">เกิดข้อผิดพลาด: {error}</p>
+        ) : stockData.length === 0 ? (
+          <div className="text-center bg-white p-4 rounded-lg shadow-md">
+            <p className="text-gray-600 text-sm font-semibold">ไม่มีข้อมูลสต็อก</p>
+            <Link href="/admin/resorce/add">
+              <button className="mt-2 bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded-md text-white shadow-md text-sm">
+                เพิ่ม Resorce
+              </button>
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {/* Table Header */}
+            <div className="grid grid-cols-5 bg-gray-200 text-gray-900 font-medium p-2 rounded-lg">
+              <span className="text-center text-sm">Date</span>
+              <span className="text-center text-sm">Type</span>
+              <span className="text-center text-sm">Unit</span>
+              <span className="text-center text-sm">Status</span>
+              <span className="text-center text-sm">Operation</span>
+            </div>
+
+            {/* Stock Data Rows */}
             {stockData.map((stock) => (
-              <tr key={stock.id} className="border">
-                <td className="px-6 py-2 border">
-                  {new Date(stock.updatedAt).toLocaleDateString("th-TH")}
-                </td>
-                <td className="px-6 py-2 border">{stock.type}</td>
-                <td className="px-6 py-2 border">{stock.quantity}</td>
-                <td className="px-6 py-2 border">
-                  <span
-                    className={`px-3 py-1 rounded-full text-white ${
-                      stock.status === "AVAILABLE"
-                        ? "bg-[#28A745]"
-                        : stock.status === "RESERVED"
-                        ? "bg-[#FFC107]"
-                        : "bg-[#FD7E14]"
-                    }`}
-                  >
-                    {stock.status === "AVAILABLE"
-                      ? "Available"
+              <div
+                key={stock.id}
+                className="grid grid-cols-5 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer"
+                onClick={() => window.location.href = `/admin/resorce/${stock.id}`}
+              >
+                <span className="text-center text-sm">{new Date(stock.updatedAt).toLocaleDateString("th-TH")}</span>
+                <span className="text-center text-sm">{stock.type}</span>
+                <span className="text-center text-sm">{stock.quantity}</span>
+                <span
+                  className={`text-center px-3 rounded-full font-light text-sm ${
+                    stock.status === "AVAILABLE"
+                      ? "text-green-600"
                       : stock.status === "RESERVED"
-                      ? "Reserved"
-                      : "Out of Stock"}
-                  </span>
-                </td>
-                <td className="px-1 py-2 text-center flex justify-center space-x-4 border">
-                  <div>
-                    <Link href={`/admin/resorce/${stock.id}`}>
-                      <button className="bg-[#e7e459] hover:bg-[#adab38] px-3 py-1 rounded-md">
-                        ดูเพิ่มเติม
-                      </button>
-                    </Link>
-                  </div>
-                  <div>
-                    <Link href={`/veterian/treatment/${stock.id}`}>
-                      <button className="bg-[#4c83d6] hover:bg-[#37609c] px-3 py-1 rounded-md">
-                        แก้ไข
-                      </button>
-                    </Link>
-                  </div>
-                </td>
-              </tr>
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {stock.status === "AVAILABLE"
+                    ? "Available"
+                    : stock.status === "RESERVED"
+                    ? "Reserved"
+                    : "Out of Stock"}
+                </span>
+                <div className="flex justify-center space-x-4">
+                  <Link href={`/veterian/treatment/${stock.id}`}>
+                    <button className="text-[#CECECE] hover:text-[#74B845] hover:scale-105 transition-transform duration-200">
+                      <i className="ri-edit-circle-fill text-2xl"></i>
+                    </button>
+                  </Link>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        )}
       </div>
     </div>
   );

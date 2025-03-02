@@ -13,6 +13,8 @@ const AddStock = () => {
     adminId: '', 
   });
 
+  const [isFormValid, setIsFormValid] = useState(false); // State to track if form is valid
+
   useEffect(() => {
     fetch("/api/auth/me/rolesId")
       .then((res) => res.json())
@@ -35,6 +37,16 @@ const AddStock = () => {
       [name]: value,
     }));
   };
+
+  // Function to check if form data is complete
+  const validateForm = (): boolean => {
+    const { name, date, importFrom, type, quantity, pricePerUnit } = formData;
+    return !!(name && date && importFrom && type && quantity > 0 && pricePerUnit > 0); // Returns true if all fields are filled correctly
+  };
+
+  useEffect(() => {
+    setIsFormValid(validateForm()); // Revalidate the form whenever formData changes
+  }, [formData]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -132,10 +144,13 @@ const AddStock = () => {
       
         <button 
           type="submit"
-          className="w-full bg-gray-300 text-white py-2 rounded-lg mt-4 transition duration-300 ease-in-out transform hover:bg-[#74B845] hover:scale-105 focus:outline-none"
+          disabled={!isFormValid} 
+          className={`w-full text-white py-2 rounded-lg mt-4 transition duration-300 ease-in-out transform ${isFormValid ? 'bg-[#74B845] hover:bg-[#74B845] ' : 'bg-[#CECECE] cursor-not-allowed'}`}
         >
           Add Stock
         </button>
+
+        
       </form>
     </div>
   );

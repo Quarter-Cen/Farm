@@ -67,11 +67,11 @@ export default function VeterianCowInfo() {
   return (
     <div className="flex flex-col p-4 bg-gray-100 min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center p-2">
-        <h1 className="text-xl font-semibold ml-20 text-gray-800">Cow Information</h1>
+      <div className="flex justify-between items-center p-2 mb-3">
+        <h1 className="text-2xl font-semibold ml-20 text-gray-800">Cow Information</h1>
     
         <Link href={`/admin/resorce/add`}>
-          <button className="w-28 h-8 text-white mr-20 bg-[#CECECE]  hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
+          <button className="w-28 h-10 text-white mr-20 bg-[#CECECE]  hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
             Add cow
           </button>
         </Link>
@@ -94,12 +94,12 @@ export default function VeterianCowInfo() {
           <div className="space-y-2">
             {/* Table Header */}
             <div className="grid grid-cols-6 bg-gray-200 text-gray-900 font-medium p-2 rounded-lg">
-              <span className="text-center text-xs">Cow ID</span>
-              <span className="text-center text-xs">Name</span>
-              <span className="text-center text-xs">Gender</span>
-              <span className="text-center text-xs">Age</span>
-              <span className="text-center text-xs">Breed</span>
-              <span className="text-center text-xs">Health Status</span>
+              <span className="text-center text-sm">Cow ID</span>
+              <span className="text-center text-sm">Name</span>
+              <span className="text-center text-sm">Gender</span>
+              <span className="text-center text-sm">Age</span>
+              <span className="text-center text-sm">Breed</span>
+              <span className="text-center text-sm">Health Status</span>
             </div>
 
             {/* Cow Data Rows */}
@@ -108,11 +108,11 @@ export default function VeterianCowInfo() {
                 key={cow.id}
                 className="grid grid-cols-6 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition"
               >
-                <span className="text-center text-xs">{index + 1}</span>
-                <span className="text-center text-xs">{cow.name}</span>
-                <span className="text-center text-xs">{cow.gender}</span>
-                <span className="text-center text-xs">{cow.age}</span>
-                <span className="text-center text-xs">{cow.breed}</span>
+                <span className="text-center text-sm">{index + 1}</span>
+                <span className="text-center text-sm">{cow.name}</span>
+                <span className="text-center text-sm">{cow.gender}</span>
+                <span className="text-center text-sm">{cow.age}</span>
+                <span className="text-center text-sm">{cow.breed}</span>
                 <span
                   className={`text-center px-3 py-0.5 rounded-full border font-light font-semibold text-xs ${
                     cow.healthStatus === "HEALTHY"
