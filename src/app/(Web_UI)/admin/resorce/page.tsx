@@ -91,7 +91,7 @@ export default function VeterianTreatment() {
                     : "Out of Stock"}
                 </span>
                 <div className="flex justify-center space-x-4">
-                  <Link href={`/veterian/treatment/${stock.id}`}>
+                  <Link href={`/veterian/treatment/edit/${stock.id}`}>
                     <button className="text-[#CECECE] hover:text-[#74B845] hover:scale-105 transition-transform duration-200">
                       <i className="ri-edit-circle-fill text-2xl"></i>
                     </button>
