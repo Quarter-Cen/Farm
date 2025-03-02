@@ -42,8 +42,9 @@ export default function VeterianCowInfo() {
     if (isAdmin) {
       fetch("/api/admin/cow-info")
         .then((res) => res.json())
-        .then((data: Cow[]) => {
-          setCowData(data);
+        .then((data) => {
+          console.log("Fetched cowData:", data); // ตรวจสอบค่า
+          setCowData(Array.isArray(data) ? data : []); // ตรวจสอบให้แน่ใจว่าเป็น array
           setLoading(false);
         })
         .catch((error) => {
@@ -53,8 +54,9 @@ export default function VeterianCowInfo() {
     } else if (isVeterian && vetId !== null) {
       fetch(`/api/veterian/assigned-cows?vetId=${vetId}`)
         .then((res) => res.json())
-        .then((data: Cow[]) => {
-          setCowData(data);
+        .then((data) => {
+          console.log("Fetched assigned cows:", data); // ตรวจสอบค่า
+          setCowData(Array.isArray(data) ? data : []); // ตรวจสอบให้แน่ใจว่าเป็น array
           setLoading(false);
         })
         .catch((error) => {
@@ -63,6 +65,7 @@ export default function VeterianCowInfo() {
         });
     }
   }, [isAdmin, isVeterian, vetId]);
+  
 
   return (
     <div className="flex flex-col p-4 bg-gray-100 min-h-screen">
@@ -71,7 +74,7 @@ export default function VeterianCowInfo() {
         <h1 className="text-2xl font-semibold ml-20 text-gray-800">Cow Information</h1>
     
 
-        <Link href={`/admin/resorce/add`}>
+        <Link href={`/admin/cow/add`}>
           <button className="w-28 h-10 text-white mr-20 bg-[#CECECE]  hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
 
             Add cow
@@ -86,11 +89,6 @@ export default function VeterianCowInfo() {
         ) : cowData.length === 0 ? (
           <div className="text-center bg-white p-4 rounded-lg shadow-md">
             <p className="text-gray-600 text-sm font-semibold">ไม่มีข้อมูลวัว</p>
-            <Link href="/admin/add-cow">
-              <button className="mt-2 bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded-md text-white shadow-md text-sm">
-                เพิ่มข้อมูลวัว
-              </button>
-            </Link>
           </div>
         ) : (
           <div className="space-y-2">
