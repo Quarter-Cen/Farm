@@ -163,10 +163,10 @@ export class UserService implements iUserService {
       const userWithRoles = {
         ...user,
         role: {
-          admin: user.admin ? user.admin.id : null,
-          supervisor: user.supervisor ? user.supervisor.id : null,
-          dairyWorker: user.dairyWorker ? user.dairyWorker.id : null,
-          veterian: user.veterian ? user.veterian.id : null,
+          Admin: user.admin ? user.admin.id : null,
+          Supervisor: user.supervisor ? user.supervisor.id : null,
+          DairyWorker: user.dairyWorker ? user.dairyWorker.id : null,
+          Veterian: user.veterian ? user.veterian.id : null,
         },
       };
       console.log(userWithRoles)
@@ -221,7 +221,7 @@ export class UserService implements iUserService {
                 veterian: true
             }
         });
-
+        console.log("currentRoles")
         // ตรวจสอบและลบ role ที่ไม่ตรงกับ array `roles`
         if (currentRoles?.admin && !roles.includes('Admin')) {
             await prisma.admin.delete({ where: { userId: userId } });

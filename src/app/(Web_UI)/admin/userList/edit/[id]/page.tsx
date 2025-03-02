@@ -111,6 +111,7 @@ const UserProfileForm = () => {
       }
 
       alert("User updated successfully!");
+      router.push("/admin/userList");
     } catch (error) {
       console.error("Error:", error);
       alert("There was an error updating the user.");
@@ -234,7 +235,7 @@ const UserProfileForm = () => {
           <div className="mb-4">
             <label className="block font-semibold mb-2">Role</label>    
             <div className="space-y-2">
-              {["admin", "supervisor", "dairyWorker", "veterian"].map(
+              {["Admin", "Supervisor", "DairyWorker", "Veterian"].map(
                 (roleName) => (
                   <div key={roleName} className="flex items-center">
                     <input
