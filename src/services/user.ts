@@ -140,4 +140,138 @@ export class UserService implements iUserService {
       return null;
     }
   }
+
+  // เพิ่มฟังก์ชัน getUserById
+  async getUserById(userId: bigint): Promise<User | null> {
+    try {
+      console.log(userId)
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+          admin: true,
+          supervisor: true,
+          dairyWorker: true,
+          veterian: true,
+        },
+      });
+
+      if (!user) {
+        throw new Error('User not found.');
+      }
+
+      // แปลงข้อมูลผู้ใช้เพื่อรวม role เข้าในฟิลด์เดียว
+      const userWithRoles = {
+        ...user,
+        role: {
+          admin: user.admin ? user.admin.id : null,
+          supervisor: user.supervisor ? user.supervisor.id : null,
+          dairyWorker: user.dairyWorker ? user.dairyWorker.id : null,
+          veterian: user.veterian ? user.veterian.id : null,
+        },
+      };
+      console.log(userWithRoles)
+      return userWithRoles;
+    } catch (error: any) {
+      console.log('Error fetching user by id: ', error.message);
+      return null;
+    }
+  }
+
+  async updateUser(
+    userId: bigint,
+    firstName: string,
+    lastName: string,
+    gender: Gender,
+    employmentDurationHours: number | undefined,
+    workLocation: string | undefined,
+    salary: number,
+    startDate: string | undefined,   // ให้แน่ใจว่าเป็น string ที่มีรูปแบบ ISO-8601
+    workHour: number,
+    phoneNumber: string,
+    address: string,
+    birthdate: string,   // ให้แน่ใจว่าเป็น string ที่มีรูปแบบ ISO-8601
+    roles: string[]      // แก้ไขเป็น array ของ string สำหรับ roles
+): Promise<User | null> {
+    try {
+        // อัพเดตข้อมูล user
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                firstName,
+                lastName,
+                gender,
+                employmentDurationHours,
+                workLocation,
+                salary,
+                startDate: startDate ? new Date(startDate) : undefined,
+                workHour,
+                phoneNumber,
+                address,
+                birthdate: birthdate ? new Date(birthdate) : undefined
+            }
+        });
+
+        // ตรวจสอบ role ที่มีอยู่ในฐานข้อมูล
+        const currentRoles = await prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                admin: true,
+                supervisor: true,
+                dairyWorker: true,
+                veterian: true
+            }
+        });
+
+        // ตรวจสอบและลบ role ที่ไม่ตรงกับ array `roles`
+        if (currentRoles?.admin && !roles.includes('Admin')) {
+            await prisma.admin.delete({ where: { userId: userId } });
+        }
+        if (currentRoles?.supervisor && !roles.includes('Supervisor')) {
+            await prisma.supervisor.delete({ where: { userId: userId } });
+        }
+        if (currentRoles?.dairyWorker && !roles.includes('DairyWorker')) {
+            await prisma.dairyWorker.delete({ where: { userId: userId } });
+        }
+        if (currentRoles?.veterian && !roles.includes('Veterian')) {
+            await prisma.veterian.delete({ where: { userId: userId } });
+        }
+
+        // สร้าง role ใหม่ที่ยังไม่มี
+        if (roles.includes('Admin') && !currentRoles?.admin) {
+            await prisma.admin.create({
+                data: {
+                    userId: updatedUser.id,
+                }
+            });
+        }
+        if (roles.includes('Supervisor') && !currentRoles?.supervisor) {
+            await prisma.supervisor.create({
+                data: {
+                    userId: updatedUser.id,
+                }
+            });
+        }
+        if (roles.includes('DairyWorker') && !currentRoles?.dairyWorker) {
+            await prisma.dairyWorker.create({
+                data: {
+                    userId: updatedUser.id,
+                }
+            });
+        }
+        if (roles.includes('Veterian') && !currentRoles?.veterian) {
+            await prisma.veterian.create({
+                data: {
+                    userId: updatedUser.id,
+                }
+            });
+        }
+
+        return updatedUser;
+    } catch (exception: any) {
+        console.error('Error updating user: ', exception.message);
+        return null;
+    }
+}
+
+  
 }

@@ -14,9 +14,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             quantity, 
             status
         );
+        const jsonResponse = JSON.stringify(updatedStock, (key, value) =>
+            typeof value === "bigint" ? value.toString() : value
+        );
+    
 
-        if (updatedStock) {
-            return NextResponse.json(updatedStock);
+        if (jsonResponse) {
+            return new NextResponse(jsonResponse, { status: 201, headers: { "Content-Type": "application/json" } });
         } else {
             return NextResponse.json({ message: "Stock not found" }, { status: 404 });
         }

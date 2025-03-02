@@ -96,7 +96,7 @@ export default function VeterianTreatment() {
                     </Link>
                   </div>
                   <div>
-                    <Link href={`/veterian/treatment/${stock.id}`}>
+                    <Link href={`/admin/resorce/edit/${stock.id}`}>
                       <button className="bg-[#4c83d6] hover:bg-[#37609c] px-3 py-1 rounded-md">
                         แก้ไข
                       </button>

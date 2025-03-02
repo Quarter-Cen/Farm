@@ -1,0 +1,19 @@
+"use client"
+
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+
+export default function AdminPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+
+    router.push("/profile/1");
+  }, [router])
+
+  return (
+    <div>
+      <p>Redirecting...</p>
+    </div>
+  );
+}

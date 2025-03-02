@@ -117,10 +117,10 @@ const UserList: React.FC = () => {
             .filter((user) => {
               if (!filter) return true; // ถ้าไม่มีการกรอง จะโชว์ทุกคน
               const rolePriority = [
-                "admin",
-                "supervisor",
-                "dairyWorker",
-                "veterian",
+                "Admin",
+                "Supervisor",
+                "DairyWorker",
+                "Veterian",
               ];
 
               // หาบทบาทที่ไม่ได้เป็น null
@@ -133,10 +133,10 @@ const UserList: React.FC = () => {
             })
             .map((user) => {
               const rolePriority = [
-                "admin",
-                "supervisor",
-                "dairyWorker",
-                "veterian",
+                "Admin",
+                "Supervisor",
+                "DairyWorker",
+                "Veterian",
               ];
 
               const filteredRoles = Object.entries(user.role)
@@ -165,7 +165,7 @@ const UserList: React.FC = () => {
                         <h3 className="font-semibold">
                           {user.firstName} {user.lastName}
                         </h3>
-                        <Link href={`/editUser/${user.id}`}>
+                        <Link href={`/admin/userList/edit/${user.id}`}>
                           <i className="ri-edit-circle-fill text-[#979797] text-xl cursor-pointer hover:scale-110 transition-transform duration-200"></i>
                         </Link>
                       </div>
