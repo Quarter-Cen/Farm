@@ -9,7 +9,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     try {
         const stock = await stockService.getStockById(BigInt(id.id));
-
+        console.log(stock)
         const jsonResponse = JSON.stringify(stock, (key, value) =>
             typeof value === "bigint" ? value.toString() : value
         );

@@ -12,7 +12,6 @@ export async function GET(request: Request) {
         roles = JSON.parse(JSON.stringify(roles, (key, value) =>
             typeof value === 'bigint' ? value.toString() : value
         ));
-        console.log(roles);
         return NextResponse.json(roles);
     }
 }

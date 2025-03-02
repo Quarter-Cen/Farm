@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 const UserProfileForm = () => {
   const router = useRouter();
+  const { id } = useParams();
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -12,40 +13,40 @@ const UserProfileForm = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [birthdate, setBirthdate] = useState("");
-  const [Role, setRole] = useState("");
-  const [StartDate, setStartDate] = useState("");
-  const [EmploymentDuration, setEmploymentDuration] = useState("");
-  const [WorkLocation, setWorkLocation] = useState("");
-  const [Salary, setSalary] = useState("");
-  const [WorkHour, setWorkHour] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [roles, setRoles] = useState<string[]>([]); // เปลี่ยนเป็น array
+  const [startDate, setStartDate] = useState("");
+  const [employmentDuration, setEmploymentDuration] = useState("");
+  const [workLocation, setWorkLocation] = useState("");
+  const [salary, setSalary] = useState("");
+  const [workHour, setWorkHour] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    // ดึงข้อมูลจาก API เมื่อคอมโพเนนต์โหลด
     const fetchUserData = async () => {
       try {
-        const response = await fetch("/api/getUserData");
+        const response = await fetch(`/api/admin/user/${id}`);
         const data = await response.json();
-        
-        // ตั้งค่าข้อมูลใน state
+
         if (data) {
           setFirstName(data.firstName);
           setLastName(data.lastName);
           setGender(data.gender);
           setPhoneNumber(data.phoneNumber);
           setAddress(data.address);
-          setBirthdate(data.birthdate);
-          setRole(data.Role);
-          setStartDate(data.StartDate);
-          setEmploymentDuration(data.EmploymentDuration);
-          setWorkLocation(data.WorkLocation);
-          setSalary(data.Salary);
-          setWorkHour(data.WorkHour);
-          setEmail(data.email);
+          setBirthdate(data.birthdate ? data.birthdate.split("T")[0] : "");
+
+          // Filter roles to include only those with non-null values
+          const filteredRoles = Object.keys(data.role).filter(
+            (role) => data.role[role] !== null
+          );
+          setRoles(filteredRoles);
+
+          setStartDate(data.startDate ? data.startDate.split("T")[0] : "");
+          setEmploymentDuration(data.employmentDurationHours);
+          setWorkLocation(data.workLocation);
+          setSalary(data.salary);
+          setWorkHour(data.workHour);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -53,7 +54,14 @@ const UserProfileForm = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [id]);
+
+  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setRoles((prevRoles) =>
+      checked ? [...prevRoles, name] : prevRoles.filter((role) => role !== name)
+    );
+  };
 
   const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -71,12 +79,7 @@ const UserProfileForm = () => {
     }
   };
 
-  const isFormComplete =
-    firstName.trim() !== "" &&
-    lastName.trim() !== "" &&
-    email.trim() !== "" &&
-    password.trim() !== "" &&
-    password === confirmPassword;
+  const isFormComplete = firstName.trim() !== "" && lastName.trim() !== "";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,19 +91,17 @@ const UserProfileForm = () => {
       phoneNumber,
       address,
       birthdate,
-      Role,
-      StartDate,
-      employmentDuration: parseInt(EmploymentDuration) || 0,
-      WorkLocation,
-      salary: parseFloat(Salary) || 0,
-      workHour: parseInt(WorkHour) || 0,
-      email,
-      password,
+      roles, // ส่ง roles เป็น array
+      startDate,
+      employmentDuration: parseInt(employmentDuration) || 0,
+      workLocation,
+      salary: parseFloat(salary) || 0,
+      workHour: parseInt(workHour) || 0,
     };
 
     try {
-      const response = await fetch("/api/updateUser", {
-        method: "POST",
+      const response = await fetch(`/api/admin/user/${id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
@@ -152,7 +153,12 @@ const UserProfileForm = () => {
               >
                 Delete Picture
               </button>
-              <input type="file" ref={fileInputRef} onChange={handlePictureChange} className="hidden" />
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handlePictureChange}
+                className="hidden"
+              />
             </div>
           </div>
 
@@ -162,7 +168,7 @@ const UserProfileForm = () => {
               <label className="block font-semibold mb-2">First Name</label>
               <input
                 type="text"
-                value={firstName}       
+                value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg"
               />
@@ -187,13 +193,11 @@ const UserProfileForm = () => {
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#88D64C]"
             >
               <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
               <option value="Other">Other</option>
             </select>
           </div>
-           
-
           {/* Phone Number */}
           <div className="mb-4">
             <label className="block font-semibold mb-2">Phone Number</label>
@@ -226,35 +230,38 @@ const UserProfileForm = () => {
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
-
-          {/* Role */}
+          {/* Role (Checkboxes) */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Role</label>
-            <input
-              type="text"
-              value={Role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-
-          {/* Start Date */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Start Date</label>
-            <input
-              type="date"
-              value={StartDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
-            />
+            <label className="block font-semibold mb-2">Role</label>    
+            <div className="space-y-2">
+              {["admin", "supervisor", "dairyWorker", "veterian"].map(
+                (roleName) => (
+                  <div key={roleName} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={roleName}
+                      name={roleName}
+                      checked={roles.includes(roleName)}
+                      onChange={handleRoleChange}
+                      className="mr-2"
+                    />
+                    <label htmlFor={roleName} className="text-sm">
+                      {roleName.charAt(0).toUpperCase() + roleName.slice(1)}
+                    </label>
+                  </div>
+                )
+              )}
+            </div>
           </div>
 
           {/* Employment Duration */}
           <div className="mb-4">
-            <label className="block font-semibold mb-2">Employment Duration (Years)</label>
+            <label className="block font-semibold mb-2">
+              Employment Duration (Years)
+            </label>
             <input
               type="number"
-              value={EmploymentDuration}
+              value={employmentDuration}
               onChange={(e) => setEmploymentDuration(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg"
             />
@@ -265,7 +272,7 @@ const UserProfileForm = () => {
             <label className="block font-semibold mb-2">Work Location</label>
             <input
               type="text"
-              value={WorkLocation}
+              value={workLocation}
               onChange={(e) => setWorkLocation(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg"
             />
@@ -276,7 +283,7 @@ const UserProfileForm = () => {
             <label className="block font-semibold mb-2">Salary</label>
             <input
               type="number"
-              value={Salary}
+              value={salary}
               onChange={(e) => setSalary(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg"
             />
@@ -287,41 +294,8 @@ const UserProfileForm = () => {
             <label className="block font-semibold mb-2">Work Hour</label>
             <input
               type="number"
-              value={WorkHour}
+              value={workHour}
               onChange={(e) => setWorkHour(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-
-          {/* Email */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-
-          {/* Password */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
-            />
-          </div>
-
-          {/* Confirm Password */}
-          <div className="mb-4">
-            <label className="block font-semibold mb-2">Confirm Password</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
