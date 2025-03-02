@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-export default function EditCowPage({ cowId }: { cowId: number }) {
+export default function EditCowPage() {
   const router = useRouter();
   const { id } = useParams();
   const [formData, setFormData] = useState({
@@ -49,7 +49,7 @@ export default function EditCowPage({ cowId }: { cowId: number }) {
     };
 
     fetchCowData();
-  }, [cowId]);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

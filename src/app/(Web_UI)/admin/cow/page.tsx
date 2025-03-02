@@ -93,20 +93,21 @@ export default function VeterianCowInfo() {
         ) : (
           <div className="space-y-2">
             {/* Table Header */}
-            <div className="grid grid-cols-6 bg-gray-200 text-gray-900 font-medium p-2 rounded-lg">
+            <div className="grid grid-cols-7 bg-gray-200 text-gray-900 font-medium p-2 rounded-lg">
               <span className="text-center text-sm">Cow ID</span>
               <span className="text-center text-sm">Name</span>
               <span className="text-center text-sm">Gender</span>
               <span className="text-center text-sm">Age</span>
               <span className="text-center text-sm">Breed</span>
               <span className="text-center text-sm">Health Status</span>
+              <span className="text-center text-sm">Operation</span>
             </div>
 
             {/* Cow Data Rows */}
             {cowData.map((cow, index) => (
               <div
                 key={cow.id}
-                className="grid grid-cols-6 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition"
+                className="grid grid-cols-7 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition"
               >
                 <span className="text-center text-sm">{index + 1}</span>
                 <span className="text-center text-sm">{cow.name}</span>
@@ -125,6 +126,13 @@ export default function VeterianCowInfo() {
                   }`}
                 >
                   {cow.healthStatus}
+                </span>
+                <span className="text-center text-sm flex justify-center items-center">
+                <Link href={`/admin/cow/edit/${cow.id}`}>
+          <button className=" py-2 px-2 text-white  bg-[#458ab8]  hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
+            Edit
+          </button>
+        </Link>
                 </span>
               </div>
             ))}
