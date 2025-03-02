@@ -1,8 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // ✅ เพิ่ม useRouter
 
 const AddStock = () => {
+  const router = useRouter(); // ✅ สร้างตัวแปร router
+
   const [formData, setFormData] = useState({
     name: '',
     date: '',
@@ -13,7 +16,7 @@ const AddStock = () => {
     adminId: '', 
   });
 
-  const [isFormValid, setIsFormValid] = useState(false); // State to track if form is valid
+  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me/rolesId")
@@ -38,14 +41,13 @@ const AddStock = () => {
     }));
   };
 
-  // Function to check if form data is complete
   const validateForm = (): boolean => {
     const { name, date, importFrom, type, quantity, pricePerUnit } = formData;
-    return !!(name && date && importFrom && type && quantity > 0 && pricePerUnit > 0); // Returns true if all fields are filled correctly
+    return !!(name && date && importFrom && type && quantity > 0 && pricePerUnit > 0);
   };
 
   useEffect(() => {
-    setIsFormValid(validateForm()); // Revalidate the form whenever formData changes
+    setIsFormValid(validateForm());
   }, [formData]);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -63,11 +65,16 @@ const AddStock = () => {
         alert(data.message);
       } else {
         alert('Stock added successfully!');
+        router.push('/admin/resorce'); // ✅ หลังจากเพิ่มสำเร็จให้ไปที่หน้า /admin/resorce
       }
     } catch (error) {
       console.error('Failed to add stock:', error);
       alert('Error adding stock');
     }
+  };
+
+  const handleCancel = () => {
+    router.push('/admin/resorce'); // ✅ กลับไปหน้าที่ต้องการเมื่อกด Cancel
   };
 
   return (
@@ -141,16 +148,24 @@ const AddStock = () => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]"
           />
         </div>
-      
-        <button 
-          type="submit"
-          disabled={!isFormValid} 
-          className={`w-full text-white py-2 rounded-lg mt-4 transition duration-300 ease-in-out transform ${isFormValid ? 'bg-[#74B845] hover:bg-[#74B845] ' : 'bg-[#CECECE] cursor-not-allowed'}`}
-        >
-          Add Stock
-        </button>
 
-        
+        <div className="flex justify-between">
+          <button 
+            type="button" 
+            onClick={handleCancel} 
+            className="w-1/2 mr-2 bg-[#CECECE] text-white py-2 rounded-lg transition duration-300 ease-in-out hover:bg-[#74B845]"
+          >
+            Cancel
+          </button>
+
+          <button 
+            type="submit"
+            disabled={!isFormValid} 
+            className={`w-1/2 text-white py-2 rounded-lg transition duration-300 ease-in-out transform ${isFormValid ? 'bg-[#74B845] hover:bg-[#74B845]' : 'bg-[#CECECE] cursor-not-allowed'}`}
+          >
+            Add Stock
+          </button>
+        </div>
       </form>
     </div>
   );

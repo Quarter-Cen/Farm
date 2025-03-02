@@ -52,7 +52,7 @@ export default function CowDetails() {
 
     return (
         <div className="flex flex-col items-center justify-center mt-10 mx-24">
-            <h1 className="text-3xl  text-gray-800 mb-6">Inventory and ordering details</h1>
+            <h1 className="text-2xl  text-gray-800 font-bold mb-6">Inventory and ordering details</h1>
             <div className="border p-6 rounded-lg shadow-lg bg-white w-full mb-6">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Resource information</h2>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-gray-700">
@@ -74,12 +74,12 @@ export default function CowDetails() {
                         <table className="min-w-full table-auto border border-gray-300">
                             <thead>
                                 <tr className="bg-gray-200 text-gray-700">
-                                    <th className="px-4 py-2 border">#</th>
-                                    <th className="px-4 py-2 border">วันที่</th>
-                                    <th className="px-4 py-2 border">ชื่อ</th>
-                                    <th className="px-4 py-2 border">ประเภท</th>
-                                    <th className="px-4 py-2 border">แหล่งที่มา</th>
-                                    <th className="px-4 py-2 border">จำนวน</th>
+                                    <th className="px-4 py-2 border">ID</th>
+                                    <th className="px-4 py-2 border">Date</th>
+                                    <th className="px-4 py-2 border">Name</th>
+                                    <th className="px-4 py-2 border">Type</th>
+                                    <th className="px-4 py-2 border">Source</th>
+                                    <th className="px-4 py-2 border">Unit</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-gray-50 text-gray-700">
@@ -102,7 +102,7 @@ export default function CowDetails() {
             </div>
 
             <Link href="/admin/resorce">
-                <button className="mt-6 bg-[#CECECE]  text-white px-6 py-3 rounded-lg hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg">
+                <button className="mt-6 bg-[#74B845]  text-white px-6 py-3 rounded-lg  hover:scale-105 transition-transform duration-200">
                 Back to Resorce page
                 </button>
             </Link>

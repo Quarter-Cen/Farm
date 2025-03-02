@@ -75,7 +75,7 @@ export default function VeterianCowInfo() {
     
 
         <Link href={`/admin/cow/add`}>
-          <button className="w-28 h-10 text-white mr-20 bg-[#CECECE]  hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
+          <button className="w-28 h-10 text-white mr-20 bg-[#74B845]  hover:scale-105 transition-transform duration-200 rounded-lg text-sm">
 
             Add cow
           </button>
