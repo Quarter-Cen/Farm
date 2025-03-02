@@ -160,7 +160,7 @@ const AddStock = () => {
           <button 
             type="button" 
             onClick={handleCancel} 
-            className="w-1/2 mr-2 bg-[#CECECE] text-white py-2 rounded-lg transition duration-300 ease-in-out hover:bg-[#74B845]"
+            className="w-1/2 mr-2 bg-[#CECECE] text-white py-2 rounded-lg transition duration-300 ease-in-out hover:bg-[#a1a1a1]"
           >
             Cancel
           </button>

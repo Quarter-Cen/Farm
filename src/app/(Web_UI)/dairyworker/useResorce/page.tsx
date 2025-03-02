@@ -69,60 +69,65 @@ export default function UseFoodPage() {
     }
   };
 
+  const isFormValid = foodType !== "" && quantity !== "";
   return (
-    <div className="container mx-auto p-6 bg-gray-50">
-      <h1 className="text-3xl font-semibold text-center text-blue-600 mb-6">ใช้งาน Food Type</h1>
+    <div className="flex items-center  bg-white">
+      <div className=" container mx-auto p-6 bg-white items-center">
+        <h1 className="text-2xl text-center font-bold  ]"> Food Type</h1>
 
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
-        {/* Food Type Dropdown */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Food Type</label>
-          <select
-            value={foodType}
-            onChange={(e) => setFoodType(e.target.value as FoodType)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
+        <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+          {/* Food Type Dropdown */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Food Type</label>
+            <select
+              value={foodType}
+              onChange={(e) => setFoodType(e.target.value as FoodType)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            >
+              <option value="">Choose food type</option>
+              {Object.values(FoodType).map((food) => (
+                <option key={food} value={food}>
+                  {food}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Quantity */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Quantity</label>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter quantity"
+              required
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading || !isFormValid}
+            className={`w-full py-3 text-white font-semibold rounded-md ${
+              loading ? "bg-gray-400" : isFormValid ? "bg-[#74B845]" : "bg-[#CECECE]"
+            }`}
           >
-            <option value="">เลือกประเภทอาหาร</option>
-            {Object.values(FoodType).map((food) => (
-              <option key={food} value={food}>
-                {food}
-              </option>
-            ))}
-          </select>
-        </div>
+            {loading ? "loading..." : "Use Food Type"}
+          </button>
+        </form>
 
-        {/* Quantity */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Quantity</label>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="กรุณากรอกจำนวน"
-            required
-          />
-        </div>
-
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-3 text-white font-semibold rounded-md ${loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"}`}
-        >
-          {loading ? "กำลังประมวลผล..." : "ใช้งาน Food Type"}
-        </button>
-      </form>
-
-      {/* Message */}
-      {message && (
-        <div className="mt-6 text-center">
-          <p className={`text-sm ${message.includes("สำเร็จ") ? "text-green-600" : "text-red-600"}`}>
-            {message}
-          </p>
-        </div>
-      )}
+        {/* Message */}
+        {message && (
+          <div className="mt-6 text-center">
+            <p className={`text-sm ${message.includes("สำเร็จ") ? "text-green-600" : "text-red-600"}`}>
+              {message}
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

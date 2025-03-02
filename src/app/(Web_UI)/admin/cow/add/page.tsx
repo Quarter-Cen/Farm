@@ -74,8 +74,10 @@ export default function AddCowPage() {
     };
 
     return (
+
         <div className="flex items-center h-full justify-items-center">
             <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg overflow-y-auto self-center">
+
             <h2 className="text-center text-2xl font-semibold text-gray-800 mb-6">Add Cow</h2>
             {message && <p className="mb-4 text-red-500">{message}</p>}
             <form onSubmit={handleSubmit} className="space-y-4">
