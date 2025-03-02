@@ -44,31 +44,31 @@ export default function CowDetails() {
         }
     }, [stock]);
 
-    if (loading) return <p className="text-center mt-10 text-gray-500">กำลังโหลดข้อมูล...</p>;
+    if (loading) return <p className="text-center mt-10 text-gray-500">Loading data...</p>;
 
-    if (error) return <p className="text-center mt-10 text-red-500">เกิดข้อผิดพลาด: {error}</p>;
+    if (error) return <p className="text-center mt-10 text-red-500">An error occurred: {error}</p>;
 
-    if (!stock) return <p className="text-center mt-10 text-gray-500">ไม่พบข้อมูลคลังนี้</p>;
+    if (!stock) return <p className="text-center mt-10 text-gray-500">This archive was not found.</p>;
 
     return (
-        <div className="flex flex-col items-center justify-center mt-10 mx-auto">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">รายละเอียดคลังและการสั่งซื้อ</h1>
+        <div className="flex flex-col items-center justify-center mt-10 mx-24">
+            <h1 className="text-3xl  text-gray-800 mb-6">Inventory and ordering details</h1>
             <div className="border p-6 rounded-lg shadow-lg bg-white w-full mb-6">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">ข้อมูลคลัง</h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">Resource information</h2>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-gray-700">
-                    <p><strong>ลำดับ:</strong> {stock.id}</p>
-                    <p><strong>ประเภท:</strong> {stock.type}</p>
-                    <p><strong>จำนวน:</strong> {stock.quantity}</p>
-                    <p><strong>ราคาต่อหน่วย:</strong> {stock.unit}</p>
-                    <p><strong>วันที่แก้ไขล่าสุด:</strong> {new Date(stock.updatedAt).toLocaleDateString("th-TH")}</p>
-                    <p><strong>สถานะ:</strong> {stock.status}</p>
+                    <p><strong>ID:</strong> {stock.id}</p>
+                    <p><strong>Type:</strong> {stock.type}</p>
+                    <p><strong>Quantity:</strong> {stock.quantity}</p>
+                    <p><strong>Unit:</strong> {stock.unit}</p>
+                    <p><strong>Update date:</strong> {new Date(stock.updatedAt).toLocaleDateString("th-TH")}</p>
+                    <p><strong>Status:</strong> {stock.status}</p>
                 </div>
             </div>
 
             <div className="border p-6 rounded-lg shadow-lg bg-white w-full">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">💉 ข้อมูลการสั่งซื้อ</h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">Ordering information</h2>
                 {order.length === 0 ? (
-                    <p className="text-center py-4 text-gray-500">ยังไม่มีข้อมูลการสั่งซื้อ</p>
+                    <p className="text-center py-4 text-gray-500">There is no ordering information yet.</p>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-full table-auto border border-gray-300">
@@ -101,10 +101,9 @@ export default function CowDetails() {
                 )}
             </div>
 
-            {/* ปุ่มกลับ */}
             <Link href="/admin/resorce">
-                <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition duration-300">
-                    🔙 กลับไปหน้าคลัง
+                <button className="mt-6 bg-[#CECECE]  text-white px-6 py-3 rounded-lg hover:bg-[#74B845] hover:scale-105 transition-transform duration-200 rounded-lg">
+                Back to Resorce page
                 </button>
             </Link>
         </div>
