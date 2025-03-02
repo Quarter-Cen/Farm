@@ -1,6 +1,5 @@
 'use client'
 
-
 import { Stock } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -66,8 +65,7 @@ export default function Resorce() {
             {stockData.map((stock) => (
               <div
                 key={stock.id}
-                className="grid grid-cols-5 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer"
-                onClick={() => window.location.href = `/admin/resorce/${stock.id}`}
+                className="grid grid-cols-5 items-center text-gray-900 bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition"
               >
                 <span className="text-center text-sm">{new Date(stock.updatedAt).toLocaleDateString("th-TH")}</span>
                 <span className="text-center text-sm">{stock.type}</span>
@@ -87,15 +85,25 @@ export default function Resorce() {
                     ? "Reserved"
                     : "Out of Stock"}
                 </span>
-                <div className="flex justify-center space-x-4">
-                  <Link href={`/veterian/treatment/${stock.id}`}>
-                    <button className="text-[#CECECE] hover:text-[#74B845] hover:scale-105 transition-transform duration-200">
-                      <i className="ri-edit-circle-fill text-2xl"></i>
-                    </button>
-                  </Link>
-                </div>
-              </div>
 
+                <div className="flex self-center justify-center  ">
+                  <div className="flex justify-center space-x-4 mr-4">
+                      <Link href={`/admin/resorce/${stock.id}`}>
+                        <button className="text-[#CECECE] hover:text-[#74B845] hover:scale-105 transition-transform duration-200">
+                          <i className="ri-pie-chart-2-fill text-2xl"></i>
+                        </button>
+                      </Link>
+                    </div>
+
+                    <div className="flex justify-center space-x-4">
+                      <Link href={`/admin/resorce/edit/${stock.id}`}>
+                        <button className="text-[#CECECE] hover:text-[#74B845] hover:scale-105 transition-transform duration-200">
+                          <i className="ri-edit-line text-2xl"></i>
+                        </button>
+                      </Link>
+                    </div>
+                </div> 
+              </div>
             ))}
           </div>
         )}

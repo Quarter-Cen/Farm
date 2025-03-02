@@ -88,6 +88,10 @@ const EditStock = () => {
     return <p className="text-center">Loading...</p>;
   }
 
+  const handleCancel = () => {
+    router.push('/admin/resorce'); 
+  };
+
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-center text-2xl font-semibold text-gray-800 mb-6">Edit Stock</h1>
@@ -149,15 +153,23 @@ const EditStock = () => {
             
           </select>
         </div>
-  
 
-        {/* ปุ่ม Submit */}
-        <button 
-          type="submit"
-          className="w-full bg-gray-300 text-white py-2 rounded-lg mt-4 transition duration-300 ease-in-out transform hover:bg-[#74B845] hover:scale-105 focus:outline-none"
-        >
-          Update Stock
-        </button>
+          <div className="flex justify-between">
+            <button 
+                type="button" 
+                onClick={handleCancel} 
+                className="w-1/2 mr-2 bg-[#CECECE] text-white py-2 rounded-lg transition duration-300 ease-in-out hover:bg-[#a1a1a1]"
+              >
+                Cancel
+            </button>
+              
+            <button 
+              type="submit"
+              className="w-1/2 mr-2 bg-[#CECECE] text-white py-2 rounded-lg transition duration-300 ease-in-out hover:bg-[#74B845]"
+            >
+              Update Stock
+            </button>
+          </div>
       </form>
     </div>
   );

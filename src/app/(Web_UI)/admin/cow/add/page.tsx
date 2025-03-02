@@ -64,7 +64,7 @@ export default function AddCowPage() {
         }
     };
 
-    // เช็คว่าเมื่อข้อมูลครบแล้วปุ่มจะเปลี่ยนสี
+    
     useEffect(() => {
         const isValid = Object.values(formData).every(value => value !== "" && value !== undefined);
         setIsFormValid(isValid);
