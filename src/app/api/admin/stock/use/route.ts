@@ -1,23 +1,22 @@
-// app/api/stock/use/route.ts
+// app/api/stock/[stockId]/route.ts
 import { NextResponse } from "next/server";
 import { StockService } from "@/services/stock";
 
 const stockService = new StockService();
 
-export async function POST(request: Request) {
-    const { stockId, quantity, usedById } = await request.json();
+export async function GET(request: Request) {
 
     try {
-        const stockUsage = await stockService.useStock(
-            BigInt(stockId), 
-            quantity, 
-            BigInt(usedById)
+        const stock = await stockService.getAllUsage();
+        console.log(stock)
+        const jsonResponse = JSON.stringify(stock, (key, value) =>
+            typeof value === "bigint" ? value.toString() : value
         );
 
-        if (stockUsage) {
-            return NextResponse.json(stockUsage);
+        if (jsonResponse) {
+            return new NextResponse(jsonResponse, { status: 200, headers: { "Content-Type": "application/json" } });
         } else {
-            return NextResponse.json({ message: "Error using stock" }, { status: 400 });
+            return NextResponse.json({ message: "Stock not found" }, { status: 404 });
         }
     } catch (error:any) {
         console.error(error);

@@ -55,7 +55,7 @@ export default function CowDetails() {
     }, [id]);
 
 
-    if (!cow) return <p className="text-center mt-10 text-gray-500">กำลังโหลดข้อมูล...</p>;
+    if (!cow) return <p className="text-center mt-10 text-gray-500">Loading...</p>;
 
     const deleteTreatment = async (treatmentId: string) => {
         try {
@@ -84,17 +84,37 @@ export default function CowDetails() {
     return (
         <div className="flex flex-col items-center justify-center mt-10 mx-auto">
             <h1 className="text-3xl font-bold text-gray-800 mb-6">🐄 รายละเอียดวัวและการรักษา</h1>
+
             {/* 🐄 ข้อมูลวัว */}
-            <div className="border p-6 rounded-lg shadow-lg bg-white w-full mb-6">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">🐄 ข้อมูลวัว</h2>
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-gray-700">
+            <div className="border border-gray-200 p-6 rounded-lg shadow-md bg-white w-full max-w-3xl mb-6">
+                <h2 className="text-xl font-bold text-gray-700 mb-4">🐄 ข้อมูลวัว</h2>
+                <div className="grid grid-cols-2 gap-y-3 text-gray-700 text-lg tracking-wide">
                     <p><strong>ชื่อ:</strong> {cow.name}</p>
                     <p><strong>เพศ:</strong> {cow.gender}</p>
                     <p><strong>อายุ:</strong> {cow.age} ปี</p>
                     <p><strong>น้ำหนัก:</strong> {cow.weight} กก.</p>
                     <p><strong>วันเกิด:</strong> {new Date(cow.birthDate).toLocaleDateString("th-TH")}</p>
                     <p><strong>สายพันธุ์:</strong> {cow.breed}</p>
-                    <p className="col-span-2"><strong>สถานะสุขภาพ:</strong> <span className="text-red-500">{cow.healthStatus}</span></p>
+                    <p className="col-span-2"><strong>สถานะสุขภาพ:</strong>
+                        <span className={`px-1 ${cow.healthStatus === "HEALTHY"
+                            ? "text-[#5EC28D]"
+                            : cow.healthStatus === "SICK"
+                                ? "text-[#F4C95D]"
+                                : cow.healthStatus === "INJURED"
+                                    ? "text-[#E88F67]"
+                                    : "text-[#6C757D]"
+                            }`}>
+
+                            {cow.healthStatus === "HEALTHY"
+                                ? "HEALTHY"
+                                : cow.healthStatus === "SICK"
+                                    ? "SICK"
+                                    : cow.healthStatus === "INJURED"
+                                        ? "INJURED"
+                                        : "DEAD"
+                            }
+                        </span>
+                    </p>
                 </div>
             </div>
 
@@ -133,20 +153,20 @@ export default function CowDetails() {
                                             <td className="px-4 py-2 text-center border">{treatment.drugName}</td>
                                             <td className="px-4 py-2 text-center border">
                                                 <span className={`px-3 py-1 rounded-full text-white text-sm ${treatment.status === "HEALTHY"
-                                                    ? "bg-[#28A745]"
+                                                    ? "bg-[#5EC28D]"
                                                     : treatment.status === "SICK"
-                                                        ? "bg-[#FFC107]"
+                                                        ? "bg-[#F4C95D]"
                                                         : treatment.status === "INJURED"
-                                                            ? "bg-[#DC3545]"
+                                                            ? "bg-[#E88F67]"
                                                             : "bg-[#6C757D]"
                                                     }`}>
                                                     {treatment.status === "HEALTHY"
-                                                        ? "HEALTHY"
+                                                        ? "สุขภาพดี"
                                                         : treatment.status === "SICK"
-                                                            ? "SICK"
+                                                            ? "ป่วย"
                                                             : treatment.status === "INJURED"
-                                                                ? "INJURED"
-                                                                : "DEAD"
+                                                                ? "ได้รับบาดเจ็บ"
+                                                                : "ตาย"
                                                     }
                                                 </span>
                                             </td>

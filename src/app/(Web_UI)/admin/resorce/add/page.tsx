@@ -1,7 +1,11 @@
 'use client'
 
+
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // ✅ เพิ่ม useRouter
+
+
+
 
 const AddStock = () => {
   const router = useRouter(); // ✅ สร้างตัวแปร router
@@ -16,7 +20,9 @@ const AddStock = () => {
     adminId: '', 
   });
 
-  const [isFormValid, setIsFormValid] = useState(false);
+  
+  const [isFormValid, setIsFormValid] = useState(false); // State to track if form is valid
+
 
   useEffect(() => {
     fetch("/api/auth/me/rolesId")
@@ -65,7 +71,9 @@ const AddStock = () => {
         alert(data.message);
       } else {
         alert('Stock added successfully!');
+
         router.push('/admin/resorce'); // ✅ หลังจากเพิ่มสำเร็จให้ไปที่หน้า /admin/resorce
+
       }
     } catch (error) {
       console.error('Failed to add stock:', error);

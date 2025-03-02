@@ -81,61 +81,67 @@ export default function VeterianTreatment() {
     }, [treatmentData]);
 
     return (
-        <div className="flex items-center justify-center ml-[2%]">
+        <div className="w-full max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-xl">
+            <h2 className="text-2xl font-semibold text-gray-700 text-center mb-6">ข้อมูลการรักษา</h2>
+
             {loading ? (
                 <p className="text-center text-gray-500 text-lg">กำลังโหลดข้อมูล...</p>
             ) : treatmentData.length === 0 ? (
                 <div className="text-center">
-                    <span className="text-gray-600 text-lg font-semibold">ไม่มีข้อมูลการรักษา</span>
+                    <span className="text-center text-gray-600 text-lg font-semibold">ไม่มีข้อมูลการรักษา</span>
                 </div>
             ) : (
-                <table className="min-w-full table-auto border border-gray-300">
-                    <thead>
-                        <tr className="bg-[#DBDBDB] text-gray-700">
-                            <th className="px-6 py-2 border">วันที่</th>
-                            <th className="px-6 py-2 border">ชื่อวัว</th>
-                            <th className="px-6 py-2 border">ชื่อโรค</th>
-                            <th className="px-6 py-2 border">เหตุการณ์</th>
-                            <th className="px-6 py-2 border">รายละเอียดอาการ</th>
-                            <th className="px-6 py-2 border">ยารักษา</th>
-                            <th className="px-6 py-2 border">สถานะ</th>
-                            <th className="px-6 py-2 border">หมายเหตุ</th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-[#F4F4F4] text-center">
-                        {treatmentData.map((treatment) => (
-                            <tr key={treatment.id} className="border">
-                                <td className="px-6 py-2 border">{new Date(treatment.date).toLocaleDateString("th-TH")}</td>
-                                <td className="px-6 py-2 border">{treatment.cow?.name || "ไม่ระบุ"}</td>
-                                <td className="px-6 py-2 border">{treatment.nameDisease}</td>
-                                <td className="px-6 py-2 border">{treatment.events}</td>
-                                <td className="px-6 py-2 border">{treatment.details}</td>
-                                <td className="px-6 py-2 border">{treatment.drugName}</td>
-                                <td className="px-6 py-2 border">
-                                    <span className={`px-3 py-1 rounded-full text-white ${treatment.status === "HEALTHY"
-                                        ? "bg-[#28A745]"
-                                        : treatment.status === "SICK"
-                                            ? "bg-[#FFC107]"
-                                            : treatment.status === "INJURED"
-                                                ? "bg-[#DC3545]"
-                                                : "bg-[#6C757D]"
-                                        }`}>
-                                        {treatment.status === "HEALTHY"
-                                            ? "HEALTHY"
-                                            : treatment.status === "SICK"
-                                                ? "SICK"
-                                                : treatment.status === "INJURED"
-                                                    ? "INJURED"
-                                                    : "DEAD"
-                                            }
-                                    </span>
-
-                                </td>
-                                <td className="px-6 py-2 border">{treatment.notation || "-"}</td>
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                        <thead>
+                            <tr className="text-gray-600 text-center border-b">
+                                <th className="px-5 py-3">วันที่</th>
+                                <th className="px-5 py-3">ชื่อ</th>
+                                <th className="px-5 py-3">ชื่อโรค</th>
+                                <th className="px-5 py-3">เหตุการณ์</th>
+                                <th className="px-5 py-3">รายละเอียดอาการ</th>
+                                <th className="px-5 py-3">ยารักษา</th>
+                                <th className="px-5 py-3">สถานะ</th>
+                                <th className="px-5 py-3">หมายเหตุ</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="text-center text-gray-600 border-b">
+                            {treatmentData.map((treatment) => (
+                                <tr key={treatment.id} className="border-b hover:bg-gray-100 transition">
+                                    <td className="px-5 py-3 border-b">{new Date(treatment.date).toLocaleDateString("th-TH")}</td>
+                                    <td className="px-5 py-3 border-b">{treatment.cow?.name || "ไม่ระบุ"}</td>
+                                    <td className="px-5 py-3 border-b">{treatment.nameDisease}</td>
+                                    <td className="px-5 py-3 border-b">{treatment.events}</td>
+                                    <td className="px-5 py-3 border-b">{treatment.details}</td>
+                                    <td className="px-5 py-3 border-b">{treatment.drugName}</td>
+                                    <td className="px-5 py-3 border-b">
+                                        <span
+                                            className={`px-4 py-1 text-sm font-medium rounded-full text-white bg-opacity-90 whitespace-nowrap
+                                                ${treatment.status === "HEALTHY"
+                                                    ? "bg-[#5EC28D]"
+                                                    : treatment.status === "SICK"
+                                                        ? "bg-[#F4C95D]"
+                                                        : treatment.status === "INJURED"
+                                                            ? "bg-[#E88F67]"
+                                                            : "bg-[#6C757D]"
+                                                }`}
+                                        >
+                                            {treatment.status === "HEALTHY"
+                                                ? "สุขภาพดี"
+                                                : treatment.status === "SICK"
+                                                    ? "ป่วย"
+                                                    : treatment.status === "INJURED"
+                                                        ? "ได้รับบาดเจ็บ"
+                                                        : "ตาย"
+                                            }
+                                        </span>
+                                    </td>
+                                    <td className="px-5 py-3 border-b">{treatment.notation || "-"}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </div>
     );
