@@ -79,7 +79,6 @@ export class LoginService implements ILoginService {
                 
                 return [];
             }
-            console.log('User details:', user);
 
             const currentUser = await prisma.user.findUnique({
                 where: { id: user.id },
@@ -123,8 +122,7 @@ export class LoginService implements ILoginService {
         if (!user) {
             return [];
         }
-        console.log('User details:', user);
-    
+
         const currentUser = await prisma.user.findUnique({
             where: { id: user.id },
             include: {

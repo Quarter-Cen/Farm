@@ -144,6 +144,7 @@ export class UserService implements iUserService {
   // เพิ่มฟังก์ชัน getUserById
   async getUserById(userId: bigint): Promise<User | null> {
     try {
+      console.log(userId)
       const user = await prisma.user.findUnique({
         where: { id: userId },
         include: {
