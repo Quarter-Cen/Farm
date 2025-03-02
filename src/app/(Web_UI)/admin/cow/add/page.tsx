@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useState } from "react";
 
 export default function AddCowPage() {
@@ -52,6 +53,7 @@ export default function AddCowPage() {
                     weight: "",
                     veterianId: "",
                 });
+                window.location.href = '/admin/cow';
             } else {
                 setMessage(`Error: ${data.error}`);
             }
