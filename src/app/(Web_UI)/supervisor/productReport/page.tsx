@@ -77,7 +77,7 @@ const ProductReport = () => {
 
   return (
     isVisible && (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen bg-white">
         <div className="max-w-lg w-full p-6 bg-white shadow-lg rounded-lg border border-gray-300 relative">
         
 

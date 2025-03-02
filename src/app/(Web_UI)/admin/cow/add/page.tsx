@@ -64,38 +64,73 @@ export default function AddCowPage() {
         }
     };
 
-    // เช็คว่าเมื่อข้อมูลครบแล้วปุ่มจะเปลี่ยนสี
     useEffect(() => {
         const isValid = Object.values(formData).every(value => value !== "" && value !== undefined);
         setIsFormValid(isValid);
     }, [formData]);
 
     const handleCancel = () => {
-        window.location.href = "/admin/cow";
+        window.location.href = "http://localhost:3000/admin/cow";
     };
 
     return (
-        <div className="max-w-lg mx-auto mt-10 p-6 border rounded-lg shadow-lg">
-            <h2 className="text-2xl text-center font-bold mb-4">Add Cow</h2>
+        <div className="flex items-center h-full justify-items-center">
+            <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg overflow-y-auto self-center">
+            <h2 className="text-center text-2xl font-semibold text-gray-800 mb-6">Add Cow</h2>
             {message && <p className="mb-4 text-red-500">{message}</p>}
             <form onSubmit={handleSubmit} className="space-y-4">
-                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" required className="border p-2 w-full" />
-                <select name="gender" value={formData.gender} onChange={handleChange} required className="border p-2 w-full">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select>
-                <input type="number" name="age" value={formData.age} onChange={handleChange} placeholder="Age" required className="border p-2 w-full" />
-                <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} required className="border p-2 w-full" />
-                <input type="text" name="breed" value={formData.breed} onChange={handleChange} placeholder="Breed" required className="border p-2 w-full" />
-                <select name="healthStatus" value={formData.healthStatus} onChange={handleChange} required className="border p-2 w-full">
-                    <option value="HEALTHY">Healthy</option>
-                    <option value="SICK">Sick</option>
-                    <option value="INJURED">Injured</option>
-                    <option value="DEAD">Dead</option>
-                </select>
-                <input type="number" name="weight" value={formData.weight} onChange={handleChange} placeholder="Weight" required className="border p-2 w-full" />
-                <input type="number" name="veterianId" value={formData.veterianId} onChange={handleChange} placeholder="Veterinarian ID (optional)" className="border p-2 w-full" />
-                
+                <div className="">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter cow name" required  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]"/>
+                </div>
+
+                <div className="flex space-x-2 justify-between">
+                    <div className=" w-1/2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                        <select name="gender" value={formData.gender} onChange={handleChange} required  className="w-full h-10 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div className="w-1/2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                        <input type="number" name="age" value={formData.age} onChange={handleChange} placeholder="Enter cow age" required  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]" />
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">BirthDate</label>
+                    <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} required  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]" />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Breed</label>
+                    <input type="text" name="breed" value={formData.breed} onChange={handleChange} placeholder="Enter cow breed" required  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]" />
+                </div>
+
+                <div className="flex space-x-2 justify-between">
+                    <div className="w-1/2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">HealthStatus</label>
+                        <select name="healthStatus" value={formData.healthStatus} onChange={handleChange} required  className="w-full h-10 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]">
+                            <option value="HEALTHY">Healthy</option>
+                            <option value="SICK">Sick</option>
+                            <option value="INJURED">Injured</option>
+                            <option value="DEAD">Dead</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Weight</label>
+                        <input type="number" name="weight" value={formData.weight} onChange={handleChange} placeholder="Enter cow weight" required  className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]" />
+                    </div>
+                </div>
+               
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">VeterianId</label>
+                    <input type="number" name="veterianId" value={formData.veterianId} onChange={handleChange} placeholder="Enter Veterinarian ID (optional)" className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#88D64C]"/>
+                    </div>
+
                 <div className="flex space-x-4 mt-4">
                     <button
                         onClick={handleCancel}
@@ -114,5 +149,8 @@ export default function AddCowPage() {
                 </div>
             </form>
         </div>
+
+        </div>
+        
     );
 }
