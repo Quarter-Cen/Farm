@@ -1,34 +1,58 @@
-import LoginForm from "@/components/LoginForm";
-import { useRouter } from "next/navigation"; 
-import { cookies } from "next/headers";
+"use client"
 
-const router = useRouter()
-export default async function LoginPage() {
-          const cookiesValue = await cookies();
-          if(cookiesValue.get('session')){
-            let roles = await fetch("http://localhost:3000/api/auth/me/roles", {
-              headers : { Cookie: cookiesValue.toString()}
-          })
-    
-          const userRole = await roles.json();
-    
+import { useEffect, useState } from "react";
+import LoginForm from "@/components/LoginForm"; 
+import { useRouter } from "next/navigation";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Check authentication status when component mounts
+    const checkAuth = async () => {
+      try {
+        // Check if user is already authenticated
+        const response = await fetch("/api/auth/me/roles", {
+          credentials: "include" // Important for cookies
+        });
+
+        if (response.ok) {
+          const userRole = await response.json();
+          
           if (userRole && userRole.length > 0) {
-            const roleNames = userRole.map((role: any) => role.name)
+            const roleNames = userRole.map((role) => role.name);
             
+            // Redirect based on user role
             if (roleNames.includes("Admin")) {
-              router.push("/admin/dashboard")
+              router.push("/admin/dashboard");
             } else if (roleNames.includes("Veterian")) {
-              router.push("/veterian/treatment")
+              router.push("/veterian/treatment");
             } else if (roleNames.includes("DairyWorker")) {
-              router.push("/dairyworker/resorce")
+              router.push("/dairyworker/resorce");
             } else if (roleNames.includes("Supervisor")) {
-              router.push("/supervisor/productReport")
+              router.push("/supervisor/productReport");
             }
           }
         }
-    return (
-        <div className="h-screen content-center">
-            <LoginForm/>
-        </div>
-    )
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
+  // Show loading state while checking auth
+  if (isLoading) {
+    return <div className="h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  return (
+    <div className="h-screen content-center">
+      <LoginForm />
+    </div>
+  );
 }
