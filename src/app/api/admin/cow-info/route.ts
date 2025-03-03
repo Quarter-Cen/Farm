@@ -26,8 +26,6 @@ export async function GET(req: NextRequest) {
 
 
 export async function POST(req: NextRequest) {
-    const guard = await AdminApiGuard(req);
-    if (guard) return guard;
     try {
         const body = await req.json();
         const { name, gender, age, birthDate, breed, healthStatus, weight, veterianId } = body;
