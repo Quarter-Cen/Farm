@@ -1,7 +1,8 @@
 import LoginForm from "@/components/LoginForm";
-import { redirect } from "next/navigation"; 
+import { useRouter } from "next/navigation"; 
 import { cookies } from "next/headers";
 
+const router = useRouter()
 export default async function LoginPage() {
           const cookiesValue = await cookies();
           if(cookiesValue.get('session')){
@@ -15,13 +16,13 @@ export default async function LoginPage() {
             const roleNames = userRole.map((role: any) => role.name)
             
             if (roleNames.includes("Admin")) {
-              redirect("/admin/dashboard")
+              router.push("/admin/dashboard")
             } else if (roleNames.includes("Veterian")) {
-              redirect("/veterian/treatment")
+              router.push("/veterian/treatment")
             } else if (roleNames.includes("DairyWorker")) {
-              redirect("/dairyworker/resorce")
+              router.push("/dairyworker/resorce")
             } else if (roleNames.includes("Supervisor")) {
-              redirect("/supervisor/productReport")
+              router.push("/supervisor/productReport")
             }
           }
         }
