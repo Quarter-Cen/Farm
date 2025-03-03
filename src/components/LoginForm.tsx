@@ -1,62 +1,74 @@
 'use client'
 
 import { useState } from "react";
-import { redirect } from "next/navigation"; 
+import { useRouter } from "next/navigation"; 
 
 export default function LoginForm() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
-  })
+  });
 
   const updateForm = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
     setForm({
       ...form,
       [key]: e.target.value,
-    })
-  }
+    });
+  };
 
   const login = async () => {
-    let response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", 
-      },
-      body: JSON.stringify({
-        ...form,
-      }),
-    })
+    setIsLoading(true);
+    try {
+      let response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", 
+        },
+        body: JSON.stringify({
+          ...form,
+        }),
+      });
 
-    console.log(response);
-    if (response.ok) {
-      const cookiesValue = document.cookie
-      let roles = await fetch("http://localhost:3000/api/auth/me/roles", {
-          headers : { Cookie: cookiesValue.toString()}
-      })
+      if (response.ok) {
+        // Use relative URL and include credentials to send cookies
+        let rolesResponse = await fetch("/api/auth/me/roles", {
+          credentials: "include" // This is important to send cookies
+        });
 
-      const userRole = await roles.json();
+        if (rolesResponse.ok) {
+          const userRole = await rolesResponse.json();
 
-      if (userRole && userRole.length > 0) {
-        const roleNames = userRole.map((role: any) => role.name)
-        
-        if (roleNames.includes("Admin")) {
-          redirect("/admin/dashboard");
-        } else if (roleNames.includes("Veterian")) {
-          redirect("/veterian/dashboard");
-        } else if (roleNames.includes("DairyWorker")) {
-          redirect("/dairyworker/dashboard");
-        } else if (roleNames.includes("Supervisor")) {
-          redirect("/supervisor/dashboard");
+          if (userRole && userRole.length > 0) {
+            const roleNames = userRole.map((role: any) => role.name);
+            
+            // Use router.push instead of redirect for client components
+            if (roleNames.includes("Admin")) {
+              router.push("/admin/dashboard");
+            } else if (roleNames.includes("Veterian")) {
+              router.push("/veterian/dashboard");
+            } else if (roleNames.includes("DairyWorker")) {
+              router.push("/dairyworker/dashboard");
+            } else if (roleNames.includes("Supervisor")) {
+              router.push("/supervisor/dashboard");
+            } else {
+              router.push("/login");
+            }
+          } else {
+            alert("You do not have permission to access this page.");
+          }
         } else {
-          redirect("/login");
+          alert("Failed to retrieve user roles.");
         }
       } else {
-        alert("You do not have permission to access this page.");
+        alert("Login failed. Please try again.");
       }
-
-    } else {
-
-      alert("Login failed. Please try again.")
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An error occurred during login. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -110,18 +122,18 @@ export default function LoginForm() {
       </div>
       <button
         onClick={login}
-        disabled={!isFormValid}
+        disabled={!isFormValid || isLoading}
         style={{
           width: "100%",
           padding: "10px",
-          backgroundColor: isFormValid ? "#007bff" : "#ccc",
+          backgroundColor: isFormValid && !isLoading ? "#007bff" : "#ccc",
           color: "white",
           border: "none",
           borderRadius: "4px",
-          cursor: isFormValid ? "pointer" : "not-allowed",
+          cursor: isFormValid && !isLoading ? "pointer" : "not-allowed",
         }}
       >
-        Login
+        {isLoading ? "Logging in..." : "Login"}
       </button>
     </div>
   );
