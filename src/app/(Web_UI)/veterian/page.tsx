@@ -8,7 +8,7 @@ export default function AdminPage() {
 
   useEffect(() => {
 
-    router.push("/veterian/dashboard");
+    router.push("/veterian/treatment");
   }, [router])
 
   return (

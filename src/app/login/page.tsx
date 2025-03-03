@@ -17,11 +17,11 @@ export default async function LoginPage() {
             if (roleNames.includes("Admin")) {
               redirect("/admin/dashboard")
             } else if (roleNames.includes("Veterian")) {
-              redirect("/veterian/dashboard")
+              redirect("/veterian/treatment")
             } else if (roleNames.includes("DairyWorker")) {
-              redirect("/dairyworker/dashboard")
+              redirect("/dairyworker/resorce")
             } else if (roleNames.includes("Supervisor")) {
-              redirect("/supervisor/dashboard")
+              redirect("/supervisor/productReport")
             }
           }
         }

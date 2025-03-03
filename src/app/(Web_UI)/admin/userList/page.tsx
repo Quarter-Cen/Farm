@@ -152,7 +152,7 @@ const UserList: React.FC = () => {
               return (
                 <div
                   key={user.id}
-                  className="border p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  className="border p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
                 >
                   <div className="flex items-center space-x-4">
                     <img

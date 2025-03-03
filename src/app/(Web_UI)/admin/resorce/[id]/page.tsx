@@ -66,7 +66,8 @@ export default function CowDetails() {
     return <p className="text-center mt-10 text-red-500">Error: {error}</p>;
   
   return (
-    <div className="flex flex-col items-center justify-center mt-10 mx-24">
+    <div className="h-[98vh] overflow-y-auto">
+      <div className="flex flex-col items-center justify-center mt-10 mx-24  ">
       <h1 className="text-2xl text-gray-800 font-bold mb-6">
         Inventory and Ordering Details
       </h1>
@@ -88,7 +89,7 @@ export default function CowDetails() {
   
       {/* Ordering Information */}
       <div className="border p-6 rounded-lg shadow-lg bg-white w-full mb-6">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+        <h2 className="text-l font-semibold text-gray-700 mb-4">
           Ordering Information
         </h2>
         {order.length === 0 ? (
@@ -96,7 +97,7 @@ export default function CowDetails() {
             There is no ordering information yet.
           </p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-y-auto">
             <table className="min-w-full table-auto border border-gray-300">
               <thead>
                 <tr className="bg-gray-200 text-gray-700">
@@ -129,7 +130,7 @@ export default function CowDetails() {
   
       {/* Usage Information */}
       <div className="border p-6 rounded-lg shadow-lg bg-white w-full mb-6">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">
+        <h2 className="text-l font-semibold text-gray-700 mb-4">
           Usage Information
         </h2>
         {usage.length === 0 ? (
@@ -137,7 +138,7 @@ export default function CowDetails() {
             No usage data available.
           </p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-y-auto">
             <table className="min-w-full table-auto border border-gray-300">
               <thead>
                 <tr className="bg-gray-200 text-gray-700">
@@ -173,5 +174,7 @@ export default function CowDetails() {
         </button>
       </Link>
     </div>
+    </div>
+    
   );
 }

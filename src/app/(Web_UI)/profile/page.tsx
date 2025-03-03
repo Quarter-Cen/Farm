@@ -1,15 +1,24 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 export default function AdminPage() {
   const router = useRouter()
-
+  const [id, setId] = useState("");
+  
   useEffect(() => {
-
-    router.push("/profile/1");
-  }, [router])
+    fetch("/api/auth/me/")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.id) {
+          console.log(data)
+          setId(data.id)
+          router.push(`/profile/${data.id}`);
+        }
+      })
+      .catch((error) => console.log("Error fetching roles:", error));
+  }, [router]);
 
   return (
     <div>

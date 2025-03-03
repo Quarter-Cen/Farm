@@ -215,15 +215,15 @@ enum HealthStatus {
 }
 
 
-enum FoodType {
-  VEGETABLE
-  MEAT
-  DAIRY
-  GRAIN
-}
+  enum FoodType {
+    VEGETABLE
+    MEAT
+    DAIRY
+    GRAIN
+  }
 
-enum StockStatus {
-  AVAILABLE
-  OUT_OF_STOCK
-  RESERVED
-}
+  enum StockStatus {
+    AVAILABLE
+    OUT_OF_STOCK
+    RESERVED
+  }
